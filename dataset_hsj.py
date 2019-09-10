@@ -93,7 +93,7 @@ class CoviarDataSet(data.Dataset):
         # divide into segments, then fetch a frame in every seg
         one_pairs_data = []
         for video in video_pairs:
-            #shapes  (nums,height,width,channels)
+            # shapes  (nums,height,width,channels)
             # for rgb: all I-frame
             # for mv,residual: regulated by self._num_segments
             extracter = VideoExtracter(video)
@@ -101,18 +101,18 @@ class CoviarDataSet(data.Dataset):
             if self._representation == 'iframe':
                 video_features = extracter.load_keyframes()
             elif self._representation == 'residual':
-                residuals = extracter.load_residuals()
                 intervel = math.ceil(residuals.shape[0] / self._num_segments)
-                video_features = residuals[::intervel,...]
-                assert video_features.shape[0]==self._num_segments, print("num_segments sample error")
-
-            elif self._representation == 'mv':
-                mvs = extracter.load_mvs()
-                intervel = math.ceil(mvs.shape[0] / self._num_segments)
-                video_features = mvs[::intervel, ...]
+                residuals = extracter.load_residuals(intervel)
+                # video_features = residuals[::intervel,...]
                 assert video_features.shape[0] == self._num_segments, print("num_segments sample error")
 
-            video_features = np.array(video_features,dtype=np.float32)
+            elif self._representation == 'mv':
+                intervel = math.ceil(mvs.shape[0] / self._num_segments)
+                mvs = extracter.load_mvs(intervel)
+                # video_features = mvs[::intervel, ...]
+                assert video_features.shape[0] == self._num_segments, print("num_segments sample error")
+
+            video_features = np.array(video_features, dtype=np.float32)
             video_features = self._transform(video_features)
             video_features = np.array(video_features)
             video_features = np.transpose(video_features, (0, 3, 1, 2))
@@ -135,4 +135,3 @@ class CoviarDataSet(data.Dataset):
 
     def __len__(self):
         return len(self._labels_list)
-
