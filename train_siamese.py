@@ -18,14 +18,18 @@ from train_options import parser
 from transforms import GroupCenterCrop
 from transforms import GroupScale
 from utils import *
+from torch.utils.tensorboard import SummaryWriter
 
 SAVE_FREQ = 40
 PRINT_FREQ = 20
 ACCUMU_STEPS = 4  # use gradient accumlation to use least memory and more runtime
 loss_min = 1
 CONTINUE_FROM_LAST = False
-LAST_SAVE_PATH = r'hmdb51_iframe_res152_copy_detection_iframe_checkpoint.pth.tar'
+LAST_SAVE_PATH = r'vcdb_mv_res50_copy_detection_checkpoint.pth.tar'
 FINETUNE = False
+
+# for visualization
+writer = SummaryWriter('./log',comment='')
 
 
 def main():
@@ -37,16 +41,9 @@ def main():
     for k, v in vars(args).items():
         print('\t{}: {}'.format(k, v))
 
-    if args.data_name == 'ucf101':
-        num_class = 101
-    elif args.data_name == 'hmdb51':
-        num_class = 51
-    else:
-        raise ValueError('Unknown dataset ' + args.data_name)
-
-
-    model = Model(num_class, args.num_segments, args.representation,
+    model = Model(2, args.num_segments, args.representation,
                   base_model=args.arch)
+    # writer.add_graph(model,input_to_model=())
     # add continue train from before
     if CONTINUE_FROM_LAST:
         checkpoint = torch.load(LAST_SAVE_PATH)
@@ -58,14 +55,14 @@ def main():
     else:
         loss_min = 10000
 
-    print(model)
+    # print(model)
+    # writer.add_graph(model, (torch.randn(10,5, 2, 224, 224),))
 
     devices = [torch.device("cuda:%d" % device) for device in args.gpus]
 
     train_loader = torch.utils.data.DataLoader(
         CoviarDataSet(
             args.data_root,
-            args.data_name,
             video_list=args.train_list,
             num_segments=args.num_segments,
             representation=args.representation,
@@ -74,12 +71,11 @@ def main():
             accumulate=(not args.no_accumulation),
         ),
         batch_size=args.batch_size, shuffle=False,
-        num_workers=args.workers, pin_memory=True)
+        num_workers=args.workers, pin_memory=False)
 
     val_loader = torch.utils.data.DataLoader(
         CoviarDataSet(
             args.data_root,
-            args.data_name,
             video_list=args.test_list,
             num_segments=args.num_segments,
             representation=args.representation,
@@ -91,7 +87,7 @@ def main():
             accumulate=(not args.no_accumulation),
         ),
         batch_size=args.batch_size, shuffle=False,
-        num_workers=args.workers, pin_memory=True)
+        num_workers=args.workers, pin_memory=False)
 
     model = torch.nn.DataParallel(model, device_ids=args.gpus)
     model = model.to(devices[0])
@@ -133,7 +129,7 @@ def main():
     for epoch in range(args.epochs):
         train(train_loader, model, criterions, optimizer, epoch)
         if epoch % args.eval_freq == 0 or epoch == args.epochs - 1:
-            loss_cur = validate(val_loader, model, criterions)
+            loss_cur = validate(val_loader, model, criterions, epoch)
             scheduler.step(loss_cur)
             is_best = (loss_cur < loss_min)
             loss_min = min(loss_cur, loss_min)
@@ -147,6 +143,7 @@ def main():
                     },
                     is_best,
                     filename='checkpoint.pth.tar')
+    writer.close()
 
 
 def train(train_loader, model, criterions, optimizer, epoch):
@@ -196,55 +193,63 @@ def train(train_loader, model, criterions, optimizer, epoch):
                 loss2=clf_losses)))
 
 
-def validate(val_loader, model, criterions):
+def validate(val_loader, model, criterions, epoch):
     batch_time = AverageMeter()
     losses = AverageMeter()
     siamese_losses = AverageMeter()
     clf_losses = AverageMeter()
 
-    model.float()
+    # model.float()
     model.eval()
 
     end = time.time()
     correct_nums = 0
+
     for i, (input_pairs, label) in enumerate(val_loader):
-        input_pairs[0] = input_pairs[0].float().to(devices[0])
-        input_pairs[1] = input_pairs[1].float().to(devices[0])
-        label = label.float().to(devices[0])
+        with torch.no_grad():
+            input_pairs[0] = input_pairs[0].float().to(devices[0])
+            input_pairs[1] = input_pairs[1].float().to(devices[0])
+            label = label.float().to(devices[0])
 
-        outputs, y = model(input_pairs)
-        loss1 = criterions[0](outputs[0], outputs[1], label.clone().float())
-        loss2 = criterions[1](y, label.clone().long())
-        siamese_losses.update(loss1.item(), input_pairs[0].size(0))
-        clf_losses.update(loss2.item(), input_pairs[0].size(0))
+            outputs, y = model(input_pairs)
+            loss1 = criterions[0](outputs[0], outputs[1], label.clone().float())
+            loss2 = criterions[1](y, label.clone().long())
+            siamese_losses.update(loss1.item(), input_pairs[0].size(0))
+            clf_losses.update(loss2.item(), input_pairs[0].size(0))
 
-        _, predicts = torch.max(y,1)
-        correct_nums += (predicts==label.clone().long()).sum()
-        batch_time.update(time.time() - end)
-        end = time.time()
+            _, predicts = torch.max(y, 1)
+            correct_nums += (predicts == label.clone().long()).sum()
+            batch_time.update(time.time() - end)
+            end = time.time()
 
-        if i % PRINT_FREQ == 0:
-            print(('Validate: [{0}/{1}]\t'
-                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
-                   'siamese loss {loss1.val:.4f} ({loss1.avg:.4f})\t'
-                   ' loss {loss1.val:.4f} ({loss1.avg:.4f})\t'
-                   ' loss {loss2.val:.4f} ({loss2.avg:.4f})\t'
-                .format(
-                i, len(val_loader),
-                batch_time=batch_time,
-                loss1=siamese_losses,
-                loss2=clf_losses)))
+            # for tensorboard
+
+            if i % PRINT_FREQ == 0:
+                print(('Validate: [{0}/{1}]\t'
+                       'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
+                       'siamese loss {loss1.val:.4f} ({loss1.avg:.4f})\t'
+                       ' loss {loss1.val:.4f} ({loss1.avg:.4f})\t'
+                       ' loss {loss2.val:.4f} ({loss2.avg:.4f})\t'
+                    .format(
+                    i, len(val_loader),
+                    batch_time=batch_time,
+                    loss1=siamese_losses,
+                    loss2=clf_losses)))
 
     acc = 100 * correct_nums / len(val_loader.dataset)
-    print(('Validating Results: siamese Loss {loss.avg:.5f}, Accuracy: {accuracy:.3f}%'.format(loss=siamese_losses,accuracy=acc)))
+    print(('Validating Results: siamese Loss {loss.avg:.5f}, Accuracy: {accuracy:.3f}%'.format(loss=siamese_losses,
+                                                                                               accuracy=acc)))
+    writer.add_scalar('Accuracy/epoch', acc, epoch)
+    writer.add_scalar('Siamese Loss/epoch', siamese_losses.avg, epoch)
+    writer.add_scalar('Classification Loss/epoch', clf_losses.avg, epoch)
     return siamese_losses.avg
 
 
 def save_checkpoint(state, is_best, filename):
-    filename = '_'.join((args.model_prefix, args.representation.lower(), filename))
+    filename = '_'.join((args.model_prefix, filename))
     torch.save(state, filename)
     if is_best:
-        best_name = '_'.join((args.model_prefix, args.representation.lower(), 'model_best.pth.tar'))
+        best_name = '_'.join((args.model_prefix, '_best.pth.tar'))
         shutil.copyfile(filename, best_name)
 
 

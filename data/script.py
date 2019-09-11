@@ -46,4 +46,5 @@ if __name__ == '__main__':
     # split_datset()
     # run()
     move_dataset()
+    test()
 

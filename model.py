@@ -10,7 +10,6 @@ import torch
 KEY_FEATURES = 128
 DROPOUT = 0
 
-
 # Flatten layer
 class Flatten(nn.Module):
     def __init__(self):

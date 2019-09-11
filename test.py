@@ -19,7 +19,6 @@ import pickle
 
 parser = argparse.ArgumentParser(
     description="Standard video-level testing")
-parser.add_argument('--data-name', type=str, choices=['ucf101', 'hmdb51'])
 parser.add_argument('--representation', type=str, choices=['iframe', 'residual', 'mv'])
 parser.add_argument('--no-accumulation', action='store_true',
                     help='disable accumulation of motion vectors and residuals.')
@@ -37,16 +36,8 @@ parser.add_argument('--gpus', nargs='+', type=int, default=None)
 
 args = parser.parse_args()
 
-if args.data_name == 'ucf101':
-    num_class = 101
-elif args.data_name == 'hmdb51':
-    num_class = 51
-else:
-    raise ValueError('Unknown dataset ' + args.data_name)
-
-
 def main():
-    net = Model(num_class, args.num_segments, args.representation,
+    net = Model(2, args.num_segments, args.representation,
                 base_model=args.arch)
 
     checkpoint = torch.load(args.weights)
@@ -70,7 +61,6 @@ def main():
     data_loader = torch.utils.data.DataLoader(
         CoviarDataSet(
             args.data_root,
-            args.data_name,
             video_list=args.test_list,
             num_segments=args.num_segments,
             representation=args.representation,

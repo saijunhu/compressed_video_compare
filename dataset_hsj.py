@@ -41,7 +41,7 @@ def get_seg_range(num_frames, num_segments, seg, representation):
 
 
 class CoviarDataSet(data.Dataset):
-    def __init__(self, data_root, data_name,
+    def __init__(self, data_root,
                  video_list,
                  representation,
                  transform,
@@ -50,7 +50,6 @@ class CoviarDataSet(data.Dataset):
                  accumulate):
 
         self._data_root = data_root
-        self._data_name = data_name
         self._num_segments = num_segments
         self._representation = representation
         self._transform = transform
@@ -101,15 +100,11 @@ class CoviarDataSet(data.Dataset):
             if self._representation == 'iframe':
                 video_features = extracter.load_keyframes()
             elif self._representation == 'residual':
-                intervel = math.ceil(residuals.shape[0] / self._num_segments)
-                residuals = extracter.load_residuals(intervel)
-                # video_features = residuals[::intervel,...]
+                video_features = extracter.load_residuals(self._num_segments)
                 assert video_features.shape[0] == self._num_segments, print("num_segments sample error")
 
             elif self._representation == 'mv':
-                intervel = math.ceil(mvs.shape[0] / self._num_segments)
-                mvs = extracter.load_mvs(intervel)
-                # video_features = mvs[::intervel, ...]
+                video_features = extracter.load_mvs(self._num_segments)
                 assert video_features.shape[0] == self._num_segments, print("num_segments sample error")
 
             video_features = np.array(video_features, dtype=np.float32)

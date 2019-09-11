@@ -6,6 +6,7 @@ from functools import cmp_to_key
 from PIL import Image
 from tqdm import tqdm
 from data.utils import free_folder_space
+import math
 
 ## FOR SMALL DATASET
 # MVS_URL = r'/home/sjhu/datasets/small_dataset/samples_mvs'
@@ -16,10 +17,10 @@ from data.utils import free_folder_space
 # TXT_ROOT_URL = r'/home/sjhu/datasets/small_dataset/'
 
 ## FOR MEDIUM
-FEATURES_URL = r'/home/sjhu/datasets/medium_dataset/features'
+FEATURES_URL = r'/data/sjhu/features_1'
 ROOT_URL = r'/home/sjhu/datasets'
 VIDEOS_URL = r'/home/sjhu/datasets/all_dataset'  #
-TXT_ROOT_URL = r'/home/sjhu/datasets/medium_dataset/'
+TXT_ROOT_URL = r'/data/sjhu/'
 
 
 class VideoExtracter:
@@ -65,9 +66,9 @@ class VideoExtracter:
             "/home/sjhu/env/ffmpeg-4.2-amd64-static/ffmpeg -i %s -vf select='eq(pict_type\,I)' -vsync 2 -s 340x256 -f image2 %s/%%d.jpeg " % (
                 os.path.join(VIDEOS_URL, self.video_name), self.keyframes_folder))
 
-    def load_video_level_features(self,intervel):
-        residuals = self.load_residuals(intervel)
-        mvs = self.load_mvs(intervel)
+    def load_video_level_features(self, num_segments):
+        residuals = self.load_residuals(num_segments)
+        mvs = self.load_mvs(num_segments)
         keyframes = self.load_keyframes()
         return residuals, mvs, keyframes
 
@@ -77,28 +78,45 @@ class VideoExtracter:
         for img in os.listdir(self.keyframes_folder):
             temp = np.asarray(Image.open(img))
             mat.append(temp)
+        if len(mat) == 0:
+            mat = np.random.randint(255, size=(5, 256, 340, 3))
         return np.array(mat, dtype=np.float32)
 
-    def load_mvs(self, intervel):
+    def load_mvs(self, num_segments):
         os.chdir(self.mvs_folder)
         mat = []
-        for img in os.listdir(self.mvs_folder):
+        length = len(os.listdir(self.mvs_folder))
+        interval = math.ceil(length / num_segments)
+        ## for some except
+        if interval == 0:
+            mat = np.random.randint(255, size=(num_segments, 256, 340, 2))
+            return np.array(mat, dtype=np.float32)
+
+
+        for img in os.listdir(self.mvs_folder)[::interval]:
             temp = np.asarray(Image.open(img))
             mat.append(temp)
         mat = np.array(mat, dtype=np.int16)
         mat = mat - 128
-        return np.array(mat[::intervel, ...], dtype=np.float32)
+        return np.array(mat[..., :2], dtype=np.float32)
 
-    def load_residuals(self, intervel):
+    def load_residuals(self, num_segments):
         os.chdir(self.residuals_folder)
         mat = []
-        for img in os.listdir(self.residuals_folder):
+        length = len(os.listdir(self.residuals_folder))
+        interval = math.ceil(length / num_segments)
+
+        ## for some except
+        if interval == 0:
+            mat = np.random.randint(255, size=(num_segments, 256, 340, 3))
+            return np.array(mat, dtype=np.float32)
+
+        for img in os.listdir(self.residuals_folder)[::interval]:
             temp = np.asarray(Image.open(img))
             mat.append(temp)
         mat = np.array(mat, dtype=np.int16)
         mat = mat - 128
-        mat = np.array(mat[..., :2], dtype=np.float32)
-        return mat[::intervel, ...]
+        return np.array(mat, dtype=np.float)
 
     def get_num_frames(self):
         return len(self.y_files)

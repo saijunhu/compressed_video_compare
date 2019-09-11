@@ -5,8 +5,8 @@ import argparse
 parser = argparse.ArgumentParser(description="CoViAR")
 
 # Data.
-parser.add_argument('--data-name', type=str, choices=['ucf101', 'hmdb51','vcdb'],
-                    help='dataset name.')
+# parser.add_argument('--data-name', type=str, choices=['ucf101', 'hmdb51', 'vcdb'],
+#                     help='dataset name.')
 parser.add_argument('--data-root', type=str,
                     help='root of data directory.')
 parser.add_argument('--train-list', type=str,
@@ -38,13 +38,13 @@ parser.add_argument('--lr-decay', default=0.1, type=float,
                     help='lr decay factor.')
 parser.add_argument('--weight-decay', '--wd', default=1e-4, type=float,
                     help='weight decay.')
+parser.add_argument('--gpus', nargs='+', type=int, default=None,
+                    help='gpu ids.')
+parser.add_argument('--workers', default=8, type=int,
+                    help='number of data loader workers.')
 
 # Log.
 parser.add_argument('--eval-freq', default=5, type=int,
                     help='evaluation frequency (epochs).')
-parser.add_argument('--workers', default=8, type=int,
-                    help='number of data loader workers.')
 parser.add_argument('--model-prefix', type=str, default="model",
                     help="prefix of model name.")
-parser.add_argument('--gpus', nargs='+', type=int, default=None,
-                    help='gpu ids.')
