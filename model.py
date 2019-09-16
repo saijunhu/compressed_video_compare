@@ -8,7 +8,7 @@ import torchvision
 import torch
 
 KEY_FEATURES = 128
-DROPOUT = 0
+DROPOUT = 0.2
 
 # Flatten layer
 class Flatten(nn.Module):

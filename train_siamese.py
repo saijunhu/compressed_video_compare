@@ -25,14 +25,15 @@ PRINT_FREQ = 20
 ACCUMU_STEPS = 4  # use gradient accumlation to use least memory and more runtime
 loss_min = 1
 CONTINUE_FROM_LAST = False
-LAST_SAVE_PATH = r'vcdb_mv_res50_copy_detection_checkpoint.pth.tar'
+LAST_SAVE_PATH = r'vcdb_residual_res50_copy_detection_checkpoint.pth.tar'
 FINETUNE = False
 
 # for visualization
-writer = SummaryWriter('./log',comment='')
+writer = SummaryWriter('./log/bt_1_seg_10_iframe')
 
 
 def main():
+    print(torch.cuda.device_count())
     global args
     global devices
     args = parser.parse_args()
@@ -43,17 +44,19 @@ def main():
 
     model = Model(2, args.num_segments, args.representation,
                   base_model=args.arch)
-    # writer.add_graph(model,input_to_model=())
+
     # add continue train from before
     if CONTINUE_FROM_LAST:
-        checkpoint = torch.load(LAST_SAVE_PATH)
+        checkpoint = torch.load(LAST_SAVE_PATH,map_location='cuda:0')
         # print("model epoch {} best prec@1: {}".format(checkpoint['epoch'], checkpoint['best_prec1']))
         print("model epoch {} lowest loss {}".format(checkpoint['epoch'], checkpoint['loss_min']))
         base_dict = {'.'.join(k.split('.')[1:]): v for k, v in list(checkpoint['state_dict'].items())}
         loss_min = checkpoint['loss_min']
         model.load_state_dict(base_dict)
+        start_epochs = checkpoint['epoch']
     else:
         loss_min = 10000
+        start_epochs = 0
 
     # print(model)
     # writer.add_graph(model, (torch.randn(10,5, 2, 224, 224),))
@@ -70,7 +73,7 @@ def main():
             is_train=True,
             accumulate=(not args.no_accumulation),
         ),
-        batch_size=args.batch_size, shuffle=False,
+        batch_size=args.batch_size, shuffle=True,
         num_workers=args.workers, pin_memory=False)
 
     val_loader = torch.utils.data.DataLoader(
@@ -97,7 +100,6 @@ def main():
     params = []
     for key, value in params_dict.items():
         decay_mult = 0.0 if 'bias' in key else 1.0
-
         if ('module.base_model.conv1' in key
             or 'module.base_model.bn1' in key
             or 'data_bn' in key) and args.representation in ['mv', 'residual']:
@@ -107,10 +109,11 @@ def main():
         else:
             lr_mult = 0.01
 
-        params += [{'params': value, 'lr': args.lr, 'lr_mult': lr_mult, 'decay_mult': decay_mult}]
+        params += [{'params': value, 'lr': 1e-3, 'lr_mult': lr_mult, 'decay_mult': decay_mult}]
 
     if FINETUNE:
         optimizer = torch.optim.SGD(params, lr=1e-5, momentum=0.9)
+        lr_t = get_lr(optimizer)
     else:
         optimizer = torch.optim.Adam(
             params,
@@ -126,10 +129,14 @@ def main():
     # try to use ReduceOnPlatue to adjust lr
     scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.2, patience=15 // args.eval_freq, verbose=True)
 
-    for epoch in range(args.epochs):
+    for epoch in range(start_epochs, args.epochs):
+        # about optimizer
+        writer.add_scalar('Lr/epoch', get_lr(optimizer), epoch)
         train(train_loader, model, criterions, optimizer, epoch)
         if epoch % args.eval_freq == 0 or epoch == args.epochs - 1:
-            loss_cur = validate(val_loader, model, criterions, epoch)
+            loss_s, loss_c = validate(val_loader, model, criterions, epoch)
+            loss_cur = 0.5 * loss_s + 0.5 * loss_c
+            writer.add_scalar('Combine Loss/epoch', loss_cur, epoch)
             scheduler.step(loss_cur)
             is_best = (loss_cur < loss_min)
             loss_min = min(loss_cur, loss_min)
@@ -153,7 +160,6 @@ def train(train_loader, model, criterions, optimizer, epoch):
     clf_losses = AverageMeter()
 
     model.train()
-
     end = time.time()
     correct_num = 0
     for i, (input_pairs, label) in enumerate(train_loader):
@@ -195,7 +201,6 @@ def train(train_loader, model, criterions, optimizer, epoch):
 
 def validate(val_loader, model, criterions, epoch):
     batch_time = AverageMeter()
-    losses = AverageMeter()
     siamese_losses = AverageMeter()
     clf_losses = AverageMeter()
 
@@ -242,7 +247,7 @@ def validate(val_loader, model, criterions, epoch):
     writer.add_scalar('Accuracy/epoch', acc, epoch)
     writer.add_scalar('Siamese Loss/epoch', siamese_losses.avg, epoch)
     writer.add_scalar('Classification Loss/epoch', clf_losses.avg, epoch)
-    return siamese_losses.avg
+    return siamese_losses.avg, clf_losses.avg
 
 
 def save_checkpoint(state, is_best, filename):

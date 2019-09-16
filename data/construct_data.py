@@ -1,12 +1,15 @@
 import numpy as np
 import os
+from datetime import datetime
 import random
 import cv2
 from functools import cmp_to_key
 from PIL import Image
 from tqdm import tqdm
-from data.utils import free_folder_space
+from data.utils import *
+from utils import *
 import math
+from config import *
 
 ## FOR SMALL DATASET
 # MVS_URL = r'/home/sjhu/datasets/small_dataset/samples_mvs'
@@ -21,6 +24,10 @@ FEATURES_URL = r'/data/sjhu/features_1'
 ROOT_URL = r'/home/sjhu/datasets'
 VIDEOS_URL = r'/home/sjhu/datasets/all_dataset'  #
 TXT_ROOT_URL = r'/data/sjhu/'
+
+## For Dataset
+WIDTH = 256
+HEIGHT = 340
 
 
 class VideoExtracter:
@@ -72,54 +79,108 @@ class VideoExtracter:
         keyframes = self.load_keyframes()
         return residuals, mvs, keyframes
 
-    def load_keyframes(self):
+    def load_keyframes(self,is_train):
+        num_max = 20
         os.chdir(self.keyframes_folder)
         mat = []
-        for img in os.listdir(self.keyframes_folder):
+        files = os.listdir(self.keyframes_folder)
+        length = len(files)
+
+        if length == 0:
+            mat = np.random.randint(255, size=(5, WIDTH, HEIGHT, 3))
+
+        idx = list(range(length))
+        if length > num_max:
+            # print(self.video_name)
+            if is_train:
+                idx = random_sample(idx,num_max)
+            else:
+                idx = fix_sample(idx,num_max)
+
+        for i in idx:
+            img = files[i]
             temp = np.asarray(Image.open(img))
             mat.append(temp)
-        if len(mat) == 0:
-            mat = np.random.randint(255, size=(5, 256, 340, 3))
+
         return np.array(mat, dtype=np.float32)
 
-    def load_mvs(self, num_segments):
+    def load_mvs(self, num_segments, is_train):
+        """
+        :param num_segments:
+        :param is_train:
+        :return: (counts, width, height, channels)
+        """
         os.chdir(self.mvs_folder)
         mat = []
-        length = len(os.listdir(self.mvs_folder))
+        files = os.listdir(self.mvs_folder)
+        length = len(files)
         interval = math.ceil(length / num_segments)
+
         ## for some except
         if interval == 0:
-            mat = np.random.randint(255, size=(num_segments, 256, 340, 2))
+            mat = np.random.randint(1, size=(num_segments, WIDTH, HEIGHT, 2))
             return np.array(mat, dtype=np.float32)
 
-
-        for img in os.listdir(self.mvs_folder)[::interval]:
+        if length < num_segments:
+            idx = list(range(length))
+        else:
+            idx = list(range(length))
+            if is_train:
+                idx = random_sample(idx,num_segments)
+                idx.sort()
+            else:
+                idx = fix_sample(idx,num_segments)
+        for i in idx:
+            img = files[i]
             temp = np.asarray(Image.open(img))
             mat.append(temp)
         mat = np.array(mat, dtype=np.int16)
         mat = mat - 128
+        if mat.shape[0] < num_segments:
+            # use zero to pad
+            pad = np.zeros((num_segments - mat.shape[0], WIDTH, HEIGHT, 3))
+            mat = np.concatenate((mat, pad), axis=0)
         return np.array(mat[..., :2], dtype=np.float32)
 
-    def load_residuals(self, num_segments):
-        os.chdir(self.residuals_folder)
+    def load_residuals(self, num_segments, is_train):
+        """
+        :param num_segments:
+        :param is_train:
+        :return: (counts, width, height, channels)
+        """
+        os.chdir(self.mvs_folder)
         mat = []
-        length = len(os.listdir(self.residuals_folder))
+        files = os.listdir(self.mvs_folder)
+        length = len(files)
         interval = math.ceil(length / num_segments)
 
         ## for some except
         if interval == 0:
-            mat = np.random.randint(255, size=(num_segments, 256, 340, 3))
+            mat = np.random.randint(1, size=(num_segments, WIDTH, HEIGHT, 3))
             return np.array(mat, dtype=np.float32)
 
-        for img in os.listdir(self.residuals_folder)[::interval]:
+        if length < num_segments:
+            idx = list(range(length))
+        else:
+            idx = list(range(length))
+            if is_train:
+                idx = random_sample(idx, num_segments)
+                idx.sort()
+            else:
+                idx = fix_sample(idx, num_segments)
+        for i in idx:
+            img = files[i]
             temp = np.asarray(Image.open(img))
             mat.append(temp)
         mat = np.array(mat, dtype=np.int16)
         mat = mat - 128
-        return np.array(mat, dtype=np.float)
-
-    def get_num_frames(self):
-        return len(self.y_files)
+        if mat.shape[0] < num_segments:
+            # use zero to pad
+            e = mat[-1, ...]
+            e = e[np.newaxis, ...]
+            pad = np.repeat(e, num_segments - mat.shape[0], axis=0)
+            mat = np.concatenate((mat, pad), axis=0)
+        return np.array(mat, dtype=np.float32)
 
     def extract_files_by_type(self, filenames):
         self.u_files = [file for file in filenames if 'D_U' in file]
@@ -170,10 +231,6 @@ class VideoExtracter:
             im = Image.fromarray(mv)
             im.save("%d.jpeg" % i)
 
-
-def partition(lst, n):
-    division = len(lst) / n
-    return [lst[round(division * i):round(division * (i + 1))] for i in range(n)]
 
 
 def single_proecess(array):

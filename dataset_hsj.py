@@ -98,13 +98,13 @@ class CoviarDataSet(data.Dataset):
             extracter = VideoExtracter(video)
             video_features = []
             if self._representation == 'iframe':
-                video_features = extracter.load_keyframes()
+                video_features = extracter.load_keyframes(self._is_train)
             elif self._representation == 'residual':
-                video_features = extracter.load_residuals(self._num_segments)
+                video_features = extracter.load_residuals(self._num_segments, self._is_train)
                 assert video_features.shape[0] == self._num_segments, print("num_segments sample error")
 
             elif self._representation == 'mv':
-                video_features = extracter.load_mvs(self._num_segments)
+                video_features = extracter.load_mvs(self._num_segments, self._is_train)
                 assert video_features.shape[0] == self._num_segments, print("num_segments sample error")
 
             video_features = np.array(video_features, dtype=np.float32)

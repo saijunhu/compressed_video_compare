@@ -114,6 +114,13 @@ def visualize(distnces, labels,title=""):
     plt.show()
 
 
+def get_lr(optimizer):
+    for param_group in optimizer.param_groups:
+        return param_group['lr']
+
+def partition(lst, n):
+    division = len(lst) / n
+    return [lst[round(division * i):round(division * (i + 1))] for i in range(n)]
 
 
 if __name__ == '__main__':

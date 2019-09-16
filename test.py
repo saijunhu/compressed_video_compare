@@ -16,6 +16,8 @@ from transforms import GroupOverSample
 from transforms import GroupScale
 from utils import *
 import pickle
+from torch.utils.tensorboard import SummaryWriter
+from sklearn.metrics import classification_report
 
 parser = argparse.ArgumentParser(
     description="Standard video-level testing")
@@ -36,7 +38,10 @@ parser.add_argument('--gpus', nargs='+', type=int, default=None)
 
 args = parser.parse_args()
 
+
 def main():
+    writter = SummaryWriter('./log/test', comment='')
+
     net = Model(2, args.num_segments, args.representation,
                 base_model=args.arch)
 
@@ -82,23 +87,30 @@ def main():
     correct_nums = 0
 
     for i, (input_pairs, label) in enumerate(data_loader):
-        input_pairs[0] = input_pairs[0].float().to(devices[0])
-        input_pairs[1] = input_pairs[1].float().to(devices[0])
-        label = label.float().to(devices[0])
+        with torch.no_grad:
+            input_pairs[0] = input_pairs[0].float().to(devices[0])
+            input_pairs[1] = input_pairs[1].float().to(devices[0])
+            label = label.float().to(devices[0])
 
-        outputs, y = net(input_pairs)
-        _, predicts = torch.max(y, 1)
-        scores.append(y.detach().cpu().numpy())
-        labels.append(label.detach().cpu().numpy())
-        correct_nums += (predicts == label.clone().long()).sum()
+            outputs, y = net(input_pairs)
+            _, predicts = torch.max(y, 1)
+            scores.append(y.detach().cpu().numpy())
+            labels.append(label.detach().cpu().numpy())
+            correct_nums += (predicts == label.clone().long()).sum()
 
-        cnt_time = time.time() - proc_start_time
-        if (i + 1) % 100 == 0:
-            print('video {} done, total {}/{}, average {} sec/video'.format(i, i + 1,
-                                                                            total_num,
-                                                                            float(cnt_time) / (i + 1)))
+            cnt_time = time.time() - proc_start_time
+            if (i + 1) % 100 == 0:
+                print('video {} done, total {}/{}, average {} sec/video'.format(i, i + 1,
+                                                                                total_num,
+                                                                                float(cnt_time) / (i + 1)))
+    predits = np.argmax(scores, 1)
+    labels = np.around(labels).astype(np.long).ravel()
 
     acc = 100 * correct_nums / len(data_loader.dataset)
+    target_names = ['Copy', 'Not Copy']
+    # writter.add_pr_curve('Precision/Recall', labels, predits)
+    writter.add_text('Accuracy', '%.3f%%' % acc)
+    writter.add_text(classification_report(labels, predits, target_names=target_names))
     print(('Validating Results: accuracy: {accuracy:.3f}%'.format(accuracy=acc)))
 
     if args.save_scores is not None:
