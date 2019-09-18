@@ -20,9 +20,9 @@ from config import *
 # TXT_ROOT_URL = r'/home/sjhu/datasets/small_dataset/'
 
 ## FOR MEDIUM
-FEATURES_URL = r'/data/sjhu/features_1'
-ROOT_URL = r'/home/sjhu/datasets'
-VIDEOS_URL = r'/home/sjhu/datasets/all_dataset'  #
+FEATURES_URL = r'/data/sjhu/features'
+ROOT_URL = r'/data/sjhu/datasets'
+VIDEOS_URL = r'/data/sjhu/datasets/all_dataset'  #
 TXT_ROOT_URL = r'/data/sjhu/'
 
 ## For Dataset
@@ -74,33 +74,48 @@ class VideoExtracter:
                 os.path.join(VIDEOS_URL, self.video_name), self.keyframes_folder))
 
     def load_video_level_features(self, num_segments):
-        residuals = self.load_residuals(num_segments)
-        mvs = self.load_mvs(num_segments)
-        keyframes = self.load_keyframes()
+        residuals = self.load_residuals(num_segments, True)
+        mvs = self.load_mvs(num_segments, True)
+        keyframes = self.load_keyframes(num_segments, True)
         return residuals, mvs, keyframes
 
-    def load_keyframes(self,is_train):
-        num_max = 20
+    def load_keyframes(self, num_segments, is_train):
+        """
+        :param num_segments:
+        :param is_train:
+        :return: (counts, width, height, channels)
+        """
         os.chdir(self.keyframes_folder)
         mat = []
         files = os.listdir(self.keyframes_folder)
         length = len(files)
+        interval = math.ceil(length / num_segments)
 
-        if length == 0:
-            mat = np.random.randint(255, size=(5, WIDTH, HEIGHT, 3))
+        ## for some exception
+        if interval == 0:
+            mat = np.random.randint(255, size=(num_segments, WIDTH, HEIGHT, 3))
+            return np.array(mat, dtype=np.float32)
 
-        idx = list(range(length))
-        if length > num_max:
-            # print(self.video_name)
+        if length < num_segments:
+            idx = list(range(length))
+        else:
+            idx = list(range(length))
             if is_train:
-                idx = random_sample(idx,num_max)
+                idx = random_sample(idx, num_segments)
+                idx.sort()
             else:
-                idx = fix_sample(idx,num_max)
-
+                idx = fix_sample(idx, num_segments)
         for i in idx:
             img = files[i]
             temp = np.asarray(Image.open(img))
             mat.append(temp)
+        mat = np.array(mat, dtype=np.int16)
+        if mat.shape[0] < num_segments:
+            # use last to pad
+            e = mat[-1, ...]
+            e = e[np.newaxis, ...]
+            pad = np.repeat(e, num_segments - mat.shape[0], axis=0)
+            mat = np.concatenate((mat, pad), axis=0)
 
         return np.array(mat, dtype=np.float32)
 
@@ -126,10 +141,10 @@ class VideoExtracter:
         else:
             idx = list(range(length))
             if is_train:
-                idx = random_sample(idx,num_segments)
+                idx = random_sample(idx, num_segments)
                 idx.sort()
             else:
-                idx = fix_sample(idx,num_segments)
+                idx = fix_sample(idx, num_segments)
         for i in idx:
             img = files[i]
             temp = np.asarray(Image.open(img))
@@ -175,7 +190,7 @@ class VideoExtracter:
         mat = np.array(mat, dtype=np.int16)
         mat = mat - 128
         if mat.shape[0] < num_segments:
-            # use zero to pad
+            # use last to pad
             e = mat[-1, ...]
             e = e[np.newaxis, ...]
             pad = np.repeat(e, num_segments - mat.shape[0], axis=0)
@@ -230,7 +245,6 @@ class VideoExtracter:
             mv = np.array(mv + 128, np.uint8)
             im = Image.fromarray(mv)
             im.save("%d.jpeg" % i)
-
 
 
 def single_proecess(array):

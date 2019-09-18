@@ -20,16 +20,19 @@ from transforms import GroupScale
 from utils import *
 from torch.utils.tensorboard import SummaryWriter
 
-SAVE_FREQ = 40
+SAVE_FREQ = 20
 PRINT_FREQ = 20
 ACCUMU_STEPS = 4  # use gradient accumlation to use least memory and more runtime
 loss_min = 1
 CONTINUE_FROM_LAST = False
-LAST_SAVE_PATH = r'vcdb_residual_res50_copy_detection_checkpoint.pth.tar'
+LAST_SAVE_PATH = r'vcdb_mv_res50_copy_detection_checkpoint.pth.tar'
 FINETUNE = False
 
+WEI_S = 1
+WEI_C = 1.5
+
 # for visualization
-writer = SummaryWriter('./log/bt_1_seg_10_iframe')
+writer = SummaryWriter('./log/bt_2_seg_15_iframe')
 
 
 def main():
@@ -47,7 +50,7 @@ def main():
 
     # add continue train from before
     if CONTINUE_FROM_LAST:
-        checkpoint = torch.load(LAST_SAVE_PATH,map_location='cuda:0')
+        checkpoint = torch.load(LAST_SAVE_PATH, map_location='cuda:0')
         # print("model epoch {} best prec@1: {}".format(checkpoint['epoch'], checkpoint['best_prec1']))
         print("model epoch {} lowest loss {}".format(checkpoint['epoch'], checkpoint['loss_min']))
         base_dict = {'.'.join(k.split('.')[1:]): v for k, v in list(checkpoint['state_dict'].items())}
@@ -109,11 +112,10 @@ def main():
         else:
             lr_mult = 0.01
 
-        params += [{'params': value, 'lr': 1e-3, 'lr_mult': lr_mult, 'decay_mult': decay_mult}]
+        params += [{'params': value, 'lr': args.lr, 'lr_mult': lr_mult, 'decay_mult': decay_mult}]
 
     if FINETUNE:
         optimizer = torch.optim.SGD(params, lr=1e-5, momentum=0.9)
-        lr_t = get_lr(optimizer)
     else:
         optimizer = torch.optim.Adam(
             params,
@@ -122,7 +124,7 @@ def main():
 
     criterions = []
     siamese_loss = ContrastiveLoss(margin=2.0).to(devices[0])
-    classifiy_loss = nn.CrossEntropyLoss()
+    classifiy_loss = nn.CrossEntropyLoss().to(devices[0])
     criterions.append(siamese_loss)
     criterions.append(classifiy_loss)
 
@@ -132,14 +134,19 @@ def main():
     for epoch in range(start_epochs, args.epochs):
         # about optimizer
         writer.add_scalar('Lr/epoch', get_lr(optimizer), epoch)
-        train(train_loader, model, criterions, optimizer, epoch)
+        loss_train_s, loss_train_c = train(train_loader, model, criterions, optimizer, epoch)
+        loss_train = WEI_S * loss_train_s + WEI_C * loss_train_c
         if epoch % args.eval_freq == 0 or epoch == args.epochs - 1:
-            loss_s, loss_c = validate(val_loader, model, criterions, epoch)
-            loss_cur = 0.5 * loss_s + 0.5 * loss_c
-            writer.add_scalar('Combine Loss/epoch', loss_cur, epoch)
-            scheduler.step(loss_cur)
-            is_best = (loss_cur < loss_min)
-            loss_min = min(loss_cur, loss_min)
+            loss_val_s, loss_val_c, acc = validate(val_loader, model, criterions, epoch)
+            loss_val = WEI_S * loss_val_s + WEI_C * loss_val_c
+            scheduler.step(loss_val)
+            is_best = (loss_val < loss_min)
+            loss_min = min(loss_val, loss_min)
+            # visualization
+            writer.add_scalar('Accuracy/epoch', acc, epoch)
+            writer.add_scalars('Siamese Loss/epoch', {'Train': loss_train_s, 'Val': loss_val_s}, epoch)
+            writer.add_scalars('Classification Loss/epoch', {'Train': loss_train_c, 'Val': loss_val_c}, epoch)
+            writer.add_scalars('Combine Loss/epoch', {'Train': loss_train, 'Val': loss_val}, epoch)
             if is_best or epoch % SAVE_FREQ == 0:
                 save_checkpoint(
                     {
@@ -154,6 +161,14 @@ def main():
 
 
 def train(train_loader, model, criterions, optimizer, epoch):
+    '''
+    :param train_loader:
+    :param model:
+    :param criterions:
+    :param optimizer:
+    :param epoch:
+    :return:  (siamese loss, clf loss)
+    '''
     batch_time = AverageMeter()
     data_time = AverageMeter()
     siamese_losses = AverageMeter()
@@ -161,22 +176,20 @@ def train(train_loader, model, criterions, optimizer, epoch):
 
     model.train()
     end = time.time()
-    correct_num = 0
     for i, (input_pairs, label) in enumerate(train_loader):
         data_time.update(time.time() - end)
         input_pairs[0] = input_pairs[0].float().to(devices[0])
         input_pairs[1] = input_pairs[1].float().to(devices[0])
         label = label.float().to(devices[0])
-
         outputs, y = model(input_pairs)
         loss1 = criterions[0](outputs[0], outputs[1], label.clone().float()) / ACCUMU_STEPS
         loss2 = criterions[1](y, label.clone().long()) / ACCUMU_STEPS
         siamese_losses.update(loss1.item(), input_pairs[0].size(0))
         clf_losses.update(loss2.item(), input_pairs[0].size(0))
-
-        loss1.backward(retain_graph=True)
-        loss2.backward()
-
+        # loss1.backward(retain_graph=True)
+        # loss2.backward()
+        loss = WEI_S * loss1 + WEI_C * loss2
+        loss.backward(retain_graph=True)
         # use gradient accumulation
         if i % ACCUMU_STEPS == 0:
             # attention the following line can't be transplaced
@@ -185,7 +198,6 @@ def train(train_loader, model, criterions, optimizer, epoch):
 
         batch_time.update(time.time() - end)
         end = time.time()
-
         if i % PRINT_FREQ == 0:
             print(('Epoch: [{0}][{1}/{2}],\t'
                    'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
@@ -198,18 +210,23 @@ def train(train_loader, model, criterions, optimizer, epoch):
                 loss1=siamese_losses,
                 loss2=clf_losses)))
 
+    return siamese_losses.avg, clf_losses.avg  # attention indent ,there was a serious bug here
+
 
 def validate(val_loader, model, criterions, epoch):
+    '''
+    :param val_loader:
+    :param model:
+    :param criterions:
+    :param epoch:
+    :return:  (siamese loss, clf loss, acc)
+    '''
     batch_time = AverageMeter()
     siamese_losses = AverageMeter()
     clf_losses = AverageMeter()
-
-    # model.float()
     model.eval()
-
     end = time.time()
     correct_nums = 0
-
     for i, (input_pairs, label) in enumerate(val_loader):
         with torch.no_grad():
             input_pairs[0] = input_pairs[0].float().to(devices[0])
@@ -227,14 +244,11 @@ def validate(val_loader, model, criterions, epoch):
             batch_time.update(time.time() - end)
             end = time.time()
 
-            # for tensorboard
-
             if i % PRINT_FREQ == 0:
                 print(('Validate: [{0}/{1}]\t'
                        'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                        'siamese loss {loss1.val:.4f} ({loss1.avg:.4f})\t'
-                       ' loss {loss1.val:.4f} ({loss1.avg:.4f})\t'
-                       ' loss {loss2.val:.4f} ({loss2.avg:.4f})\t'
+                       'clf loss {loss2.val:.4f} ({loss2.avg:.4f})\t'
                     .format(
                     i, len(val_loader),
                     batch_time=batch_time,
@@ -242,12 +256,11 @@ def validate(val_loader, model, criterions, epoch):
                     loss2=clf_losses)))
 
     acc = 100 * correct_nums / len(val_loader.dataset)
-    print(('Validating Results: siamese Loss {loss.avg:.5f}, Accuracy: {accuracy:.3f}%'.format(loss=siamese_losses,
-                                                                                               accuracy=acc)))
-    writer.add_scalar('Accuracy/epoch', acc, epoch)
-    writer.add_scalar('Siamese Loss/epoch', siamese_losses.avg, epoch)
-    writer.add_scalar('Classification Loss/epoch', clf_losses.avg, epoch)
-    return siamese_losses.avg, clf_losses.avg
+    print((
+        'Validating Results: siamese Loss {loss.avg:.5f}, classification loss {loss3.avg:.5f}, Accuracy: {accuracy:.3f}%'.format(
+            loss=siamese_losses, loss3=clf_losses,
+            accuracy=acc)))
+    return siamese_losses.avg, clf_losses.avg, acc
 
 
 def save_checkpoint(state, is_best, filename):

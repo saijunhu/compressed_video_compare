@@ -19,11 +19,15 @@ parser.add_argument('--representation', type=str, choices=['iframe', 'mv', 'resi
                     help='data representation.')
 parser.add_argument('--arch', type=str, default="resnet152",
                     help='base architecture.')
-parser.add_argument('--num_segments', type=int, default=3,
+parser.add_argument('--num-segments', type=int, default=3,
                     help='number of TSN segments.')
 parser.add_argument('--no-accumulation', action='store_true',
                     help='disable accumulation of motion vectors and residuals.')
-                    # store_true 是指带触发action时为真，不触发则为假，2L说的代码去掉default初始化，其功能也不会变化
+# store_true 是指带触发action时为真，不触发则为假，2L说的代码去掉default初始化，其功能也不会变化
+parser.add_argument('--dropout', default=0.25, type=float,
+                    help='control the dropout ratio')
+parser.add_argument('--keyfeatures', default=128, type=int,
+                    help='the discriminative key vectors length')
 
 # Training.
 parser.add_argument('--epochs', default=500, type=int,

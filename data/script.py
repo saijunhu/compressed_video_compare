@@ -41,10 +41,13 @@ def move_dataset():
         os.system('cp -r %s %s' % (v,SPLIT_URL))
         print("ok")
 
+def merge_dataset():
+    os.chdir('/data/sjhu/features_2')
+    for folder in os.listdir('/data/sjhu/features_2'):
+        os.system('mv %s %s' % (folder, '/data/sjhu/features_1'))
 
 if __name__ == '__main__':
     # split_datset()
     # run()
-    move_dataset()
-    test()
+    merge_dataset()
 

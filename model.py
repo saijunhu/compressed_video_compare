@@ -6,9 +6,11 @@ from transforms import GroupRandomHorizontalFlip
 import torch.nn.functional as F
 import torchvision
 import torch
+from train_options import parser
+args = parser.parse_args()
 
-KEY_FEATURES = 128
-DROPOUT = 0.2
+KEY_FEATURES = args.keyfeatures
+DROPOUT = args.dropout
 
 # Flatten layer
 class Flatten(nn.Module):
