@@ -123,45 +123,7 @@ class VideoExtracter:
         """
         :param num_segments:
         :param is_train:
-        :return: (counts, width, height, channels)
-        """
-        os.chdir(self.mvs_folder)
-        mat = []
-        files = os.listdir(self.mvs_folder)
-        length = len(files)
-        interval = math.ceil(length / num_segments)
-
-        ## for some except
-        if interval == 0:
-            mat = np.random.randint(1, size=(num_segments, WIDTH, HEIGHT, 2))
-            return np.array(mat, dtype=np.float32)
-
-        if length < num_segments:
-            idx = list(range(length))
-        else:
-            idx = list(range(length))
-            if is_train:
-                idx = random_sample(idx, num_segments)
-                idx.sort()
-            else:
-                idx = fix_sample(idx, num_segments)
-        for i in idx:
-            img = files[i]
-            temp = np.asarray(Image.open(img))
-            mat.append(temp)
-        mat = np.array(mat, dtype=np.int16)
-        mat = mat - 128
-        if mat.shape[0] < num_segments:
-            # use zero to pad
-            pad = np.zeros((num_segments - mat.shape[0], WIDTH, HEIGHT, 3))
-            mat = np.concatenate((mat, pad), axis=0)
-        return np.array(mat[..., :2], dtype=np.float32)
-
-    def load_residuals(self, num_segments, is_train):
-        """
-        :param num_segments:
-        :param is_train:
-        :return: (counts, width, height, channels)
+        :return: (counts, width, height, channels=3) 0,255
         """
         os.chdir(self.mvs_folder)
         mat = []
@@ -188,7 +150,46 @@ class VideoExtracter:
             temp = np.asarray(Image.open(img))
             mat.append(temp)
         mat = np.array(mat, dtype=np.int16)
-        mat = mat - 128
+        # mat = mat - 128
+        if mat.shape[0] < num_segments:
+            # use zero to pad
+            pad = np.zeros((num_segments - mat.shape[0], WIDTH, HEIGHT, 3))
+            mat = np.concatenate((mat, pad), axis=0)
+        # return np.array(mat[..., :2], dtype=np.float32)
+        return np.array(mat,dtype=np.float32)
+
+    def load_residuals(self, num_segments, is_train):
+        """
+        :param num_segments:
+        :param is_train:
+        :return: (counts, width, height, channels), 0,255
+        """
+        os.chdir(self.mvs_folder)
+        mat = []
+        files = os.listdir(self.mvs_folder)
+        length = len(files)
+        interval = math.ceil(length / num_segments)
+
+        ## for some except
+        if interval == 0:
+            mat = np.random.randint(1, size=(num_segments, WIDTH, HEIGHT, 3))
+            return np.array(mat, dtype=np.float32)
+
+        if length < num_segments:
+            idx = list(range(length))
+        else:
+            idx = list(range(length))
+            if is_train:
+                idx = random_sample(idx, num_segments)
+                idx.sort()
+            else:
+                idx = fix_sample(idx, num_segments)
+        for i in idx:
+            img = files[i]
+            temp = np.asarray(Image.open(img))
+            mat.append(temp)
+        mat = np.array(mat, dtype=np.int16)
+        # mat = mat - 128
         if mat.shape[0] < num_segments:
             # use last to pad
             e = mat[-1, ...]

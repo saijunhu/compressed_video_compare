@@ -1,6 +1,7 @@
 import os
 from PIL import Image
 import numpy as np
+import cv2
 
 def calcul_video_mse():
     origin = np.load('residuals.npy')
@@ -133,6 +134,16 @@ def fix_sample(lst,n):
     for g in groups:
         mat.append(g[-1])
     return mat
+
+def convert_mv_to_3C(mat):
+    # Use Hue, Saturation, Value colour model
+    w = mat.shape[1], h= mat.shape[2]
+    hsv = np.zeros((w, h, 3), dtype=np.uint8)
+    hsv[..., 1] = 255
+    mag, ang = cv2.cartToPolar(tmp[..., 0], tmp[..., 1])
+    hsv[..., 0] = ang * 180 / np.pi / 2
+    hsv[..., 2] = cv2.normalize(mag, None, 0, 255, cv2.NORM_MINMAX)
+    bgr_frame = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
 if __name__ == '__main__':
     # split_datset()

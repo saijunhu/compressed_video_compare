@@ -7,10 +7,13 @@ import torch.nn.functional as F
 import torchvision
 import torch
 from train_options import parser
+from torchvision.models.video import r2plus1d_18
+from torch.nn.modules import Conv3d
 args = parser.parse_args()
 
 KEY_FEATURES = args.keyfeatures
 DROPOUT = args.dropout
+
 
 # Flatten layer
 class Flatten(nn.Module):
@@ -23,7 +26,7 @@ class Flatten(nn.Module):
 
 class Model(nn.Module):
     def __init__(self, num_class, num_segments, representation,
-                 base_model='resnet152'):
+                 base_model='r2plus1d_18'):
         super(Model, self).__init__()
         self._representation = representation  # net input, mv,residual,
         self.num_segments = num_segments
@@ -31,62 +34,57 @@ class Model(nn.Module):
         print(("""
 Initializing model:
     base model:         {}.
-    input_representation:     {}.
-    num_class:          {}.
     num_segments:       {}.
-        """.format(base_model, self._representation, num_class, self.num_segments)))
+        """.format(base_model, self.num_segments)))
 
         self._prepare_base_model(base_model)
         self._prepare_tsn(num_class)
 
     def _prepare_tsn(self, num_class):
-
-        feature_dim = getattr(self.base_model, 'fc').out_features
+        feature_dim = getattr(self.base_model_channel_3, 'fc').out_features
         self.dropout = nn.Dropout(DROPOUT)
         self.key_feature_layer = nn.Linear(feature_dim, KEY_FEATURES)
-        self.fc_layer_1 = nn.Linear(KEY_FEATURES, KEY_FEATURES)
-        self.fc_layer_2 = nn.Linear(KEY_FEATURES, KEY_FEATURES)
-        self.clf_layer = nn.Linear(KEY_FEATURES, 2)
-
-        if self._representation == 'mv':
-            # here modify the conv1 input channel from resnet 3  ==> 2,that's all
-            setattr(self.base_model, 'conv1',
-                    nn.Conv2d(2, 64,
-                              kernel_size=(7, 7),
-                              stride=(2, 2),
-                              padding=(3, 3),
-                              bias=False))
-            self.data_bn = nn.BatchNorm2d(2)  # input channel is 2
-        if self._representation == 'residual':
-            self.data_bn = nn.BatchNorm2d(3)  # input channel is 3
+        self.fc_layer_1 = nn.Linear(KEY_FEATURES * 2, KEY_FEATURES * 2)
+        self.fc_layer_2 = nn.Linear(KEY_FEATURES * 2, KEY_FEATURES * 2)
+        self.clf_layer = nn.Linear(KEY_FEATURES * 2, 2)
 
     def _prepare_base_model(self, base_model):
         """
-        create ResNet backbone
+        create 3d convnet backbone
         """
-        if 'resnet' in base_model:
-            self.base_model = getattr(torchvision.models, base_model)(pretrained=True)
-            self._input_size = 224
-        else:
-            raise ValueError('Unknown base model: {}'.format(base_model))
+        self.base_model_channel_3 = torchvision.models.video.r2plus1d_18(pretrained=True)
+        self.base_model_channel_2 = torchvision.models.video.r2plus1d_18(pretrained=True)
+        # here modify the conv1 input channel from resnet 3  ==> 2,that's all
+        self.base_model_channel_2.stem[0] = Conv3d(2,45,kernel_size=(1,7,7),stride=(1,2,2),padding=(0,3,3),bias=True)
+
+        self.data_bn_channel_2 = nn.BatchNorm3d(2)  # input channel is 2
+        self.data_bn_channel_3 = nn.BatchNorm3d(3)  # input channel is 3
 
     def forward(self, inputs):
+        # ( (img1,mv1), (img2,mv2))
         outputs = []
-        for input in inputs:
-            if self._representation == 'iframe':
-                self.num_segments = input.shape[1]
-            # convert input to 4-dim input
-            input = input.view((-1,) + input.size()[-3:])
-            if self._representation in ['mv', 'residual']:
-                input = self.data_bn(input)
-
-            x = self.base_model(input)
-            x = self.dropout(x)
-            x = self.key_feature_layer(x)
-            x = x.view((-1, self.num_segments) + x.size()[1:])
-            x = torch.mean(x, dim=1)
-            outputs.append(x)
-
+        for features in inputs:
+            mix_features = []
+            for i in range(len(features)):
+                if i == 0:
+                    # for rgb
+                    features[i] = self.data_bn_channel_3(features[i])
+                    x = self.base_model_channel_3(features[i])
+                if i == 1:
+                    # for mv and residual need batch_normalization
+                    features[i] = self.data_bn_channel_2(features[i])
+                    x = self.base_model_channel_2(features[i])
+                if i == 2:
+                    # for futures , for residual
+                    features[i] = self.data_bn_channel_3(features[i])
+                    x = self.base_model_channel_3(features[i])
+                x = self.dropout(x)
+                x = self.key_feature_layer(x)
+                # x = (batch, features)
+                mix_features.append(x)
+            mix_features = torch.cat([mix_features[0], mix_features[1]], dim=1)
+            # print(mix_features.shape)
+            outputs.append(mix_features)
         x = self.fc_layer_1(torch.abs(outputs[0] - outputs[1]))
         x = F.relu(x)
         x = self.fc_layer_2(x)

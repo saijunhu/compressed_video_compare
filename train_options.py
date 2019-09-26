@@ -15,7 +15,7 @@ parser.add_argument('--test-list', type=str,
                     help='testing example list.')
 
 # Model.
-parser.add_argument('--representation', type=str, choices=['iframe', 'mv', 'residual'],
+parser.add_argument('--representation', type=str, choices=['iframe', 'mv', 'residual', 'mixed'],
                     help='data representation.')
 parser.add_argument('--arch', type=str, default="resnet152",
                     help='base architecture.')

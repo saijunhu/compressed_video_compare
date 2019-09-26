@@ -25,14 +25,14 @@ PRINT_FREQ = 20
 ACCUMU_STEPS = 4  # use gradient accumlation to use least memory and more runtime
 loss_min = 1
 CONTINUE_FROM_LAST = False
-LAST_SAVE_PATH = r'vcdb_mv_res50_copy_detection_checkpoint.pth.tar'
+LAST_SAVE_PATH = r'vcdb_medium_mixed_res50_copy_detection_checkpoint.pth.tar'
 FINETUNE = False
 
 WEI_S = 1
-WEI_C = 1.5
+WEI_C = 2
 
 # for visualization
-writer = SummaryWriter('./log/bt_2_seg_15_iframe')
+writer = SummaryWriter('./log/bt_6_seg_10_mixed_r21d18')
 
 
 def main():
@@ -50,7 +50,7 @@ def main():
 
     # add continue train from before
     if CONTINUE_FROM_LAST:
-        checkpoint = torch.load(LAST_SAVE_PATH, map_location='cuda:0')
+        checkpoint = torch.load(LAST_SAVE_PATH)
         # print("model epoch {} best prec@1: {}".format(checkpoint['epoch'], checkpoint['best_prec1']))
         print("model epoch {} lowest loss {}".format(checkpoint['epoch'], checkpoint['loss_min']))
         base_dict = {'.'.join(k.split('.')[1:]): v for k, v in list(checkpoint['state_dict'].items())}
@@ -72,7 +72,6 @@ def main():
             video_list=args.train_list,
             num_segments=args.num_segments,
             representation=args.representation,
-            transform=model.get_augmentation(),
             is_train=True,
             accumulate=(not args.no_accumulation),
         ),
@@ -85,10 +84,6 @@ def main():
             video_list=args.test_list,
             num_segments=args.num_segments,
             representation=args.representation,
-            transform=torchvision.transforms.Compose([
-                GroupScale(int(model.scale_size)),
-                GroupCenterCrop(model.crop_size),
-            ]),
             is_train=False,
             accumulate=(not args.no_accumulation),
         ),
@@ -129,7 +124,7 @@ def main():
     criterions.append(classifiy_loss)
 
     # try to use ReduceOnPlatue to adjust lr
-    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.2, patience=15 // args.eval_freq, verbose=True)
+    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.2, patience=20 // args.eval_freq, verbose=True)
 
     for epoch in range(start_epochs, args.epochs):
         # about optimizer
@@ -139,9 +134,9 @@ def main():
         if epoch % args.eval_freq == 0 or epoch == args.epochs - 1:
             loss_val_s, loss_val_c, acc = validate(val_loader, model, criterions, epoch)
             loss_val = WEI_S * loss_val_s + WEI_C * loss_val_c
-            scheduler.step(loss_val)
-            is_best = (loss_val < loss_min)
-            loss_min = min(loss_val, loss_min)
+            scheduler.step(loss_val_c)
+            is_best = (loss_val_c < loss_min)
+            loss_min = min(loss_val_c, loss_min)
             # visualization
             writer.add_scalar('Accuracy/epoch', acc, epoch)
             writer.add_scalars('Siamese Loss/epoch', {'Train': loss_train_s, 'Val': loss_val_s}, epoch)
@@ -178,14 +173,16 @@ def train(train_loader, model, criterions, optimizer, epoch):
     end = time.time()
     for i, (input_pairs, label) in enumerate(train_loader):
         data_time.update(time.time() - end)
-        input_pairs[0] = input_pairs[0].float().to(devices[0])
-        input_pairs[1] = input_pairs[1].float().to(devices[0])
+        input_pairs[0][0] = input_pairs[0][0].float().to(devices[0])
+        input_pairs[0][1] = input_pairs[0][1].float().to(devices[0])
+        input_pairs[1][0] = input_pairs[1][0].float().to(devices[0])
+        input_pairs[1][1] = input_pairs[1][1].float().to(devices[0])
         label = label.float().to(devices[0])
         outputs, y = model(input_pairs)
         loss1 = criterions[0](outputs[0], outputs[1], label.clone().float()) / ACCUMU_STEPS
         loss2 = criterions[1](y, label.clone().long()) / ACCUMU_STEPS
-        siamese_losses.update(loss1.item(), input_pairs[0].size(0))
-        clf_losses.update(loss2.item(), input_pairs[0].size(0))
+        siamese_losses.update(loss1.item(), args.batch_size)
+        clf_losses.update(loss2.item(), args.batch_size)
         # loss1.backward(retain_graph=True)
         # loss2.backward()
         loss = WEI_S * loss1 + WEI_C * loss2
@@ -229,15 +226,17 @@ def validate(val_loader, model, criterions, epoch):
     correct_nums = 0
     for i, (input_pairs, label) in enumerate(val_loader):
         with torch.no_grad():
-            input_pairs[0] = input_pairs[0].float().to(devices[0])
-            input_pairs[1] = input_pairs[1].float().to(devices[0])
+            input_pairs[0][0] = input_pairs[0][0].float().to(devices[0])
+            input_pairs[0][1] = input_pairs[0][1].float().to(devices[0])
+            input_pairs[1][0] = input_pairs[1][0].float().to(devices[0])
+            input_pairs[1][1] = input_pairs[1][1].float().to(devices[0])
             label = label.float().to(devices[0])
 
             outputs, y = model(input_pairs)
             loss1 = criterions[0](outputs[0], outputs[1], label.clone().float())
             loss2 = criterions[1](y, label.clone().long())
-            siamese_losses.update(loss1.item(), input_pairs[0].size(0))
-            clf_losses.update(loss2.item(), input_pairs[0].size(0))
+            siamese_losses.update(loss1.item(), input_pairs[0][0].size(0))
+            clf_losses.update(loss2.item(), input_pairs[0][0].size(0))
 
             _, predicts = torch.max(y, 1)
             correct_nums += (predicts == label.clone().long()).sum()
