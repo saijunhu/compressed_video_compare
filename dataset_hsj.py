@@ -87,6 +87,9 @@ class CoviarDataSet(data.Dataset):
             #     assert video_features.shape[0] == self._num_segments, print("num_segments sample error")
             video_features.append(keyframes)
             video_features.append(mvs)
+            #TODO qpdata 1x112x112
+            qp = np.random.random((self._num_segments,1,56,56))
+            video_features.append(qp)
             one_pairs_data.append(video_features)
 
         return one_pairs_data, self._labels_list[index]

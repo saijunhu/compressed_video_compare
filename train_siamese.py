@@ -32,15 +32,18 @@ WEI_S = 1
 WEI_C = 2
 
 # for visualization
-writer = SummaryWriter('./log/bt_6_seg_10_mixed_r21d18')
+WRITER = []
+DEVICES = []
 
 
 def main():
     print(torch.cuda.device_count())
     global args
     global devices
+    global WRITER
     args = parser.parse_args()
-
+    log_name = './log/%s_bt_%d_seg_%d_%s' % (args.arch, args.batch_size, args.num_segments, args.representation)
+    WRITER = SummaryWriter(log_name)
     print('Training arguments:')
     for k, v in vars(args).items():
         print('\t{}: {}'.format(k, v))
@@ -62,9 +65,11 @@ def main():
         start_epochs = 0
 
     # print(model)
-    # writer.add_graph(model, (torch.randn(10,5, 2, 224, 224),))
+    # WRITER.add_graph(model, (torch.randn(10,5, 2, 224, 224),))
 
     devices = [torch.device("cuda:%d" % device) for device in args.gpus]
+    global DEVICES
+    DEVICES = devices
 
     train_loader = torch.utils.data.DataLoader(
         CoviarDataSet(
@@ -128,7 +133,7 @@ def main():
 
     for epoch in range(start_epochs, args.epochs):
         # about optimizer
-        writer.add_scalar('Lr/epoch', get_lr(optimizer), epoch)
+        WRITER.add_scalar('Lr/epoch', get_lr(optimizer), epoch)
         loss_train_s, loss_train_c = train(train_loader, model, criterions, optimizer, epoch)
         loss_train = WEI_S * loss_train_s + WEI_C * loss_train_c
         if epoch % args.eval_freq == 0 or epoch == args.epochs - 1:
@@ -138,10 +143,10 @@ def main():
             is_best = (loss_val_c < loss_min)
             loss_min = min(loss_val_c, loss_min)
             # visualization
-            writer.add_scalar('Accuracy/epoch', acc, epoch)
-            writer.add_scalars('Siamese Loss/epoch', {'Train': loss_train_s, 'Val': loss_val_s}, epoch)
-            writer.add_scalars('Classification Loss/epoch', {'Train': loss_train_c, 'Val': loss_val_c}, epoch)
-            writer.add_scalars('Combine Loss/epoch', {'Train': loss_train, 'Val': loss_val}, epoch)
+            WRITER.add_scalar('Accuracy/epoch', acc, epoch)
+            WRITER.add_scalars('Siamese Loss/epoch', {'Train': loss_train_s, 'Val': loss_val_s}, epoch)
+            WRITER.add_scalars('Classification Loss/epoch', {'Train': loss_train_c, 'Val': loss_val_c}, epoch)
+            WRITER.add_scalars('Combine Loss/epoch', {'Train': loss_train, 'Val': loss_val}, epoch)
             if is_best or epoch % SAVE_FREQ == 0:
                 save_checkpoint(
                     {
@@ -152,7 +157,7 @@ def main():
                     },
                     is_best,
                     filename='checkpoint.pth.tar')
-    writer.close()
+    WRITER.close()
 
 
 def train(train_loader, model, criterions, optimizer, epoch):
@@ -175,8 +180,10 @@ def train(train_loader, model, criterions, optimizer, epoch):
         data_time.update(time.time() - end)
         input_pairs[0][0] = input_pairs[0][0].float().to(devices[0])
         input_pairs[0][1] = input_pairs[0][1].float().to(devices[0])
+        input_pairs[0][2] = input_pairs[0][2].float().to(devices[0])
         input_pairs[1][0] = input_pairs[1][0].float().to(devices[0])
         input_pairs[1][1] = input_pairs[1][1].float().to(devices[0])
+        input_pairs[1][2] = input_pairs[1][2].float().to(devices[0])
         label = label.float().to(devices[0])
         outputs, y = model(input_pairs)
         loss1 = criterions[0](outputs[0], outputs[1], label.clone().float()) / ACCUMU_STEPS
@@ -228,8 +235,10 @@ def validate(val_loader, model, criterions, epoch):
         with torch.no_grad():
             input_pairs[0][0] = input_pairs[0][0].float().to(devices[0])
             input_pairs[0][1] = input_pairs[0][1].float().to(devices[0])
+            input_pairs[0][2] = input_pairs[0][2].float().to(devices[0])
             input_pairs[1][0] = input_pairs[1][0].float().to(devices[0])
             input_pairs[1][1] = input_pairs[1][1].float().to(devices[0])
+            input_pairs[1][2] = input_pairs[1][2].float().to(devices[0])
             label = label.float().to(devices[0])
 
             outputs, y = model(input_pairs)
