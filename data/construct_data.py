@@ -20,10 +20,10 @@ from config import *
 # TXT_ROOT_URL = r'/home/sjhu/datasets/small_dataset/'
 
 ## FOR MEDIUM
-FEATURES_URL = r'/data/sjhu/features'
-ROOT_URL = r'/data/sjhu/datasets'
-VIDEOS_URL = r'/data/sjhu/datasets/all_dataset'  #
-TXT_ROOT_URL = r'/data/sjhu/'
+FEATURES_URL = r'/home/sjhu/datasets/medium_dataset/features'
+ROOT_URL = r'/home/sjhu/datasets/medium_dataset/datasets'
+VIDEOS_URL = r'/home/sjhu/datasets/all_dataset'  #
+TXT_ROOT_URL = r'/home/sjhu/datasets/medium_dataset/'
 
 ## For Dataset
 WIDTH = 256
@@ -43,7 +43,7 @@ class VideoExtracter:
         self.mv_x_files = []
         self.mv_y_files = []
         self.pic_names = []
-        if not os.path.exists(self.video_features_folder): os.makedirs(self.video_features_folder)
+        # if not os.path.exists(self.video_features_folder): os.makedirs(self.video_features_folder)
         os.chdir(self.video_features_folder)
         self.mvs_folder = os.path.join(self.video_features_folder, 'mvs')
         self.keyframes_folder = os.path.join(self.video_features_folder, 'keyframes')
@@ -64,14 +64,17 @@ class VideoExtracter:
             filenames.append(filename)
         filenames.sort(key=self.sort_by_frame_order)
         self.extract_files_by_type(filenames)
-        self.deal_residual_matrixs(self.residuals_folder)
-        self.deal_mv_matrix(self.mvs_folder)
+        # self.deal_residual_matrixs(self.residuals_folder)
+        # self.deal_mv_matrix(self.mvs_folder)
+        self.deal_depth_matrix(self.video_features_folder)
+        self.deal_qp_matrix(self.video_features_folder)
+
         free_folder_space(temp_folder)
 
         # for keyframes
-        os.system(
-            "/home/sjhu/env/ffmpeg-4.2-amd64-static/ffmpeg -i %s -vf select='eq(pict_type\,I)' -vsync 2 -s 340x256 -f image2 %s/%%d.jpeg " % (
-                os.path.join(VIDEOS_URL, self.video_name), self.keyframes_folder))
+        # os.system(
+        #     "/home/sjhu/env/ffmpeg-4.2-amd64-static/ffmpeg -i %s -vf select='eq(pict_type\,I)' -vsync 2 -s 340x256 -f image2 %s/%%d.jpeg " % (
+        #         os.path.join(VIDEOS_URL, self.video_name), self.keyframes_folder))
 
     def load_video_level_features(self, num_segments):
         residuals = self.load_residuals(num_segments, True)
@@ -90,7 +93,7 @@ class VideoExtracter:
         files = os.listdir(self.keyframes_folder)
         length = len(files)
         interval = math.ceil(length / num_segments)
-
+        self.idxs = []
         ## for some exception
         if interval == 0:
             mat = np.random.randint(255, size=(num_segments, WIDTH, HEIGHT, 3))
@@ -117,6 +120,7 @@ class VideoExtracter:
             pad = np.repeat(e, num_segments - mat.shape[0], axis=0)
             mat = np.concatenate((mat, pad), axis=0)
 
+        self.idxs = idx
         return np.array(mat, dtype=np.float32)
 
     def load_mvs(self, num_segments, is_train):
@@ -156,7 +160,7 @@ class VideoExtracter:
             pad = np.zeros((num_segments - mat.shape[0], WIDTH, HEIGHT, 3))
             mat = np.concatenate((mat, pad), axis=0)
         # return np.array(mat[..., :2], dtype=np.float32)
-        return np.array(mat,dtype=np.float32)
+        return np.array(mat, dtype=np.float32)
 
     def load_residuals(self, num_segments, is_train):
         """
@@ -198,12 +202,38 @@ class VideoExtracter:
             mat = np.concatenate((mat, pad), axis=0)
         return np.array(mat, dtype=np.float32)
 
+    def load_qp(self, num_segments):
+        #
+        QP_SIZE = 56
+        os.chdir(self.video_features_folder)
+        qp = np.load('qps.npy')
+        idx =self.idxs
+        result = []
+        if qp.shape[0] < len(idx) or len(idx) == 0:
+            return np.full((num_segments, 1, QP_SIZE, QP_SIZE), 0.5,dtype=np.float32)
+
+        for i in idx:
+            result.append(qp[i])
+        assert len(result)!=0, print(" result shape wrong ")
+        result = np.array(result, dtype=np.float32)
+        assert len(idx) <= num_segments, print("idx len greater than num_segments")
+        if len(idx) < num_segments:
+            mat = np.full((result.shape[1], result.shape[2]), 26.0)
+            mat = mat[np.newaxis, ...]
+            mat = np.repeat(mat, num_segments - result.shape[0], axis=0)
+            result = np.concatenate((result, mat), axis=0)
+        outputs = []
+        for i in range(result.shape[0]):
+            outputs.append(cv2.resize(result[i], dsize=(QP_SIZE, QP_SIZE), interpolation=cv2.INTER_CUBIC))
+        outputs = 1 - (np.array(outputs, dtype=np.float32) / 51)
+        return np.expand_dims(outputs, axis=1)
+
     def extract_files_by_type(self, filenames):
         self.u_files = [file for file in filenames if 'D_U' in file]
         self.y_files = [file for file in filenames if 'D_Y' in file]
         self.v_files = [file for file in filenames if 'D_V' in file]
-        self.depth_files = [file for file in filenames if 'depth' in file]
-        self.qp_files = [file for file in filenames if 'QP' in file]
+        self.depth_files = [file for file in filenames if 'I_depth' in file]
+        self.qp_files = [file for file in filenames if 'I_QP' in file]
         # for B-frame , here just abondon the back refernce frame
         self.mv_x_files = [file for file in filenames if '_mv_0_x' in file]
         self.mv_y_files = [file for file in filenames if 'mv_0_y' in file]
@@ -247,6 +277,22 @@ class VideoExtracter:
             im = Image.fromarray(mv)
             im.save("%d.jpeg" % i)
 
+    def deal_qp_matrix(self, folder):
+        os.chdir(folder)
+        qps = []
+        for i in range(len(self.qp_files)):
+            qp = np.loadtxt(self.qp_files[i])
+            qps.append(qp)
+        np.save('qps.npy', qps)
+
+    def deal_depth_matrix(self, folder):
+        os.chdir(folder)
+        depths = []
+        for i in range(len(self.depth_files)):
+            dp = np.loadtxt(self.depth_files[i])
+            depths.append(dp)
+        np.save('depths.npy', depths)
+
 
 def single_proecess(array):
     for video in array:
@@ -270,7 +316,7 @@ def run():
             video = os.path.basename(video)
             videos.append(video)
     f1.close()
-    groups = partition(videos[2000:], cpu_count() // 4)
+    groups = partition(videos, cpu_count() // 4)
     p = Pool(cpu_count() // 4)
     for i in range(cpu_count() // 4):
         p.apply_async(single_proecess, (groups[i],))
@@ -280,5 +326,5 @@ def run():
 
 
 if __name__ == '__main__':
-    debug()
-    # run()
+    # debug()
+    run()

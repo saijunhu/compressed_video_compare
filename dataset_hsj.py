@@ -82,14 +82,14 @@ class CoviarDataSet(data.Dataset):
             mvs = extracter.load_mvs(self._num_segments, self._is_train)
             mvs = self.normalization(mvs, 'mv')
             assert mvs.shape[1] == self._num_segments, print("residual num_segments sample error")
+            qps = extracter.load_qp(self._num_segments)
+            assert qps.shape[0] == self._num_segments,print(" qps dim wrong")
             # elif self._representation == 'mv':
             #     video_features = extracter.load_mvs(self._num_segments, self._is_train)
             #     assert video_features.shape[0] == self._num_segments, print("num_segments sample error")
             video_features.append(keyframes)
             video_features.append(mvs)
-            #TODO qpdata 1x112x112
-            qp = np.random.random((self._num_segments,1,56,56))
-            video_features.append(qp)
+            video_features.append(qps)
             one_pairs_data.append(video_features)
 
         return one_pairs_data, self._labels_list[index]

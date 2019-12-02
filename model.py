@@ -28,35 +28,22 @@ class Flatten(nn.Module):
         return x.view(x.size(0), -1)
 
 
-class SimpleConv(nn.Module):
-    def __init__(self, input_planes, output_planes, num_segments):
-        super(SimpleConv, self).__init__()
-        self.num_segments = num_segments
-        self.layer1 = nn.Sequential(
-            nn.Conv2d(input_planes, 4, kernel_size=3, padding=1, stride=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=1, padding=1)
-        )
-        self.layer2 = nn.Sequential(
-            nn.Conv2d(4, 16, kernel_size=3, padding=1, stride=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=1, padding=1)
-        )
-        self.layer3 = nn.Sequential(
-            nn.Conv2d(16, output_planes, kernel_size=3, padding=1, stride=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=1, padding=1)
-        )
-
-    def forward(self, x):
-        # 2,10,1,112,112
-        x = x.view((-1,) + x.size()[-3:])
-        x = self.layer1(x)
-        x = self.layer2(x)
-        x = self.layer3(x)
-        x = x.view((-1, self.num_segments,) + x.size()[-3:])
-        x = x.transpose(1,2)
-        return x
+# class SimpleConv(nn.Module):
+#     def __init__(self, input_planes, output_planes, num_segments):
+#         super(SimpleConv, self).__init__()
+#         self.num_segments = num_segments
+#         self.layer1 = nn.Sequential(
+#             nn.Conv2d(input_planes, output_planes, kernel_size=3, padding=1, stride=1),
+#             nn.MaxPool2d(kernel_size=3, stride=1, padding=1)
+#         )
+#
+#     def forward(self, x):
+#         # 2,10,1,112,112
+#         # x = x.view((-1,) + x.size()[-3:])
+#         # x = self.layer1(x)
+#         # x = x.view((-1, self.num_segments,) + x.size()[-3:])
+#
+#         return a
 
 
 class Model(nn.Module):
@@ -74,8 +61,8 @@ Initializing model:
 
         self._prepare_base_model(base_model)
         self._prepare_tsn(num_class)
-        self.qp_model = SimpleConv(1, 64,self.num_segments)
-        self.qp_model.eval()
+        # self.qp_model = SimpleConv(1, 64,self.num_segments)
+        # self.qp_model.eval()
 
     def _prepare_tsn(self, num_class):
         feature_dim = getattr(self.base_model_channel_3, 'fc').out_features
@@ -125,7 +112,7 @@ Initializing model:
                 x = self.key_feature_layer(x)
                 # x = (batch, features)
                 mix_features.append(x)
-            mix_features = torch.cat([mix_features[0], mix_features[1]], dim=1)
+            mix_features = torch.cat([mix_features[0], QPs.mean().item()*mix_features[1]], dim=1)
             # print(mix_features.shape)
             outputs.append(mix_features)
         x = self.fc_layer_1(torch.abs(outputs[0] - outputs[1]))
@@ -135,10 +122,11 @@ Initializing model:
         x = self.clf_layer(x)
         return outputs, x
 
-    def deal_qp_data(self, qps):
+    def deal_qp_data(self, x):
         # print(qps.shape)
-        qps = self.qp_model(qps)
-        return qps
+        x.transpose_(1,2)
+        a = x.repeat((1,64,1,1,1))
+        return a
 
     @property  # turn a func to a properity
     def crop_size(self):

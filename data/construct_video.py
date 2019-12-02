@@ -3,6 +3,8 @@ import time
 import subprocess
 import random
 from tqdm import tqdm
+from utils import partition
+
 base_url = r'/home/sjhu/datasets/annotation'
 video_url = r'/home/sjhu/datasets/core_dataset_no_dir/'
 output_url = r'/home/sjhu/datasets/all_dataset/'

@@ -35,14 +35,16 @@ WEI_C = 2
 WRITER = []
 DEVICES = []
 
-
+description = ""
 def main():
     print(torch.cuda.device_count())
     global args
     global devices
     global WRITER
     args = parser.parse_args()
-    log_name = './log/%s_bt_%d_seg_%d_%s' % (args.arch, args.batch_size, args.num_segments, args.representation)
+    global description
+    description = '%s_bt_%d_seg_%d_%s' % (args.arch, args.batch_size, args.num_segments, "mv_iframe_qp_after_layer1")
+    log_name = './log/%s' % description
     WRITER = SummaryWriter(log_name)
     print('Training arguments:')
     for k, v in vars(args).items():
@@ -272,10 +274,10 @@ def validate(val_loader, model, criterions, epoch):
 
 
 def save_checkpoint(state, is_best, filename):
-    filename = '_'.join((args.model_prefix, filename))
+    filename = '_'.join((description, filename))
     torch.save(state, filename)
     if is_best:
-        best_name = '_'.join((args.model_prefix, '_best.pth.tar'))
+        best_name = '_'.join((description, '_best.pth.tar'))
         shutil.copyfile(filename, best_name)
 
 
