@@ -7,7 +7,7 @@ from sklearn.svm import LinearSVC
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
-
+import math
 
 class ContrastiveLoss(torch.nn.Module):
     """
@@ -27,6 +27,43 @@ class ContrastiveLoss(torch.nn.Module):
         # print(label)
         # print("The loss is %f" % loss_contrastive)
         return loss_contrastive
+
+
+class LabelSmoothingLoss(torch.nn.Module):
+    def __init__(self, classes, smoothing=0.0, dim=-1):
+        super(LabelSmoothingLoss, self).__init__()
+        self.confidence = 1.0 - smoothing
+        self.smoothing = smoothing
+        self.cls = classes
+        self.dim = dim
+
+    def forward(self, pred, target):
+        pred = pred.log_softmax(dim=self.dim)
+        with torch.no_grad():
+            # true_dist = pred.data.clone()
+            true_dist = torch.zeros_like(pred)
+            true_dist.fill_(self.smoothing / (self.cls - 1))
+            true_dist.scatter_(1, target.data.unsqueeze(1), self.confidence)
+        return torch.mean(torch.sum(-true_dist * pred, dim=self.dim))
+
+class WarmStartCosineAnnealingLR(torch.optim.lr_scheduler._LRScheduler):
+    r"""Set the learning rate of each parameter group using a cosine annealing
+    add warm start to CosineAnnealingLR
+    """
+    def __init__(self, optimizer, T_max, T_warm, eta_min=0, last_epoch=-1,):
+        self.T_max = T_max
+        self.T_warm = T_warm
+        self.eta_min = eta_min
+
+        super(WarmStartCosineAnnealingLR, self).__init__(optimizer, last_epoch)
+
+    def get_lr(self):
+        if self.last_epoch < self.T_warm:
+            return [base_lr * ((self.last_epoch+1) / self.T_warm) for base_lr in self.base_lrs]
+        else:
+            return [self.eta_min + (base_lr - self.eta_min) *
+                (1 + math.cos(math.pi * self.last_epoch / self.T_max)) / 2
+                for base_lr in self.base_lrs]
 
 
 class AverageMeter(object):
@@ -51,10 +88,12 @@ class AverageMeter(object):
 def similarity(output_1, output_2):
     return F.pairwise_distance(output_1, output_2)
 
+
 def accauacy(predicts, labels):
     auc_score = roc_auc_score(labels, predicts)
     acc_score = accuracy_score(labels, predicts)
     return acc_score
+
 
 def metric_performance(distances, labels):
     """
@@ -105,7 +144,7 @@ def metric_performance_offline():
     return metric_performance(distances, labels)
 
 
-def visualize(distnces, labels,title=""):
+def visualize(distnces, labels, title=""):
     plt.scatter(distnces, labels)
     plt.ylim(-0.5, 1.5)
     plt.xlabel('Distance')
@@ -118,10 +157,25 @@ def get_lr(optimizer):
     for param_group in optimizer.param_groups:
         return param_group['lr']
 
+
 def partition(lst, n):
     division = len(lst) / n
     return [lst[round(division * i):round(division * (i + 1))] for i in range(n)]
 
+
+def smooth_one_hot(true_labels: torch.Tensor, num_classes: int, smoothing=0.0):
+    assert 0 <= smoothing < 1
+    confidence = 1.0 - smoothing
+    otherwise = smoothing / (num_classes - 1)
+    with torch.no_grad():
+        true_dist = torch.zeros((true_labels.shape[0], num_classes), dtype=torch.float32, device=true_labels.device)
+        true_dist.fill_(otherwise)
+        true_dist.scatter_(1, true_labels.long().unsqueeze(1), confidence)
+    return true_dist
+
+def smoothed_label_loss(pred,smoothed_label):
+    log_prob = torch.nn.functional.log_softmax(pred,dim=1)
+    return -torch.sum(log_prob*smoothed_label)/pred.shape[0]
 
 if __name__ == '__main__':
     pass

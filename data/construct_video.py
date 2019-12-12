@@ -9,7 +9,7 @@ base_url = r'/home/sjhu/datasets/annotation'
 video_url = r'/home/sjhu/datasets/core_dataset_no_dir/'
 output_url = r'/home/sjhu/datasets/all_dataset/'
 root_url = r'/home/sjhu/datasets/'
-txt_url = r'/home/sjhu/datasets/medium_dataset'
+txt_url = r'/home/sjhu/datasets/'
 
 def put_all_files_in_one_directory(input, output):
     for dir in os.listdir(input):
@@ -58,7 +58,7 @@ def generate_neg_sample():
     cnt_failed=0
 
     files = os.listdir(base_url)
-    for i in range(2000):
+    for i in range(1230):
         file1, file2 = random.sample(files, 2)
         with open(os.path.join(base_url, file1), 'r') as fr:
             lines = fr.readlines()
@@ -67,7 +67,7 @@ def generate_neg_sample():
             output_name_a = output_url + str(random.getrandbits(100)) + ".mp4"
             output_name_b = ""
             return_code_a = os.system(
-                "ffmpeg -loglevel warning -ss %s -to %s -i %s -vf scale=340:256,setsar=1:1 -c:v libx264 -coder 1 -threads 4 -cpu-used 0 %s" % (
+                "/home/sjhu/env/ffmpeg-4.2-amd64-static/ffmpeg -loglevel warning -ss %s -to %s -i %s -vf scale=340:256,setsar=1:1 -c:v libx264 -coder 1 -threads 4 -cpu-used 0 %s" % (
                 start_a, end_a, video_url + video_a, output_name_a))
             with open(os.path.join(base_url, file2), 'r') as fr2:
                 lines = fr2.readlines()
@@ -75,7 +75,7 @@ def generate_neg_sample():
                 _, video_b, _, _, start_b, end_b = line.strip().split(',')
                 output_name_b = output_url + str(random.getrandbits(100)) + ".mp4"
                 return_code_b = os.system(
-                    "ffmpeg -loglevel warning -ss %s -to %s -i %s -vf scale=340:256,setsar=1:1 -c:v libx264 -coder 1 -threads 4 -cpu-used 0 %s" % (
+                    "/home/sjhu/env/ffmpeg-4.2-amd64-static/ffmpeg -loglevel warning -ss %s -to %s -i %s -vf scale=340:256,setsar=1:1 -c:v libx264 -coder 1 -threads 4 -cpu-used 0 %s" % (
                     start_b, end_b, video_url + video_b, output_name_b))
             fr2.close()
             with open(os.path.join(root_url, 'all_neg_sample.txt'), 'a') as fw:
@@ -106,12 +106,12 @@ def train_test_spilt(test_pairs, train_pairs):
             train_pos_lines = pos_lines[-train_pairs//2:]
             train_neg_lines = neg_lines[-train_pairs//2:]
 
-            with open(os.path.join(txt_url, 'train_sample.txt'), 'a') as ftrain:
+            with open(os.path.join(txt_url, 'all_train_sample.txt'), 'a') as ftrain:
                 for i in range(train_pairs // 2):
                     ftrain.write(train_pos_lines[i])
                     ftrain.write(train_neg_lines[i])
             ftrain.close()
-            with open(os.path.join(txt_url, 'test_sample.txt'), 'a') as ftest:
+            with open(os.path.join(txt_url, 'all_test_sample.txt'), 'a') as ftest:
                 test_lines = test_pos_lines + test_neg_lines
                 random.shuffle(test_lines)
                 print(len(test_lines))
@@ -194,6 +194,6 @@ if __name__ == '__main__':
     # generate_pos_sample()
     # generate_neg_sample()
     # # deal_neg_txt()
-    train_test_spilt(340,3600)
-    sample_dataset()
+    train_test_spilt(552,5700)
+    # sample_dataset()
     # # construct_debug_train_test()

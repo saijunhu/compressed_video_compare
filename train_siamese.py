@@ -43,7 +43,7 @@ def main():
     global WRITER
     args = parser.parse_args()
     global description
-    description = '%s_bt_%d_seg_%d_%s' % (args.arch, args.batch_size, args.num_segments, "mv_iframe_qp_after_layer1")
+    description = '%s_bt_%d_seg_%d_%s' % (args.arch, args.batch_size, args.num_segments, "add_label_smoothing")
     log_name = './log/%s' % description
     WRITER = SummaryWriter(log_name)
     print('Training arguments:')
@@ -126,8 +126,10 @@ def main():
 
     criterions = []
     siamese_loss = ContrastiveLoss(margin=2.0).to(devices[0])
-    classifiy_loss = nn.CrossEntropyLoss().to(devices[0])
+    # classifiy_loss = nn.CrossEntropyLoss().to(devices[0])
+    classifiy_loss = LabelSmoothingLoss(2,0.1,-1)
     criterions.append(siamese_loss)
+
     criterions.append(classifiy_loss)
 
     # try to use ReduceOnPlatue to adjust lr
