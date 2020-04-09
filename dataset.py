@@ -12,8 +12,8 @@ import numpy as np
 import torch
 import torch.utils.data as data
 
-from coviar import get_num_frames
-from coviar import load
+from coviar_gjy import get_num_frames
+from coviar_gjy import load
 from transforms import color_aug
 
 GOP_SIZE = 12

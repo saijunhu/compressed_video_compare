@@ -25,7 +25,7 @@ PRINT_FREQ = 20
 ACCUMU_STEPS = 4  # use gradient accumlation to use least memory and more runtime
 loss_min = 1
 CONTINUE_FROM_LAST = True
-LAST_SAVE_PATH = r'r2plus1d_18_bt_24_seg_10_baseline_using_frame_checkpoint.pth.tar'
+LAST_SAVE_PATH = r'r2plus1d_18_bt_28_seg_15_baseline_using_frame_checkpoint.pth.tar'
 FINETUNE = False
 
 WEI_S = 1

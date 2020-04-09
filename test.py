@@ -3,14 +3,12 @@
 import argparse
 import time
 
-import numpy as np
 import torch.nn.parallel
 import torch.optim
 import torchvision
-import torch.backends.cudnn as cudnn
 
 from dataset import CoviarDataSet
-from model import Model
+from codobase.model import Model
 from transforms import GroupCenterCrop
 from transforms import GroupOverSample
 from transforms import GroupScale

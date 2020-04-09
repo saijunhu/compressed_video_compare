@@ -57,7 +57,7 @@ counting the number of frames in a video.
 The following call returns one frame (specified by `frame_index=0,1,...`) of one GOP
 (specified by `gop_index=0,1,...`).
 ```python
-from coviar import load
+from coviar_gjy import load
 load([input], [gop_index], [frame_index], [representation_type], [accumulate])
 ```
  - input: path to video (.mp4).

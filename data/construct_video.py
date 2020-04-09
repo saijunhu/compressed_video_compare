@@ -163,10 +163,10 @@ def generate_videos_data(folder):
     for video in tqdm(os.listdir(folder)):
         os.system('extract_mvs ./+%s' % video)
 
-def sample_dataset():
+def sample_dataset(url):
     videos = []
-    with open(os.path.join(txt_url, 'test_sample.txt'), 'r') as f1:
-        with open(os.path.join(txt_url,'train_sample.txt'),'r') as f2:
+    with open(os.path.join(url, 'all_test_sample.txt'), 'r') as f1:
+        with open(os.path.join(url,'all_train_sample.txt'),'r') as f2:
             for line in f1:
                 video1,video2,label = line.strip().split(',')
                 videos.append(video1)
@@ -177,7 +177,7 @@ def sample_dataset():
                 videos.append(video2)
     f1.close()
     f2.close()
-    with open(os.path.join(txt_url,'dataset_sample.txt'),'w') as f:
+    with open(os.path.join(url,'all_dataset_sample.txt'),'w') as f:
         for video in videos:
             f.write(video+'\n')
     f.close()
@@ -194,6 +194,6 @@ if __name__ == '__main__':
     # generate_pos_sample()
     # generate_neg_sample()
     # # deal_neg_txt()
-    train_test_spilt(552,5700)
-    # sample_dataset()
+    # train_test_spilt(552,5700)
+    sample_dataset('/home/sjhu/projects/compressed_video_compare/data/datalists')
     # # construct_debug_train_test()

@@ -1,15 +1,5 @@
-import numpy as np
-import os
-from datetime import datetime
-import random
-import cv2
-from functools import cmp_to_key
-from PIL import Image
-from tqdm import tqdm
-from data.utils import *
-from utils import *
+from utils.data_utils import *
 import math
-from config import *
 
 ## FOR SMALL DATASET
 # MVS_URL = r'/home/sjhu/datasets/small_dataset/samples_mvs'
@@ -91,6 +81,7 @@ class VideoExtracter:
         os.chdir(self.keyframes_folder)
         mat = []
         files = os.listdir(self.keyframes_folder)
+        files.sort(key=self.sort_by_image_order)
         length = len(files)
         interval = math.ceil(length / num_segments)
         self.idxs = []
@@ -203,14 +194,14 @@ class VideoExtracter:
         return np.array(mat, dtype=np.float32)
 
     def load_qp(self, num_segments):
-        #
+        # return (c=1,depth,width,height)
         QP_SIZE = 56
         os.chdir(self.video_features_folder)
         qp = np.load('qps.npy')
         idx =self.idxs
         result = []
         if qp.shape[0] < len(idx) or len(idx) == 0:
-            return np.full((num_segments, 1, QP_SIZE, QP_SIZE), 0.5,dtype=np.float32)
+            return np.full((1,num_segments, QP_SIZE, QP_SIZE), 0.5,dtype=np.float32)
 
         for i in idx:
             result.append(qp[i])
@@ -226,7 +217,7 @@ class VideoExtracter:
         for i in range(result.shape[0]):
             outputs.append(cv2.resize(result[i], dsize=(QP_SIZE, QP_SIZE), interpolation=cv2.INTER_CUBIC))
         outputs = 1 - (np.array(outputs, dtype=np.float32) / 51)
-        return np.expand_dims(outputs, axis=1)
+        return np.expand_dims(outputs, axis=0)
 
     def extract_files_by_type(self, filenames):
         self.u_files = [file for file in filenames if 'D_U' in file]
@@ -307,7 +298,7 @@ def debug():
 
 
 def run():
-    from multiprocessing import Process, cpu_count, Pool
+    from multiprocessing import cpu_count, Pool
     print(cpu_count())
     videos = []
     with open(os.path.join(TXT_ROOT_URL, 'dataset_sample.txt'), 'r') as f1:
@@ -326,5 +317,5 @@ def run():
 
 
 if __name__ == '__main__':
-    # debug()
-    run()
+    debug()
+    # run()
