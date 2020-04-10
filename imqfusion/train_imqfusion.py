@@ -11,17 +11,17 @@ import torchvision
 import torch.nn as nn
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 import torch.backends as F
-from imqfusion.dataset_imqfusion import CoviarDataSet
+from imqfusion.dataset_gjy import CoviarDataSet
 from imqfusion.model_im_fm_stack import Model
 from train_options import parser
 
 from torch.utils.tensorboard import SummaryWriter
 
-from utils.utils import AverageMeter, ContrastiveLoss, get_lr
+from utils.utils import AverageMeter, ContrastiveLoss, get_lr, WarmStartCosineAnnealingLR
 
 SAVE_FREQ = 5
 PRINT_FREQ = 20
-ACCUMU_STEPS = 16  # use gradient accumlation to use least memory and more runtime
+ACCUMU_STEPS = 4  # use gradient accumlation to use least memory and more runtime
 loss_min = 1
 CONTINUE_FROM_LAST = False
 LAST_SAVE_PATH = r'r2plus1d_18_bt_24_seg_10_ifame_fusion_qp+mv_part_dataset_checkpoint.pth.tar'
@@ -35,6 +35,8 @@ WRITER = []
 DEVICES = []
 
 description = ""
+
+
 def main():
     print(torch.cuda.device_count())
     global args
@@ -42,7 +44,7 @@ def main():
     global WRITER
     args = parser.parse_args()
     global description
-    description = 'bt_%d_seg_%d_%s' % (args.batch_size*ACCUMU_STEPS, args.num_segments, "im_fm_conv1_stack_sgd")
+    description = 'bt_%d_seg_%d_%s' % (args.batch_size * ACCUMU_STEPS, args.num_segments, "im_fm_conv1_stack_sgd")
     log_name = './log/%s' % description
     WRITER = SummaryWriter(log_name)
     print('Training arguments:')
@@ -65,9 +67,6 @@ def main():
         loss_min = 10000
         start_epochs = 0
 
-    # print(model)
-    # WRITER.add_graph(model, (torch.randn(10,5, 2, 224, 224),))
-
     devices = [torch.device("cuda:%d" % device) for device in args.gpus]
     global DEVICES
     DEVICES = devices
@@ -77,9 +76,7 @@ def main():
             args.data_root,
             video_list=args.train_list,
             num_segments=args.num_segments,
-            representation=args.representation,
             is_train=True,
-            accumulate=(not args.no_accumulation),
         ),
         batch_size=args.batch_size, shuffle=True,
         num_workers=args.workers, pin_memory=True)
@@ -89,9 +86,7 @@ def main():
             args.data_root,
             video_list=args.test_list,
             num_segments=args.num_segments,
-            representation=args.representation,
             is_train=False,
-            accumulate=(not args.no_accumulation),
         ),
         batch_size=args.batch_size, shuffle=False,
         num_workers=args.workers, pin_memory=True)
@@ -113,34 +108,26 @@ def main():
         else:
             params += [{'params': [value], 'lr': args.lr * 1, 'decay_mult': decay_mult}]
 
-    # if FINETUNE:
-    #
-    # else:
-    #     optimizer = torch.optim.Adam(
-    #         params,
-    #         weight_decay=args.weight_decay,
-    #         eps=0.001)
     optimizer = torch.optim.SGD(params, lr=args.lr, momentum=0.9)
     criterions = []
     siamese_loss = ContrastiveLoss(margin=2.0).to(devices[0])
     classifiy_loss = nn.CrossEntropyLoss().to(devices[0])
     # classifiy_loss = LabelSmoothingLoss(2,0.1,-1)
     criterions.append(siamese_loss)
-
     criterions.append(classifiy_loss)
 
     # try to use ReduceOnPlatue to adjust lr
-    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.2, patience=20 // args.eval_freq, verbose=True)
-
+    # scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.2, patience=20 // args.eval_freq, verbose=True)
+    scheduler = WarmStartCosineAnnealingLR(optimizer, T_max=args.epochs, T_warm=10)
     for epoch in range(start_epochs, args.epochs):
         # about optimizer
         WRITER.add_scalar('Lr/epoch', get_lr(optimizer), epoch)
         loss_train_s, loss_train_c = train(train_loader, model, criterions, optimizer, epoch)
         loss_train = WEI_S * loss_train_s + WEI_C * loss_train_c
+        scheduler.step(epoch)
         if epoch % args.eval_freq == 0 or epoch == args.epochs - 1:
             loss_val_s, loss_val_c, acc = validate(val_loader, model, criterions, epoch)
             loss_val = WEI_S * loss_val_s + WEI_C * loss_val_c
-            scheduler.step(loss_val_c)
             is_best = (loss_val_c < loss_min)
             loss_min = min(loss_val_c, loss_min)
             # visualization
@@ -270,7 +257,7 @@ def validate(val_loader, model, criterions, epoch):
 
 def save_checkpoint(state, is_best, filename):
     filename = '_'.join((description, filename))
-    filename = './'+filename
+    filename = './' + filename
     torch.save(state, filename)
     if is_best:
         best_name = '_'.join((description, '_best.pth.tar'))

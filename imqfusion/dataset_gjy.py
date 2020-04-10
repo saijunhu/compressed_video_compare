@@ -12,29 +12,47 @@ import numpy as np
 import torch
 import torch.utils.data as data
 from PIL import Image
-from data.construct_data import VideoExtracter
+import traceback
+import logging
+import coviexinfo
+import matplotlib.pyplot as plt
+import torchvision
+from utils.sample import *
 
-from transforms import color_aug
-from transforms_hsj import transform_mv, transform_rgb_residual,transform_infer
+from transforms import *
+
+VIDEOS_URL = r'/home/sjhu/datasets/all_dataset'
+## For Dataset
+WIDTH = 256
+HEIGHT = 340
 
 
 class CoviarDataSet(data.Dataset):
     def __init__(self, data_root,
                  video_list,
-                 representation,
                  num_segments,
-                 is_train,
-                 accumulate):
+                 is_train):
 
         self._data_root = data_root
         self._num_segments = num_segments
-        self._representation = representation
         self._is_train = is_train
-        self._accumulate = accumulate
-        self._size = 0
+        self._iframe_scales = [1, .875, .75]
+        self._mv_scales = [1, .875, .75, .66]
+        self._input_size = 224
+        self._scale_size = self._input_size * 256 // 224
+        self._iframe_transform = torchvision.transforms.Compose(
+            [GroupMultiScaleCrop(self._input_size, self._iframe_scales),
+             GroupRandomHorizontalFlip(is_mv=False)])
+        self._mv_transform = torchvision.transforms.Compose(
+            [GroupMultiScaleCrop(self._input_size, self._mv_scales),
+             GroupRandomHorizontalFlip(is_mv=True)])
+        self._infer_transform = torchvision.transforms.Compose([
+            GroupScale(int(self._scale_size)),
+            GroupCenterCrop(self._input_size),
+        ])
         # modify depend on Kinetics-400 dataset setting
         self._input_mean = torch.from_numpy(
-            np.array([0.43216, 0.394666, 0.37645]).reshape((3,1, 1, 1))).float()
+            np.array([0.43216, 0.394666, 0.37645]).reshape((3, 1, 1, 1))).float()
         self._input_std = torch.from_numpy(
             np.array([0.22803, 0.22145, 0.216989]).reshape((3, 1, 1, 1))).float()
 
@@ -67,66 +85,121 @@ class CoviarDataSet(data.Dataset):
         # siamese label, '0' means same, '1' means diff
         video_pairs = self._videos_list[index]
         # divide into segments, then fetch a frame in every seg
-        one_pairs_data = []  # ( (img1,mv1), (img2,mv2) )
-        for video in video_pairs:
-            # shapes  (nums,height,width,channels)
-            # for rgb: all I-frame
-            # for mv,residual: regulated by self._num_segments
-            extracter = VideoExtracter(video)
-            video_features = []
+        pairs_data = []  # ( (img1,mv1), (img2,mv2) )
+        try:
+            for video in video_pairs:
+                # shapes  (nums,height,width,channels)
+                video_features = []
+                extracter = VideoExtracter(video)
 
-            keyframes = extracter.load_keyframes(self._num_segments, self._is_train)
-            keyframes = self.normalization(keyframes, 'iframe')
-            mvs = extracter.load_mvs(self._num_segments, self._is_train)
-            mvs = self.normalization(mvs, 'mv')
-            assert mvs.shape[1] == self._num_segments, print("residual num_segments sample error")
-            qps = extracter.load_qp(self._num_segments)
-            assert qps.shape[1] == self._num_segments, print(" qps dim wrong")
-            # elif self._representation == 'mv':
-            #     video_features = extracter.load_mvs(self._num_segments, self._is_train)
-            #     assert video_features.shape[0] == self._num_segments, print("num_segments sample error")
-            video_features.append(keyframes)
-            video_features.append(mvs)
-            video_features.append(qps)
-            one_pairs_data.append(video_features)
+                # process mv
+                mvs = extracter.load_mvs(self._num_segments, self._is_train)
+                mvs = self._mv_transform(mvs) if self._is_train else self._infer_transform(mvs)
+                mvs = np.asarray(mvs)
+                mvs = np.transpose(mvs, (3, 0, 1, 2))
+                mvs = torch.from_numpy(mvs).float() / 255.0
+                mvs = (mvs - 0.5)
 
-        return one_pairs_data, self._labels_list[index]
+                # # process iframe
+                iframes = extracter.load_keyframes(self._num_segments, self._is_train)
+                iframes = self._iframe_transform(iframes) if self._is_train else self._infer_transform(iframes)
+                iframes = np.array(iframes)
+                iframes = np.transpose(iframes, (3, 0, 1, 2))
+                iframes = torch.from_numpy(iframes).float() / 255.0
+                iframes = (iframes - self._input_mean) / self._input_std
+
+                video_features.append(iframes)
+                video_features.append(mvs)
+                pairs_data.append(video_features)
+
+            return pairs_data, self._labels_list[index]
+        except Exception as e:
+            traceback.print_exc()
+            logging.exception(e)
 
     def __len__(self):
         return len(self._labels_list)
 
-    def normalization(self,video_features, representation):
-        video_features = np.array(video_features, dtype=np.uint8)
-        output = []
-        if self._is_train == False:
-            for i in range(video_features.shape[0]):
-                t = video_features[i,...]
-                img = Image.fromarray(t)
-                output.append(transform_infer(img))
-            output = torch.stack(output)
-            output = np.transpose(output,(1,0,2,3)) / 255.0
-            if representation == 'iframe' or representation == 'residual':
-                output = (output - self._input_mean) / self._input_std
-            else:
-                output = (output - output.mean())[:2, :, :, :]
-        elif representation == 'iframe' or representation == 'residual':
-            for i in range(video_features.shape[0]):
-                t = video_features[i,...]
-                img = Image.fromarray(t)
-                output.append(transform_rgb_residual(img))
-            output = torch.stack(output)
-            output = np.transpose(output,(1,0,2,3)) / 255.0
-            output = (output - self._input_mean) / self._input_std
-        elif representation == 'mv':
-            # torch.Size([3, 2, 224, 224])
-            for i in range(video_features.shape[0]):
-                t = video_features[i,...]
-                img = Image.fromarray(t)
-                output.append(transform_mv(img))
-            output = torch.stack(output)
-            output = np.transpose(output,(1,0,2,3)) / 255.0
-            output = (output - output.mean())[:2, :, :, :]
-        else:
-            assert False, print("representation wrong")
 
-        return output
+class VideoExtracter:
+    def __init__(self, video_name):
+        # ex: filename = 916710595466737253411014029368.mp4
+        os.chdir(VIDEOS_URL)
+        self.video_name = video_name
+        # get basic decode information
+        frames_type = coviexinfo.get_num_frames(video_name)
+        self.num_frames = frames_type.shape[1]
+        self.num_I = np.sum(frames_type[0] == 1).item()
+
+    def load_keyframes(self, num_segments, is_train):
+        """
+        :param num_segments:
+        :param is_train:
+        :return: (counts, width, height, channels)
+        """
+        os.chdir(VIDEOS_URL)
+        frames = coviexinfo.extract(self.video_name, 'get_I', self.num_frames, self.num_I, 0)
+        if len(frames) == 0:
+            mat = np.random.randint(255, size=(num_segments, WIDTH, HEIGHT, 3))
+            return np.array(mat, dtype=np.float32)
+
+        mat = []
+        for i in range(self.num_I):
+            rgb = np.dstack((frames[:, :, i * 3], frames[:, :, i * 3 + 1], frames[:, :, i * 3 + 2]))
+            mat.append(rgb)
+            # plt.imshow(rgb)
+            # plt.show()
+        mat = random_sample(mat, num_segments) if is_train else fix_sample(mat, num_segments)
+        mat = np.asarray(mat, dtype=np.float32)
+        return mat
+
+    def load_mvs(self, num_segments, is_train):
+        """
+        :param num_segments:
+        :param is_train:
+        :return: (counts, width//4, height//4, channels=2) 0,255
+        """
+        # mv_ref_arr=(H/4,W/4,frames*6)
+        # mv_ref_arr is a array with 3 dimensions. The first dimension denotes Height of a frame. The second dimension denotes Width of a frame.
+        # For every frame, it contains mv_0_x, mv_0_y, ref_0, mv_1_x, mv_1_y, ref_1. So, the third dimension denote frames*6.
+
+        os.chdir(VIDEOS_URL)
+        mv_origin = coviexinfo.extract(self.video_name, 'get_mv', self.num_frames, self.num_I, 0)
+        if len(mv_origin) == 0:
+            mat = np.random.randint(1, size=(num_segments, WIDTH, HEIGHT, 2))
+            return np.array(mat, dtype=np.float32)
+
+        mat = []
+        mv_0_x = mv_origin[:, :, ::6]
+        mv_0_y = mv_origin[:, :, 1::6]
+        for i in range(mv_0_x.shape[2]):
+            mv_0 = np.dstack((mv_0_x[:, :, i], mv_0_y[:, :, i]))
+            mat.append(mv_0 + 128)
+            # plt.imshow(mv_0)
+            # plt.show()
+        mat = random_sample(mat, num_segments) if is_train else fix_sample(mat, num_segments)
+        mat = np.asarray(mat, dtype=np.float32)
+        return mat
+
+
+
+if __name__ == '__main__':
+    import time
+
+    start = time.time()
+    train_loader = torch.utils.data.DataLoader(
+        CoviarDataSet(
+            r'/home/sjhu/datasets/all_datasets',
+            video_list=r'/home/sjhu/projects/compressed_video_compare/data/datalists/all_train_sample.txt',
+            num_segments=10,
+            is_train=True
+        ),
+        batch_size=4, shuffle=True,
+        num_workers=4, pin_memory=False)
+
+    for i, (input_pairs, label) in enumerate(train_loader):
+        (iframe, mv), _ = input_pairs
+        print(iframe.shape)
+        print(mv.shape)
+    end = time.time()
+    print("cost %f s" % ((end - start)))

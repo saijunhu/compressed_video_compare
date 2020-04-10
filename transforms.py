@@ -4,6 +4,13 @@ import random
 import numpy as np
 import cv2
 
+class TransformsConfig(object):
+    def __init__(self):
+        self.iframe_scales = [1, .875, .75]
+        self.mv_scales = [1, .875, .75, .66]
+        self.input_size = 224
+        self.crop_size = 224
+        self.scale_size = self.input_size * 256 // 224
 
 def color_aug(img, random_h=36, random_l=50, random_s=50):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2HLS).astype(float)
