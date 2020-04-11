@@ -4,6 +4,12 @@ and return compressed representations (I-frames, motion vectors,
 or residuals) for training or testing.
 """
 
+import sys
+import os
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath) # 把项目的根目录添加到程序执行时的环境变量
+
 import os
 import os.path
 import random
@@ -21,6 +27,8 @@ from utils.sample import *
 
 from transforms import *
 
+# from memory_profiler import profile
+import gc
 VIDEOS_URL = r'/home/sjhu/datasets/all_dataset'
 ## For Dataset
 WIDTH = 256
@@ -51,10 +59,8 @@ class CoviarDataSet(data.Dataset):
             GroupCenterCrop(self._input_size),
         ])
         # modify depend on Kinetics-400 dataset setting
-        self._input_mean = torch.from_numpy(
-            np.array([0.43216, 0.394666, 0.37645]).reshape((3, 1, 1, 1))).float()
-        self._input_std = torch.from_numpy(
-            np.array([0.22803, 0.22145, 0.216989]).reshape((3, 1, 1, 1))).float()
+        self._input_mean = np.array([0.43216, 0.394666, 0.37645]).reshape((3, 1, 1, 1)).astype(np.float32)
+        self._input_std = np.array([0.22803, 0.22145, 0.216989]).reshape((3, 1, 1, 1)).astype(np.float32)
 
         self._load_list(video_list)
 
@@ -73,49 +79,44 @@ class CoviarDataSet(data.Dataset):
                 video_b = video_b.split('/')[-1]
                 self._videos_list.append((video_a, video_b))
                 self._labels_list.append(int(label))
-
-        # self._videos_list = np.array(self._videos_list)
-        # self._frames_list = np.array(self._frames_list)
+        # must be numpy array rather than python list , nontheless ,this may be lead to a memory leak.
+        self._videos_list = np.array(self._videos_list)
         self._labels_list = np.array(self._labels_list)
 
         self._size = len(self._labels_list)
         print('%d pair videos loaded.' % self._size)
+
 
     def __getitem__(self, index):
         # siamese label, '0' means same, '1' means diff
         video_pairs = self._videos_list[index]
         # divide into segments, then fetch a frame in every seg
         pairs_data = []  # ( (img1,mv1), (img2,mv2) )
-        try:
-            for video in video_pairs:
-                # shapes  (nums,height,width,channels)
-                video_features = []
-                extracter = VideoExtracter(video)
 
-                # process mv
-                mvs = extracter.load_mvs(self._num_segments, self._is_train)
-                mvs = self._mv_transform(mvs) if self._is_train else self._infer_transform(mvs)
-                mvs = np.asarray(mvs)
-                mvs = np.transpose(mvs, (3, 0, 1, 2))
-                mvs = torch.from_numpy(mvs).float() / 255.0
-                mvs = (mvs - 0.5)
+        for video in video_pairs:
+            # shapes  (nums,height,width,channels)
+            video_features = []
+            extracter = VideoExtracter(video)
 
-                # # process iframe
-                iframes = extracter.load_keyframes(self._num_segments, self._is_train)
-                iframes = self._iframe_transform(iframes) if self._is_train else self._infer_transform(iframes)
-                iframes = np.array(iframes)
-                iframes = np.transpose(iframes, (3, 0, 1, 2))
-                iframes = torch.from_numpy(iframes).float() / 255.0
-                iframes = (iframes - self._input_mean) / self._input_std
+            # process mv
+            mvs = extracter.load_mvs(self._num_segments, self._is_train)
+            mvs = self._mv_transform(mvs) if self._is_train else self._infer_transform(mvs)
+            mvs = np.asarray(mvs, dtype=np.float32) / 255.0
+            mvs = np.transpose(mvs, (3, 0, 1, 2))
+            mvs = (mvs - 0.5)
 
-                video_features.append(iframes)
-                video_features.append(mvs)
-                pairs_data.append(video_features)
+            # # process iframe
+            iframes = extracter.load_keyframes(self._num_segments, self._is_train)
+            iframes = self._iframe_transform(iframes) if self._is_train else self._infer_transform(iframes)
+            iframes = np.asarray(iframes,dtype=np.float32) / 255.0
+            iframes = np.transpose(iframes, (3, 0, 1, 2))
+            iframes = (iframes - self._input_mean) / self._input_std
 
-            return pairs_data, self._labels_list[index]
-        except Exception as e:
-            traceback.print_exc()
-            logging.exception(e)
+            video_features.append(iframes)
+            video_features.append(mvs)
+            pairs_data.append(video_features)
+
+        return pairs_data, self._labels_list[index]
 
     def __len__(self):
         return len(self._labels_list)
@@ -153,6 +154,7 @@ class VideoExtracter:
         mat = np.asarray(mat, dtype=np.float32)
         return mat
 
+    # @profile
     def load_mvs(self, num_segments, is_train):
         """
         :param num_segments:
@@ -179,18 +181,19 @@ class VideoExtracter:
             # plt.show()
         mat = random_sample(mat, num_segments) if is_train else fix_sample(mat, num_segments)
         mat = np.asarray(mat, dtype=np.float32)
+        mv_origin = []
         return mat
 
 
 
-if __name__ == '__main__':
+def main():
     import time
 
     start = time.time()
     train_loader = torch.utils.data.DataLoader(
         CoviarDataSet(
             r'/home/sjhu/datasets/all_datasets',
-            video_list=r'/home/sjhu/projects/compressed_video_compare/data/datalists/all_train_sample.txt',
+            video_list=r'/home/sjhu/projects/compressed_video_compare/data/datalists/debug_all_dataset.txt',
             num_segments=10,
             is_train=True
         ),
@@ -203,3 +206,6 @@ if __name__ == '__main__':
         print(mv.shape)
     end = time.time()
     print("cost %f s" % ((end - start)))
+
+if __name__ == '__main__':
+    main()

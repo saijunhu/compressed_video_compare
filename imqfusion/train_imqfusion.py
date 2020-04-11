@@ -1,5 +1,12 @@
 """Run training."""
+import sys
+import os
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath) # 把项目的根目录添加到程序执行时的环境变量
 
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6,7"
 import shutil
 import time
 import numpy as np
@@ -14,17 +21,20 @@ import torch.backends as F
 from imqfusion.dataset_gjy import CoviarDataSet
 from imqfusion.model_im_fm_stack import Model
 from train_options import parser
-
+import gc
 from torch.utils.tensorboard import SummaryWriter
 
 from utils.utils import AverageMeter, ContrastiveLoss, get_lr, WarmStartCosineAnnealingLR
 
-SAVE_FREQ = 5
+
+
+SAVE_FREQ = 1
+EVAL_FREQ = 5
 PRINT_FREQ = 20
 ACCUMU_STEPS = 4  # use gradient accumlation to use least memory and more runtime
 loss_min = 1
-CONTINUE_FROM_LAST = False
-LAST_SAVE_PATH = r'r2plus1d_18_bt_24_seg_10_ifame_fusion_qp+mv_part_dataset_checkpoint.pth.tar'
+CONTINUE_FROM_LAST = True
+LAST_SAVE_PATH = r'/home/sjhu/projects/compressed_video_compare/imqfusion/checkpoint.pth.tar'
 FINETUNE = False
 
 WEI_S = 1
@@ -45,7 +55,7 @@ def main():
     args = parser.parse_args()
     global description
     description = 'bt_%d_seg_%d_%s' % (args.batch_size * ACCUMU_STEPS, args.num_segments, "im_fm_conv1_stack_sgd")
-    log_name = './log/%s' % description
+    log_name = r'/home/sjhu/projects/compressed_video_compare/imqfusion/log/%s' % description
     WRITER = SummaryWriter(log_name)
     print('Training arguments:')
     for k, v in vars(args).items():
@@ -78,7 +88,7 @@ def main():
             num_segments=args.num_segments,
             is_train=True,
         ),
-        batch_size=args.batch_size, shuffle=True,
+        batch_size=args.batch_size, shuffle=False,
         num_workers=args.workers, pin_memory=True)
 
     val_loader = torch.utils.data.DataLoader(
@@ -120,12 +130,12 @@ def main():
     # scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.2, patience=20 // args.eval_freq, verbose=True)
     scheduler = WarmStartCosineAnnealingLR(optimizer, T_max=args.epochs, T_warm=10)
     for epoch in range(start_epochs, args.epochs):
-        # about optimizer
+        # about optimizer:
         WRITER.add_scalar('Lr/epoch', get_lr(optimizer), epoch)
         loss_train_s, loss_train_c = train(train_loader, model, criterions, optimizer, epoch)
         loss_train = WEI_S * loss_train_s + WEI_C * loss_train_c
         scheduler.step(epoch)
-        if epoch % args.eval_freq == 0 or epoch == args.epochs - 1:
+        if epoch % EVAL_FREQ == 0 or epoch == args.epochs - 1:
             loss_val_s, loss_val_c, acc = validate(val_loader, model, criterions, epoch)
             loss_val = WEI_S * loss_val_s + WEI_C * loss_val_c
             is_best = (loss_val_c < loss_min)
@@ -199,7 +209,7 @@ def train(train_loader, model, criterions, optimizer, epoch):
                 data_time=data_time,
                 loss1=siamese_losses,
                 loss2=clf_losses)))
-
+    gc.collect()
     return siamese_losses.avg, clf_losses.avg  # attention indent ,there was a serious bug here
 
 
@@ -257,11 +267,11 @@ def validate(val_loader, model, criterions, epoch):
 
 def save_checkpoint(state, is_best, filename):
     filename = '_'.join((description, filename))
-    filename = './' + filename
+    filename = r'/home/sjhu/projects/compressed_video_compare/imqfusion/' + filename
     torch.save(state, filename)
     if is_best:
         best_name = '_'.join((description, '_best.pth.tar'))
-        best_name = './' + best_name
+        best_name = r'/home/sjhu/projects/compressed_video_compare/imqfusion/' + best_name
         shutil.copyfile(filename, best_name)
 
 

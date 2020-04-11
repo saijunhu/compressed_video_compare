@@ -1,0 +1,1939 @@
+4
+Training arguments:
+	data_root: /home/sjhu/datasets/all_datasets
+	train_list: /home/sjhu/projects/compressed_video_compare/data/datalists/all_train_sample.txt
+	test_list: /home/sjhu/projects/compressed_video_compare/data/datalists/all_test_sample.txt
+	representation: mixed
+	arch: r2plus1d_18
+	num_segments: 5
+	no_accumulation: False
+	dropout: 0.25
+	keyfeatures: 128
+	epochs: 300
+	batch_size: 12
+	lr: 0.01
+	weight_decay: 0.0001
+	gpus: [0, 1, 2, 3]
+	workers: 8
+	eval_freq: 5
+
+Initializing model:
+    base model:         r2plus1d_18.
+    num_segments:       5.
+        
+model epoch 16 lowest loss 0.0648414300757413
+5692 pair videos loaded.
+551 pair videos loaded.
+tcmalloc: large alloc 1974067200 bytes == 0x55e54cc46000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e5cc68c000 @ 
+[h264 @ 0x55e548dc4000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e54cc44000 @ 
+tcmalloc: large alloc 8688771072 bytes == 0x55e585510000 @ 
+tcmalloc: large alloc 1112375296 bytes == 0x55e55fc8c000 @ 
+[h264 @ 0x55e57e65a000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e54c82e000 @ 
+[h264 @ 0x55e5395a6000] illegal short term buffer state detected
+[h264 @ 0x55e5520f4000] illegal short term buffer state detected
+tcmalloc: large alloc 1455489024 bytes == 0x55e59e644000 @ 
+[h264 @ 0x55e55325e000] illegal short term buffer state detected
+tcmalloc: large alloc 1455489024 bytes == 0x55e59e4b2000 @ 
+[h264 @ 0x55e549f10000] illegal short term buffer state detected
+[h264 @ 0x55e5499f4000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e57998a000 @ 
+tcmalloc: large alloc 8688771072 bytes == 0x55e57998a000 @ 
+[h264 @ 0x55e595e2a000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e57805e000 @ 
+[h264 @ 0x55e7b5876000] illegal short term buffer state detected
+[h264 @ 0x55e7b19f4000] illegal short term buffer state detected
+Epoch: [16][0/475],	Time 144.464 (144.464)	Data 124.697 (124.697)	siamese Loss 0.0351 (0.0351)	classifier Loss 0.0011 (0.0011)	
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+tcmalloc: large alloc 1087832064 bytes == 0x55e56ea38000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e5393bc000 @ 
+tcmalloc: large alloc 1227268096 bytes == 0x55e59bba6000 @ 
+[h264 @ 0x55e54a260000] illegal short term buffer state detected
+tcmalloc: large alloc 1227268096 bytes == 0x55e59bba6000 @ 
+tcmalloc: large alloc 1338507264 bytes == 0x55e5cf40c000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e5393bc000 @ 
+tcmalloc: large alloc 1095663616 bytes == 0x55e56b4ce000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e55d212000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e59bba6000 @ 
+tcmalloc: large alloc 2167955456 bytes == 0x55e55f6a2000 @ 
+tcmalloc: large alloc 1894039552 bytes == 0x55e5f3a5a000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e55d212000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e59bba6000 @ 
+Epoch: [16][20/475],	Time 1.303 (9.922)	Data 0.000 (8.043)	siamese Loss 0.0222 (0.0384)	classifier Loss 0.0015 (0.0047)	
+tcmalloc: large alloc 1894039552 bytes == 0x55e5e9564000 @ 
+[h264 @ 0x55e5d7570000] illegal short term buffer state detected
+tcmalloc: large alloc 2167955456 bytes == 0x55e5673a6000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e568fb2000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e568fb2000 @ 
+[h264 @ 0x55e54d214000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e568fb2000 @ 
+[h264 @ 0x55e553bda000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e568fb2000 @ 
+tcmalloc: large alloc 2230624256 bytes == 0x55e571c86000 @ 
+[h264 @ 0x55e550198000] illegal short term buffer state detected
+[h264 @ 0x55e5599aa000] illegal short term buffer state detected
+[h264 @ 0x55e54f7d8000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e56b4ce000 @ 
+tcmalloc: large alloc 2230624256 bytes == 0x55e571c86000 @ 
+[h264 @ 0x55e551b18000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e56b4ce000 @ 
+[h264 @ 0x55e54b50c000] illegal short term buffer state detected
+[h264 @ 0x55e5571c4000] illegal short term buffer state detected
+[h264 @ 0x55e54cc7c000] illegal short term buffer state detected
+[h264 @ 0x55e54d258000] illegal short term buffer state detected
+Epoch: [16][40/475],	Time 5.332 (6.929)	Data 4.358 (5.510)	siamese Loss 0.0335 (0.0401)	classifier Loss 0.0033 (0.0078)	
+tcmalloc: large alloc 1748205568 bytes == 0x55e568fb2000 @ 
+tcmalloc: large alloc 1613463552 bytes == 0x55e55f6a2000 @ 
+tcmalloc: large alloc 2406612992 bytes == 0x55e56ea38000 @ 
+[h264 @ 0x55e5dcc98000] illegal short term buffer state detected
+[h264 @ 0x55e5dcc8c000] illegal short term buffer state detected
+tcmalloc: large alloc 2406612992 bytes == 0x55e56ea38000 @ 
+[h264 @ 0x55e54e58a000] illegal short term buffer state detected
+[h264 @ 0x55e54bf44000] illegal short term buffer state detected
+[h264 @ 0x55e5599aa000] illegal short term buffer state detected
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+[h264 @ 0x55e54f8f8000] illegal short term buffer state detected
+[h264 @ 0x55e548dc4000] illegal short term buffer state detected
+tcmalloc: large alloc 2343944192 bytes == 0x55e55f6a2000 @ 
+tcmalloc: large alloc 2343944192 bytes == 0x55e55f6a2000 @ 
+[h264 @ 0x55e54c4dc000] illegal short term buffer state detected
+Epoch: [16][60/475],	Time 1.358 (6.283)	Data 0.000 (5.030)	siamese Loss 0.0162 (0.0408)	classifier Loss 0.0003 (0.0110)	
+[h264 @ 0x55e54f45e000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e571c86000 @ 
+[h264 @ 0x55e54e578000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e571c86000 @ 
+[h264 @ 0x55e54caac000] illegal short term buffer state detected
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e568fb2000 @ 
+tcmalloc: large alloc 2097709056 bytes == 0x55e56b4ce000 @ 
+[h264 @ 0x55e551476000] illegal short term buffer state detected
+tcmalloc: large alloc 2097709056 bytes == 0x55e56b4ce000 @ 
+[h264 @ 0x55e550e22000] illegal short term buffer state detected
+[h264 @ 0x55e5d55fa000] illegal short term buffer state detected
+[h264 @ 0x55e54e578000] illegal short term buffer state detected
+[h264 @ 0x55e54e578000] illegal short term buffer state detected
+tcmalloc: large alloc 2191450112 bytes == 0x55e55d212000 @ 
+tcmalloc: large alloc 2681053184 bytes == 0x55e568fb2000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e55d212000 @ 
+tcmalloc: large alloc 2681053184 bytes == 0x55e568fb2000 @ 
+Epoch: [16][80/475],	Time 1.435 (5.936)	Data 0.446 (4.775)	siamese Loss 0.0523 (0.0410)	classifier Loss 0.0071 (0.0111)	
+[h264 @ 0x55e552a1e000] illegal short term buffer state detected
+[h264 @ 0x55e5d7646000] illegal short term buffer state detected
+[h264 @ 0x55e5393bc000] illegal short term buffer state detected
+tcmalloc: large alloc 2214952960 bytes == 0x55e5393bc000 @ 
+[h264 @ 0x55e7dbefe000] illegal short term buffer state detected
+[h264 @ 0x55e7dfd80000] illegal short term buffer state detected
+[h264 @ 0x55e54cb1e000] illegal short term buffer state detected
+[h264 @ 0x55e54f23c000] illegal short term buffer state detected
+[h264 @ 0x55e5d7d7e000] illegal short term buffer state detected
+Epoch: [16][100/475],	Time 12.721 (5.725)	Data 11.708 (4.622)	siamese Loss 0.0462 (0.0399)	classifier Loss 0.0031 (0.0101)	
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+tcmalloc: large alloc 1819484160 bytes == 0x55e555b28000 @ 
+[h264 @ 0x55e549cf4000] illegal short term buffer state detected
+[h264 @ 0x55e54cfac000] illegal short term buffer state detected
+[h264 @ 0x55e54af2e000] illegal short term buffer state detected
+[h264 @ 0x55e54c26a000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e55d212000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e56b4ce000 @ 
+tcmalloc: large alloc 3011502080 bytes == 0x55e55d212000 @ 
+[h264 @ 0x55e61d04c000] illegal short term buffer state detected
+Epoch: [16][120/475],	Time 1.356 (5.532)	Data 0.000 (4.460)	siamese Loss 0.0370 (0.0396)	classifier Loss 0.0041 (0.0094)	
+tcmalloc: large alloc 3011502080 bytes == 0x55e55d212000 @ 
+[h264 @ 0x55e53d374000] illegal short term buffer state detected
+[h264 @ 0x55e555b28000] illegal short term buffer state detected
+[h264 @ 0x55e5599a4000] illegal short term buffer state detected
+[h264 @ 0x55e54fbf6000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e56105c000 @ 
+tcmalloc: large alloc 3607764992 bytes == 0x55e559358000 @ 
+[h264 @ 0x55e548f3a000] illegal short term buffer state detected
+[h264 @ 0x55e6578fa000] illegal short term buffer state detected
+[h264 @ 0x55e54f7e2000] illegal short term buffer state detected
+[h264 @ 0x55e54be00000] illegal short term buffer state detected
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e571c86000 @ 
+[h264 @ 0x55e547f7e000] illegal short term buffer state detected
+[h264 @ 0x55e550bd4000] illegal short term buffer state detected
+[h264 @ 0x55e7e0554000] illegal short term buffer state detected
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+Epoch: [16][140/475],	Time 1.355 (5.524)	Data 0.000 (4.470)	siamese Loss 0.0190 (0.0385)	classifier Loss 0.0004 (0.0087)	
+[h264 @ 0x55e5581c2000] illegal short term buffer state detected
+[h264 @ 0x55e551a76000] illegal short term buffer state detected
+[h264 @ 0x55e54dec8000] illegal short term buffer state detected
+[h264 @ 0x55e54a730000] illegal short term buffer state detected
+[h264 @ 0x55e54d1dc000] illegal short term buffer state detected
+[h264 @ 0x55e5522a2000] illegal short term buffer state detected
+[h264 @ 0x55e54a346000] illegal short term buffer state detected
+[h264 @ 0x55e54a1d2000] illegal short term buffer state detected
+[h264 @ 0x55e7e3c02000] illegal short term buffer state detected
+[h264 @ 0x55e7e3c02000] illegal short term buffer state detected
+[h264 @ 0x55e555b28000] illegal short term buffer state detected
+[h264 @ 0x55e53e1e4000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e5c4932000 @ 
+[h264 @ 0x55e54a106000] illegal short term buffer state detected
+[h264 @ 0x55e7a9ccc000] illegal short term buffer state detected
+[h264 @ 0x55e54ab4e000] illegal short term buffer state detected
+Epoch: [16][160/475],	Time 1.358 (5.623)	Data 0.000 (4.582)	siamese Loss 0.0446 (0.0385)	classifier Loss 0.0112 (0.0089)	
+[h264 @ 0x55e549326000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e5c4932000 @ 
+[h264 @ 0x55e5a710e000] illegal short term buffer state detected
+[h264 @ 0x55e551eca000] illegal short term buffer state detected
+[h264 @ 0x55e5aaf72000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e55f6a2000 @ 
+[h264 @ 0x55e5527ee000] illegal short term buffer state detected
+[h264 @ 0x55e54b9ae000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e55f6a2000 @ 
+[h264 @ 0x55e5525da000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e55f6a2000 @ 
+[h264 @ 0x55e54aaea000] illegal short term buffer state detected
+[h264 @ 0x55e54172e000] illegal short term buffer state detected
+[h264 @ 0x55e5410c0000] illegal short term buffer state detected
+[h264 @ 0x55e7ddb20000] illegal short term buffer state detected
+Epoch: [16][180/475],	Time 1.355 (5.525)	Data 0.000 (4.494)	siamese Loss 0.0360 (0.0383)	classifier Loss 0.0023 (0.0084)	
+[h264 @ 0x55e548dc4000] illegal short term buffer state detected
+[h264 @ 0x55e55bdc2000] illegal short term buffer state detected
+[h264 @ 0x55e553e8c000] illegal short term buffer state detected
+[h264 @ 0x55e54a2ee000] illegal short term buffer state detected
+[h264 @ 0x55e5bd616000] illegal short term buffer state detected
+[h264 @ 0x55e5b9794000] illegal short term buffer state detected
+[h264 @ 0x55e54fe12000] illegal short term buffer state detected
+Epoch: [16][200/475],	Time 11.136 (5.394)	Data 10.123 (4.373)	siamese Loss 0.0355 (0.0379)	classifier Loss 0.0047 (0.0081)	
+[h264 @ 0x55e546e36000] illegal short term buffer state detected
+[h264 @ 0x55e7e3c02000] illegal short term buffer state detected
+[h264 @ 0x55e54f334000] illegal short term buffer state detected
+[h264 @ 0x55e54c9b0000] illegal short term buffer state detected
+[h264 @ 0x55e548dc4000] illegal short term buffer state detected
+Epoch: [16][220/475],	Time 1.360 (5.334)	Data 0.000 (4.318)	siamese Loss 0.0183 (0.0374)	classifier Loss 0.0005 (0.0077)	
+[h264 @ 0x55e5395a6000] illegal short term buffer state detected
+[h264 @ 0x55e54bc26000] illegal short term buffer state detected
+[h264 @ 0x55e54bc26000] illegal short term buffer state detected
+[h264 @ 0x55e5498ca000] illegal short term buffer state detected
+[h264 @ 0x55e54cc22000] illegal short term buffer state detected
+[h264 @ 0x55e54fc40000] illegal short term buffer state detected
+[h264 @ 0x55e7dfd80000] illegal short term buffer state detected
+Epoch: [16][240/475],	Time 1.359 (5.388)	Data 0.000 (4.377)	siamese Loss 0.0419 (0.0368)	classifier Loss 0.0070 (0.0075)	
+[h264 @ 0x55e548c0e000] illegal short term buffer state detected
+[h264 @ 0x55e54ba3c000] illegal short term buffer state detected
+[h264 @ 0x55e54ba3c000] illegal short term buffer state detected
+[h264 @ 0x55e548dc4000] illegal short term buffer state detected
+[h264 @ 0x55e548dc4000] illegal short term buffer state detected
+[h264 @ 0x55e5556dc000] illegal short term buffer state detected
+[h264 @ 0x55e556f30000] illegal short term buffer state detected
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+[h264 @ 0x55e553c28000] illegal short term buffer state detected
+[h264 @ 0x55e553b9c000] illegal short term buffer state detected
+[h264 @ 0x55e54f1ae000] illegal short term buffer state detected
+[h264 @ 0x55e55111c000] illegal short term buffer state detected
+Epoch: [16][260/475],	Time 1.356 (5.282)	Data 0.000 (4.278)	siamese Loss 0.0358 (0.0368)	classifier Loss 0.0026 (0.0074)	
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+[h264 @ 0x55e54bb04000] illegal short term buffer state detected
+[h264 @ 0x55e54baf8000] illegal short term buffer state detected
+[h264 @ 0x55e54fb3e000] illegal short term buffer state detected
+[h264 @ 0x55e54ef5e000] illegal short term buffer state detected
+[h264 @ 0x55e54c78a000] illegal short term buffer state detected
+[h264 @ 0x55e54a1a4000] illegal short term buffer state detected
+[h264 @ 0x55e54c2e8000] illegal short term buffer state detected
+[h264 @ 0x55e550dd4000] illegal short term buffer state detected
+[h264 @ 0x55e54bad0000] illegal short term buffer state detected
+[h264 @ 0x55e54c91a000] illegal short term buffer state detected
+Epoch: [16][280/475],	Time 1.358 (5.270)	Data 0.000 (4.271)	siamese Loss 0.0412 (0.0368)	classifier Loss 0.0081 (0.0076)	
+[h264 @ 0x55e5508c2000] illegal short term buffer state detected
+[h264 @ 0x55e549274000] illegal short term buffer state detected
+[h264 @ 0x55e550fb6000] illegal short term buffer state detected
+[h264 @ 0x55e545426000] illegal short term buffer state detected
+[h264 @ 0x55e5520f4000] illegal short term buffer state detected
+[h264 @ 0x55e552e74000] illegal short term buffer state detected
+[h264 @ 0x55e548dc4000] illegal short term buffer state detected
+[h264 @ 0x55e54b3c0000] illegal short term buffer state detected
+[h264 @ 0x55e7dfd80000] illegal short term buffer state detected
+[h264 @ 0x55e549b1a000] illegal short term buffer state detected
+Epoch: [16][300/475],	Time 1.356 (5.190)	Data 0.000 (4.193)	siamese Loss 0.0586 (0.0368)	classifier Loss 0.0125 (0.0076)	
+[h264 @ 0x55e54fc8c000] illegal short term buffer state detected
+[h264 @ 0x55e54be04000] illegal short term buffer state detected
+[h264 @ 0x55e54c904000] illegal short term buffer state detected
+[h264 @ 0x55e5468a2000] illegal short term buffer state detected
+[h264 @ 0x55e5502e6000] illegal short term buffer state detected
+[h264 @ 0x55e54c0c2000] illegal short term buffer state detected
+[h264 @ 0x55e548608000] illegal short term buffer state detected
+[h264 @ 0x55e54cef6000] illegal short term buffer state detected
+[h264 @ 0x55e7dbefe000] illegal short term buffer state detected
+[h264 @ 0x55e54b6a4000] illegal short term buffer state detected
+[h264 @ 0x55e551b26000] illegal short term buffer state detected
+Epoch: [16][320/475],	Time 1.356 (5.190)	Data 0.000 (4.196)	siamese Loss 0.0351 (0.0363)	classifier Loss 0.0119 (0.0074)	
+[h264 @ 0x55e549cfa000] illegal short term buffer state detected
+[h264 @ 0x55e545566000] illegal short term buffer state detected
+[h264 @ 0x55e54d99e000] illegal short term buffer state detected
+[h264 @ 0x55e550340000] illegal short term buffer state detected
+tcmalloc: large alloc 2380242944 bytes == 0x55e56b4ce000 @ 
+[h264 @ 0x55e548dc4000] illegal short term buffer state detected
+[h264 @ 0x55e549bae000] illegal short term buffer state detected
+Epoch: [16][340/475],	Time 1.357 (5.092)	Data 0.000 (4.100)	siamese Loss 0.0325 (0.0360)	classifier Loss 0.0060 (0.0072)	
+[h264 @ 0x55e54cdb2000] illegal short term buffer state detected
+[h264 @ 0x55e55197e000] illegal short term buffer state detected
+[h264 @ 0x55e552916000] illegal short term buffer state detected
+[h264 @ 0x55e54c4be000] illegal short term buffer state detected
+[h264 @ 0x55e551fe0000] illegal short term buffer state detected
+[h264 @ 0x55e5527fc000] illegal short term buffer state detected
+[h264 @ 0x55e54c4be000] illegal short term buffer state detected
+[h264 @ 0x55e54e96e000] illegal short term buffer state detected
+[h264 @ 0x55e552b0c000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e568fb2000 @ 
+[h264 @ 0x55e54f514000] illegal short term buffer state detected
+[h264 @ 0x55e7dfd80000] illegal short term buffer state detected
+[h264 @ 0x55e54eff8000] illegal short term buffer state detected
+[h264 @ 0x55e7e3c02000] illegal short term buffer state detected
+Epoch: [16][360/475],	Time 1.357 (5.065)	Data 0.000 (4.079)	siamese Loss 0.0456 (0.0356)	classifier Loss 0.0080 (0.0070)	
+tcmalloc: large alloc 3607764992 bytes == 0x55e568fb2000 @ 
+[h264 @ 0x55e541852000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e568fb2000 @ 
+[h264 @ 0x55e5458c6000] illegal short term buffer state detected
+[h264 @ 0x55e541852000] illegal short term buffer state detected
+[h264 @ 0x55e54e2ea000] illegal short term buffer state detected
+[h264 @ 0x55e54b6e2000] illegal short term buffer state detected
+[h264 @ 0x55e7dfd80000] illegal short term buffer state detected
+[h264 @ 0x55e54f564000] illegal short term buffer state detected
+[h264 @ 0x55e5500cc000] illegal short term buffer state detected
+[h264 @ 0x55e5500cc000] illegal short term buffer state detected
+[h264 @ 0x55e54f564000] illegal short term buffer state detected
+[h264 @ 0x55e5503d2000] illegal short term buffer state detected
+tcmalloc: large alloc 3411533824 bytes == 0x55e55d212000 @ 
+Epoch: [16][380/475],	Time 1.351 (5.110)	Data 0.000 (4.129)	siamese Loss 0.0198 (0.0353)	classifier Loss 0.0013 (0.0069)	
+[h264 @ 0x55e54fb0c000] illegal short term buffer state detected
+[h264 @ 0x55e551fec000] illegal short term buffer state detected
+[h264 @ 0x55e54e8e6000] illegal short term buffer state detected
+[h264 @ 0x55e54fc66000] illegal short term buffer state detected
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+Epoch: [16][400/475],	Time 1.348 (5.077)	Data 0.000 (4.099)	siamese Loss 0.0262 (0.0349)	classifier Loss 0.0010 (0.0069)	
+[h264 @ 0x55e5452ba000] illegal short term buffer state detected
+[h264 @ 0x55e555b28000] illegal short term buffer state detected
+[h264 @ 0x55e54daa6000] illegal short term buffer state detected
+[h264 @ 0x55e54c324000] illegal short term buffer state detected
+[h264 @ 0x55e55d15a000] illegal short term buffer state detected
+[h264 @ 0x55e555b28000] illegal short term buffer state detected
+[h264 @ 0x55e54f2f8000] illegal short term buffer state detected
+Epoch: [16][420/475],	Time 1.357 (5.066)	Data 0.000 (4.089)	siamese Loss 0.0535 (0.0349)	classifier Loss 0.0101 (0.0068)	
+[h264 @ 0x55e5393bc000] illegal short term buffer state detected
+[h264 @ 0x55e54b4f4000] illegal short term buffer state detected
+[h264 @ 0x55e54a6d2000] illegal short term buffer state detected
+[h264 @ 0x55e5519e0000] illegal short term buffer state detected
+[h264 @ 0x55e7dfd80000] illegal short term buffer state detected
+[h264 @ 0x55e5531e8000] illegal short term buffer state detected
+[h264 @ 0x55e54e3e6000] illegal short term buffer state detected
+[h264 @ 0x55e551414000] illegal short term buffer state detected
+[h264 @ 0x55e54e64a000] illegal short term buffer state detected
+Epoch: [16][440/475],	Time 1.361 (5.028)	Data 0.000 (4.051)	siamese Loss 0.0287 (0.0347)	classifier Loss 0.0008 (0.0066)	
+[h264 @ 0x55e5393bc000] illegal short term buffer state detected
+[h264 @ 0x55e7e3c02000] illegal short term buffer state detected
+[h264 @ 0x55e54834c000] illegal short term buffer state detected
+[h264 @ 0x55e54f9f6000] illegal short term buffer state detected
+[h264 @ 0x55e558256000] illegal short term buffer state detected
+[h264 @ 0x55e7dfd80000] illegal short term buffer state detected
+[h264 @ 0x55e544f42000] illegal short term buffer state detected
+[h264 @ 0x55e548a16000] illegal short term buffer state detected
+[h264 @ 0x55e54c3f6000] illegal short term buffer state detected
+[h264 @ 0x55e546d6c000] illegal short term buffer state detected
+[h264 @ 0x55e550a2e000] illegal short term buffer state detected
+Epoch: [16][460/475],	Time 25.259 (5.130)	Data 24.210 (4.154)	siamese Loss 0.0237 (0.0345)	classifier Loss 0.0014 (0.0066)	
+tcmalloc: large alloc 1974067200 bytes == 0x55e71e2b2000 @ 
+[h264 @ 0x55e76bdde000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e7ab25a000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e7092ec000 @ 
+tcmalloc: large alloc 8688771072 bytes == 0x55e7236fa000 @ 
+tcmalloc: large alloc 1112375296 bytes == 0x55e764cce000 @ 
+[h264 @ 0x55e728a2a000] illegal short term buffer state detected
+[h264 @ 0x55e711286000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e7092ec000 @ 
+[h264 @ 0x55e730918000] illegal short term buffer state detected
+tcmalloc: large alloc 1455489024 bytes == 0x55e72bc1a000 @ 
+[h264 @ 0x55e7332ee000] illegal short term buffer state detected
+tcmalloc: large alloc 1455489024 bytes == 0x55e7353fa000 @ 
+[h264 @ 0x55e7663a0000] illegal short term buffer state detected
+[h264 @ 0x55e72ee98000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7236fa000 @ 
+[h264 @ 0x55e70c69c000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7236fa000 @ 
+tcmalloc: large alloc 8688771072 bytes == 0x55e7236fa000 @ 
+[h264 @ 0x55e93cce0000] illegal short term buffer state detected
+[h264 @ 0x55e9d1e1a000] illegal short term buffer state detected
+Epoch: [17][0/475],	Time 121.061 (121.061)	Data 119.614 (119.614)	siamese Loss 0.0352 (0.0352)	classifier Loss 0.0057 (0.0057)	
+[h264 @ 0x55e724bee000] illegal short term buffer state detected
+tcmalloc: large alloc 1087832064 bytes == 0x55e72549e000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e7092ec000 @ 
+tcmalloc: large alloc 1227268096 bytes == 0x55e71226e000 @ 
+[h264 @ 0x55e72d736000] illegal short term buffer state detected
+tcmalloc: large alloc 1227268096 bytes == 0x55e71226e000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e7092ec000 @ 
+tcmalloc: large alloc 1338507264 bytes == 0x55e72ce14000 @ 
+tcmalloc: large alloc 1095663616 bytes == 0x55e732cec000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72af6c000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e77b732000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e777634000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e726dea000 @ 
+[h264 @ 0x55e7b7c60000] illegal short term buffer state detected
+tcmalloc: large alloc 2167955456 bytes == 0x55e72e4fe000 @ 
+tcmalloc: large alloc 1894039552 bytes == 0x55e725110000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72baee000 @ 
+Epoch: [17][20/475],	Time 1.303 (9.020)	Data 0.000 (8.034)	siamese Loss 0.0198 (0.0299)	classifier Loss 0.0005 (0.0043)	
+tcmalloc: large alloc 2167955456 bytes == 0x55e7bfcdc000 @ 
+tcmalloc: large alloc 1894039552 bytes == 0x55e71d40c000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e727f84000 @ 
+[h264 @ 0x55e733bb0000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e727eec000 @ 
+[h264 @ 0x55e730a36000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e727eec000 @ 
+[h264 @ 0x55e760da8000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e733714000 @ 
+[h264 @ 0x55e77163e000] illegal short term buffer state detected
+[h264 @ 0x55e72e372000] illegal short term buffer state detected
+tcmalloc: large alloc 2230624256 bytes == 0x55e70abc8000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e730246000 @ 
+[h264 @ 0x55e7d2624000] illegal short term buffer state detected
+[h264 @ 0x55e767130000] illegal short term buffer state detected
+tcmalloc: large alloc 2230624256 bytes == 0x55e70abc8000 @ 
+[h264 @ 0x55e726cb4000] illegal short term buffer state detected
+[h264 @ 0x55e72b57e000] illegal short term buffer state detected
+[h264 @ 0x55e72bab2000] illegal short term buffer state detected
+Epoch: [17][40/475],	Time 17.130 (6.782)	Data 16.133 (5.832)	siamese Loss 0.0249 (0.0323)	classifier Loss 0.0014 (0.0047)	
+tcmalloc: large alloc 1748205568 bytes == 0x55e7167d6000 @ 
+[h264 @ 0x55e7cd5ca000] illegal short term buffer state detected
+[h264 @ 0x55e7c903e000] illegal short term buffer state detected
+tcmalloc: large alloc 2406612992 bytes == 0x55e727412000 @ 
+tcmalloc: large alloc 1613463552 bytes == 0x55e72f348000 @ 
+tcmalloc: large alloc 2406612992 bytes == 0x55e727412000 @ 
+[h264 @ 0x55e728a32000] illegal short term buffer state detected
+[h264 @ 0x55e7dbcee000] illegal short term buffer state detected
+[h264 @ 0x55e72c246000] illegal short term buffer state detected
+[h264 @ 0x55e730984000] illegal short term buffer state detected
+[h264 @ 0x55e727b04000] illegal short term buffer state detected
+Epoch: [17][60/475],	Time 1.360 (6.021)	Data 0.000 (5.064)	siamese Loss 0.0206 (0.0320)	classifier Loss 0.0006 (0.0054)	
+[h264 @ 0x55e72e354000] illegal short term buffer state detected
+[h264 @ 0x55e70a060000] illegal short term buffer state detected
+[h264 @ 0x55e72fece000] illegal short term buffer state detected
+tcmalloc: large alloc 2343944192 bytes == 0x55e72c040000 @ 
+[h264 @ 0x55e72ca64000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e70abc8000 @ 
+tcmalloc: large alloc 2343944192 bytes == 0x55e72c034000 @ 
+[h264 @ 0x55e72b7b8000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e70abc8000 @ 
+tcmalloc: large alloc 2097709056 bytes == 0x55e7246e6000 @ 
+tcmalloc: large alloc 2097709056 bytes == 0x55e7246e6000 @ 
+[h264 @ 0x55e7c5f80000] illegal short term buffer state detected
+[h264 @ 0x55e7b6fac000] illegal short term buffer state detected
+[h264 @ 0x55e7bae2e000] illegal short term buffer state detected
+[h264 @ 0x55e731810000] illegal short term buffer state detected
+[h264 @ 0x55e7227da000] illegal short term buffer state detected
+[h264 @ 0x55e731810000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e72d848000 @ 
+[h264 @ 0x55e726392000] illegal short term buffer state detected
+tcmalloc: large alloc 2191450112 bytes == 0x55e729ad6000 @ 
+[h264 @ 0x55e7bc450000] illegal short term buffer state detected
+tcmalloc: large alloc 2191450112 bytes == 0x55e7276b8000 @ 
+tcmalloc: large alloc 2681053184 bytes == 0x55e72d918000 @ 
+Epoch: [17][80/475],	Time 12.226 (5.983)	Data 11.221 (5.032)	siamese Loss 0.0377 (0.0338)	classifier Loss 0.0019 (0.0075)	
+tcmalloc: large alloc 2681053184 bytes == 0x55e725a94000 @ 
+[h264 @ 0x55e72d70e000] illegal short term buffer state detected
+tcmalloc: large alloc 2214952960 bytes == 0x55e7092ec000 @ 
+[h264 @ 0x55e7310c6000] illegal short term buffer state detected
+[h264 @ 0x55e976cd4000] illegal short term buffer state detected
+[h264 @ 0x55e72e284000] illegal short term buffer state detected
+[h264 @ 0x55e97ab56000] illegal short term buffer state detected
+[h264 @ 0x55e798e5c000] illegal short term buffer state detected
+[h264 @ 0x55e70c5e4000] illegal short term buffer state detected
+[h264 @ 0x55e72ce66000] illegal short term buffer state detected
+Epoch: [17][100/475],	Time 41.927 (5.948)	Data 40.891 (4.997)	siamese Loss 0.0552 (0.0336)	classifier Loss 0.0189 (0.0073)	
+tcmalloc: large alloc 1819484160 bytes == 0x55e7269d2000 @ 
+[h264 @ 0x55e711d64000] illegal short term buffer state detected
+[h264 @ 0x55e729a52000] illegal short term buffer state detected
+[h264 @ 0x55e7293d2000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e734448000 @ 
+tcmalloc: large alloc 3011502080 bytes == 0x55e730ebc000 @ 
+[h264 @ 0x55e728968000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e7214b4000 @ 
+[h264 @ 0x55e7fe97e000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e7214b4000 @ 
+Epoch: [17][120/475],	Time 1.353 (5.759)	Data 0.000 (4.805)	siamese Loss 0.0386 (0.0339)	classifier Loss 0.0027 (0.0073)	
+[h264 @ 0x55e72aa5c000] illegal short term buffer state detected
+[h264 @ 0x55e734d76000] illegal short term buffer state detected
+[h264 @ 0x55e7d51f2000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e7b931a000 @ 
+tcmalloc: large alloc 3607764992 bytes == 0x55e7a919e000 @ 
+[h264 @ 0x55e8b3a02000] illegal short term buffer state detected
+[h264 @ 0x55e732590000] illegal short term buffer state detected
+[h264 @ 0x55e8cee16000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e70abc8000 @ 
+[h264 @ 0x55e9d238c000] illegal short term buffer state detected
+[h264 @ 0x55e72f2fe000] illegal short term buffer state detected
+[h264 @ 0x55e723ce4000] illegal short term buffer state detected
+[h264 @ 0x55e72f2f2000] illegal short term buffer state detected
+[h264 @ 0x55e72a03a000] illegal short term buffer state detected
+Epoch: [17][140/475],	Time 1.357 (5.610)	Data 0.001 (4.663)	siamese Loss 0.0302 (0.0330)	classifier Loss 0.0041 (0.0065)	
+[h264 @ 0x55e72fd0e000] illegal short term buffer state detected
+[h264 @ 0x55e72836c000] illegal short term buffer state detected
+[h264 @ 0x55e712b64000] illegal short term buffer state detected
+[h264 @ 0x55e729962000] illegal short term buffer state detected
+[h264 @ 0x55e72db92000] illegal short term buffer state detected
+[h264 @ 0x55e727160000] illegal short term buffer state detected
+[h264 @ 0x55e727b9c000] illegal short term buffer state detected
+[h264 @ 0x55e729982000] illegal short term buffer state detected
+[h264 @ 0x55e729982000] illegal short term buffer state detected
+[h264 @ 0x55e97d64c000] illegal short term buffer state detected
+[h264 @ 0x55e97a250000] illegal short term buffer state detected
+[h264 @ 0x55e70b668000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7ca12c000 @ 
+[h264 @ 0x55e72a12c000] illegal short term buffer state detected
+[h264 @ 0x55e730ce6000] illegal short term buffer state detected
+[h264 @ 0x55e9763ce000] illegal short term buffer state detected
+Epoch: [17][160/475],	Time 1.353 (5.735)	Data 0.000 (4.791)	siamese Loss 0.0299 (0.0325)	classifier Loss 0.0015 (0.0063)	
+[h264 @ 0x55e72372c000] illegal short term buffer state detected
+[h264 @ 0x55e7b3cc6000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7ba574000 @ 
+[h264 @ 0x55e730104000] illegal short term buffer state detected
+[h264 @ 0x55e7324f4000] illegal short term buffer state detected
+[h264 @ 0x55ea06b80000] illegal short term buffer state detected
+[h264 @ 0x55e718cf4000] illegal short term buffer state detected
+[h264 @ 0x55e72ab4e000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72b43c000 @ 
+[h264 @ 0x55e7292b6000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72b43c000 @ 
+[h264 @ 0x55e7e5cf6000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72b43c000 @ 
+[h264 @ 0x55e7261de000] illegal short term buffer state detected
+[h264 @ 0x55e71b3e0000] illegal short term buffer state detected
+[h264 @ 0x55e785834000] illegal short term buffer state detected
+[h264 @ 0x55e7230e4000] illegal short term buffer state detected
+Epoch: [17][180/475],	Time 1.355 (5.712)	Data 0.000 (4.764)	siamese Loss 0.0302 (0.0327)	classifier Loss 0.0026 (0.0068)	
+[h264 @ 0x55e7284cc000] illegal short term buffer state detected
+[h264 @ 0x55e7331f4000] illegal short term buffer state detected
+[h264 @ 0x55e72eaa2000] illegal short term buffer state detected
+[h264 @ 0x55e72b86a000] illegal short term buffer state detected
+[h264 @ 0x55e79d4c6000] illegal short term buffer state detected
+[h264 @ 0x55e73204c000] illegal short term buffer state detected
+[h264 @ 0x55e7a08ae000] illegal short term buffer state detected
+[h264 @ 0x55e9cfee2000] illegal short term buffer state detected
+Epoch: [17][200/475],	Time 1.346 (5.601)	Data 0.000 (4.649)	siamese Loss 0.0520 (0.0330)	classifier Loss 0.0161 (0.0070)	
+[h264 @ 0x55e72b62c000] illegal short term buffer state detected
+[h264 @ 0x55e73665c000] illegal short term buffer state detected
+[h264 @ 0x55e72c67e000] illegal short term buffer state detected
+[h264 @ 0x55e72aab8000] illegal short term buffer state detected
+Epoch: [17][220/475],	Time 1.357 (5.589)	Data 0.000 (4.636)	siamese Loss 0.0253 (0.0329)	classifier Loss 0.0012 (0.0066)	
+[h264 @ 0x55e72e81a000] illegal short term buffer state detected
+[h264 @ 0x55e72b4be000] illegal short term buffer state detected
+[h264 @ 0x55e728680000] illegal short term buffer state detected
+[h264 @ 0x55e70d0f8000] illegal short term buffer state detected
+[h264 @ 0x55e735dd6000] illegal short term buffer state detected
+[h264 @ 0x55e71a6de000] illegal short term buffer state detected
+[h264 @ 0x55e971652000] illegal short term buffer state detected
+Epoch: [17][240/475],	Time 1.356 (5.637)	Data 0.000 (4.684)	siamese Loss 0.0238 (0.0327)	classifier Loss 0.0012 (0.0066)	
+[h264 @ 0x55e7255ba000] illegal short term buffer state detected
+[h264 @ 0x55e72293a000] illegal short term buffer state detected
+[h264 @ 0x55e72acf6000] illegal short term buffer state detected
+[h264 @ 0x55e731166000] illegal short term buffer state detected
+[h264 @ 0x55e72acf6000] illegal short term buffer state detected
+[h264 @ 0x55e72c240000] illegal short term buffer state detected
+[h264 @ 0x55e7230e4000] illegal short term buffer state detected
+[h264 @ 0x55e7283de000] illegal short term buffer state detected
+[h264 @ 0x55e727ca2000] illegal short term buffer state detected
+[h264 @ 0x55e72e7d8000] illegal short term buffer state detected
+[h264 @ 0x55e72a35c000] illegal short term buffer state detected
+[h264 @ 0x55e72bdca000] illegal short term buffer state detected
+Epoch: [17][260/475],	Time 1.347 (5.534)	Data 0.000 (4.582)	siamese Loss 0.0334 (0.0327)	classifier Loss 0.0017 (0.0066)	
+[h264 @ 0x55e72ae7c000] illegal short term buffer state detected
+[h264 @ 0x55e723940000] illegal short term buffer state detected
+[h264 @ 0x55e72d618000] illegal short term buffer state detected
+[h264 @ 0x55e72f5ce000] illegal short term buffer state detected
+[h264 @ 0x55e72c724000] illegal short term buffer state detected
+[h264 @ 0x55e72f132000] illegal short term buffer state detected
+[h264 @ 0x55e72a7d0000] illegal short term buffer state detected
+[h264 @ 0x55e72e8f6000] illegal short term buffer state detected
+[h264 @ 0x55e731bbc000] illegal short term buffer state detected
+[h264 @ 0x55e72e616000] illegal short term buffer state detected
+[h264 @ 0x55e72adbe000] illegal short term buffer state detected
+Epoch: [17][280/475],	Time 1.351 (5.542)	Data 0.000 (4.592)	siamese Loss 0.0609 (0.0331)	classifier Loss 0.0837 (0.0071)	
+[h264 @ 0x55e7cac70000] illegal short term buffer state detected
+[h264 @ 0x55e72b142000] illegal short term buffer state detected
+[h264 @ 0x55e72e73a000] illegal short term buffer state detected
+[h264 @ 0x55e72a7d0000] illegal short term buffer state detected
+[h264 @ 0x55e72a7d0000] illegal short term buffer state detected
+[h264 @ 0x55e71fdda000] illegal short term buffer state detected
+[h264 @ 0x55e730850000] illegal short term buffer state detected
+[h264 @ 0x55e718f60000] illegal short term buffer state detected
+[h264 @ 0x55e72831c000] illegal short term buffer state detected
+[h264 @ 0x55e979a36000] illegal short term buffer state detected
+[h264 @ 0x55e733894000] illegal short term buffer state detected
+Epoch: [17][300/475],	Time 10.903 (5.499)	Data 9.887 (4.552)	siamese Loss 0.0435 (0.0333)	classifier Loss 0.0035 (0.0074)	
+[h264 @ 0x55e719044000] illegal short term buffer state detected
+[h264 @ 0x55e721686000] illegal short term buffer state detected
+[h264 @ 0x55e733df8000] illegal short term buffer state detected
+[h264 @ 0x55e72e748000] illegal short term buffer state detected
+[h264 @ 0x55e716e12000] illegal short term buffer state detected
+[h264 @ 0x55e72235c000] illegal short term buffer state detected
+[h264 @ 0x55e72d7f4000] illegal short term buffer state detected
+[h264 @ 0x55e72c6f4000] illegal short term buffer state detected
+[h264 @ 0x55e9c04c4000] illegal short term buffer state detected
+[h264 @ 0x55e72b214000] illegal short term buffer state detected
+Epoch: [17][320/475],	Time 1.350 (5.482)	Data 0.000 (4.537)	siamese Loss 0.0283 (0.0332)	classifier Loss 0.0039 (0.0074)	
+[h264 @ 0x55e72a7d0000] illegal short term buffer state detected
+[h264 @ 0x55e730d58000] illegal short term buffer state detected
+[h264 @ 0x55e72ab9c000] illegal short term buffer state detected
+[h264 @ 0x55e72a7d0000] illegal short term buffer state detected
+[h264 @ 0x55e72a076000] illegal short term buffer state detected
+tcmalloc: large alloc 2380242944 bytes == 0x55e72e496000 @ 
+[h264 @ 0x55e72cda8000] illegal short term buffer state detected
+[h264 @ 0x55e729820000] illegal short term buffer state detected
+[h264 @ 0x55e71ade8000] illegal short term buffer state detected
+Epoch: [17][340/475],	Time 33.319 (5.475)	Data 32.252 (4.530)	siamese Loss 0.0584 (0.0333)	classifier Loss 0.0619 (0.0073)	
+[h264 @ 0x55e722776000] illegal short term buffer state detected
+[h264 @ 0x55e732a12000] illegal short term buffer state detected
+[h264 @ 0x55e72cca2000] illegal short term buffer state detected
+[h264 @ 0x55e7199cc000] illegal short term buffer state detected
+[h264 @ 0x55e728e20000] illegal short term buffer state detected
+[h264 @ 0x55e7130b2000] illegal short term buffer state detected
+[h264 @ 0x55e732318000] illegal short term buffer state detected
+[h264 @ 0x55e732a0c000] illegal short term buffer state detected
+[h264 @ 0x55e72ef40000] illegal short term buffer state detected
+[h264 @ 0x55e97c4ea000] illegal short term buffer state detected
+[h264 @ 0x55e9756c8000] illegal short term buffer state detected
+[h264 @ 0x55e732318000] illegal short term buffer state detected
+Epoch: [17][360/475],	Time 1.349 (5.421)	Data 0.000 (4.476)	siamese Loss 0.0341 (0.0333)	classifier Loss 0.0012 (0.0072)	
+[h264 @ 0x55e72563e000] illegal short term buffer state detected
+[h264 @ 0x55e73159e000] illegal short term buffer state detected
+[h264 @ 0x55e726e6c000] illegal short term buffer state detected
+[h264 @ 0x55e978a56000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e72c89e000 @ 
+[h264 @ 0x55e72beea000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e720aa0000 @ 
+[h264 @ 0x55e826448000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e72c626000 @ 
+[h264 @ 0x55e715a9c000] illegal short term buffer state detected
+[h264 @ 0x55e7167d6000] illegal short term buffer state detected
+[h264 @ 0x55e732318000] illegal short term buffer state detected
+[h264 @ 0x55e71a166000] illegal short term buffer state detected
+tcmalloc: large alloc 3411533824 bytes == 0x55e7242cc000 @ 
+[h264 @ 0x55e71a166000] illegal short term buffer state detected
+Epoch: [17][380/475],	Time 14.823 (5.458)	Data 13.813 (4.514)	siamese Loss 0.0270 (0.0334)	classifier Loss 0.0005 (0.0072)	
+[h264 @ 0x55e7309e4000] illegal short term buffer state detected
+[h264 @ 0x55e7304a8000] illegal short term buffer state detected
+[h264 @ 0x55e72df1c000] illegal short term buffer state detected
+[h264 @ 0x55e731d9e000] illegal short term buffer state detected
+[h264 @ 0x55e72b96e000] illegal short term buffer state detected
+Epoch: [17][400/475],	Time 1.358 (5.418)	Data 0.000 (4.474)	siamese Loss 0.0173 (0.0331)	classifier Loss 0.0002 (0.0070)	
+[h264 @ 0x55e71661c000] illegal short term buffer state detected
+[h264 @ 0x55e72f6c6000] illegal short term buffer state detected
+[h264 @ 0x55e71b098000] illegal short term buffer state detected
+[h264 @ 0x55e72e0a8000] illegal short term buffer state detected
+[h264 @ 0x55e729654000] illegal short term buffer state detected
+[h264 @ 0x55e734638000] illegal short term buffer state detected
+[h264 @ 0x55e72e496000] illegal short term buffer state detected
+[h264 @ 0x55e71ad84000] illegal short term buffer state detected
+[h264 @ 0x55e731526000] illegal short term buffer state detected
+[h264 @ 0x55e72e112000] illegal short term buffer state detected
+[h264 @ 0x55e794106000] illegal short term buffer state detected
+[h264 @ 0x55e71c8aa000] illegal short term buffer state detected
+Epoch: [17][420/475],	Time 53.204 (5.489)	Data 52.143 (4.545)	siamese Loss 0.0440 (0.0331)	classifier Loss 0.0031 (0.0071)	
+[h264 @ 0x55e72e496000] illegal short term buffer state detected
+[h264 @ 0x55e732318000] illegal short term buffer state detected
+[h264 @ 0x55e97c85a000] illegal short term buffer state detected
+Epoch: [17][440/475],	Time 1.359 (5.410)	Data 0.000 (4.465)	siamese Loss 0.0316 (0.0331)	classifier Loss 0.0014 (0.0072)	
+[h264 @ 0x55e72a7d0000] illegal short term buffer state detected
+[h264 @ 0x55e72754c000] illegal short term buffer state detected
+[h264 @ 0x55e7f37ba000] illegal short term buffer state detected
+[h264 @ 0x55e7095cc000] illegal short term buffer state detected
+[h264 @ 0x55e7f53ce000] illegal short term buffer state detected
+[h264 @ 0x55e97c360000] illegal short term buffer state detected
+[h264 @ 0x55e716514000] illegal short term buffer state detected
+[h264 @ 0x55e97941e000] illegal short term buffer state detected
+[h264 @ 0x55e72b6e0000] illegal short term buffer state detected
+[h264 @ 0x55e72a882000] illegal short term buffer state detected
+[h264 @ 0x55e732586000] illegal short term buffer state detected
+[h264 @ 0x55e7d4da6000] illegal short term buffer state detected
+Epoch: [17][460/475],	Time 52.342 (5.610)	Data 51.312 (4.665)	siamese Loss 0.0349 (0.0331)	classifier Loss 0.0060 (0.0072)	
+tcmalloc: large alloc 1974067200 bytes == 0x55e71e382000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e7ab448000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e7ab406000 @ 
+[h264 @ 0x55e723346000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e726386000 @ 
+tcmalloc: large alloc 1112375296 bytes == 0x55e72d9bc000 @ 
+[h264 @ 0x55e731d0a000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e7ab406000 @ 
+[h264 @ 0x55e73029e000] illegal short term buffer state detected
+[h264 @ 0x55e72e60e000] illegal short term buffer state detected
+[h264 @ 0x55e709784000] illegal short term buffer state detected
+tcmalloc: large alloc 1455489024 bytes == 0x55e772114000 @ 
+tcmalloc: large alloc 1455489024 bytes == 0x55e733434000 @ 
+[h264 @ 0x55e779aa4000] illegal short term buffer state detected
+[h264 @ 0x55e729aba000] illegal short term buffer state detected
+[h264 @ 0x55e721df8000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e726386000 @ 
+tcmalloc: large alloc 8688771072 bytes == 0x55e726386000 @ 
+tcmalloc: large alloc 8688771072 bytes == 0x55e726386000 @ 
+[h264 @ 0x55e7148e4000] illegal short term buffer state detected
+[h264 @ 0x55e710a62000] illegal short term buffer state detected
+Epoch: [18][0/475],	Time 133.422 (133.422)	Data 132.367 (132.367)	siamese Loss 0.0360 (0.0360)	classifier Loss 0.0078 (0.0078)	
+[h264 @ 0x55e72578a000] illegal short term buffer state detected
+tcmalloc: large alloc 1087832064 bytes == 0x55e781aca000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e7104e0000 @ 
+tcmalloc: large alloc 1227268096 bytes == 0x55e7314c8000 @ 
+[h264 @ 0x55e72ab72000] illegal short term buffer state detected
+tcmalloc: large alloc 1999790080 bytes == 0x55e7104e0000 @ 
+tcmalloc: large alloc 1227268096 bytes == 0x55e731448000 @ 
+tcmalloc: large alloc 1338507264 bytes == 0x55e779dc6000 @ 
+tcmalloc: large alloc 1095663616 bytes == 0x55e731cf6000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e729a52000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72ffd4000 @ 
+[h264 @ 0x55e7a09de000] illegal short term buffer state detected
+tcmalloc: large alloc 2167955456 bytes == 0x55e72bff6000 @ 
+tcmalloc: large alloc 1894039552 bytes == 0x55e740f7e000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e725bd0000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72feb4000 @ 
+tcmalloc: large alloc 1894039552 bytes == 0x55e740f7e000 @ 
+tcmalloc: large alloc 2167955456 bytes == 0x55e72bff6000 @ 
+Epoch: [18][20/475],	Time 1.304 (9.847)	Data 0.000 (8.879)	siamese Loss 0.0299 (0.0351)	classifier Loss 0.0038 (0.0054)	
+tcmalloc: large alloc 2191450112 bytes == 0x55e72af82000 @ 
+[h264 @ 0x55e72dc5a000] illegal short term buffer state detected
+tcmalloc: large alloc 2191450112 bytes == 0x55e71f048000 @ 
+[h264 @ 0x55e732580000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e71f048000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e71f048000 @ 
+[h264 @ 0x55e72f61c000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e7305fe000 @ 
+[h264 @ 0x55e72c498000] illegal short term buffer state detected
+[h264 @ 0x55e71f81c000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e728d9e000 @ 
+[h264 @ 0x55e7cab5c000] illegal short term buffer state detected
+[h264 @ 0x55e719992000] illegal short term buffer state detected
+tcmalloc: large alloc 2230624256 bytes == 0x55e726382000 @ 
+[h264 @ 0x55e71f0bc000] illegal short term buffer state detected
+[h264 @ 0x55e72b8d8000] illegal short term buffer state detected
+[h264 @ 0x55e71f608000] illegal short term buffer state detected
+tcmalloc: large alloc 2230624256 bytes == 0x55e726382000 @ 
+tcmalloc: large alloc 1748205568 bytes == 0x55e72cb90000 @ 
+Epoch: [18][40/475],	Time 27.785 (7.438)	Data 26.755 (6.486)	siamese Loss 0.0201 (0.0335)	classifier Loss 0.0006 (0.0041)	
+tcmalloc: large alloc 1613463552 bytes == 0x55e72f2d0000 @ 
+[h264 @ 0x55e7c335c000] illegal short term buffer state detected
+[h264 @ 0x55e7bf4ce000] illegal short term buffer state detected
+tcmalloc: large alloc 2406612992 bytes == 0x55e740f7e000 @ 
+tcmalloc: large alloc 2406612992 bytes == 0x55e740f7e000 @ 
+[h264 @ 0x55e72da58000] illegal short term buffer state detected
+[h264 @ 0x55e737224000] illegal short term buffer state detected
+[h264 @ 0x55e7adf2e000] illegal short term buffer state detected
+[h264 @ 0x55e719f88000] illegal short term buffer state detected
+[h264 @ 0x55e72e4e0000] illegal short term buffer state detected
+[h264 @ 0x55e72793a000] illegal short term buffer state detected
+tcmalloc: large alloc 2343944192 bytes == 0x55e72d536000 @ 
+tcmalloc: large alloc 2343944192 bytes == 0x55e7256c0000 @ 
+Epoch: [18][60/475],	Time 1.355 (6.434)	Data 0.000 (5.483)	siamese Loss 0.0365 (0.0336)	classifier Loss 0.0016 (0.0079)	
+[h264 @ 0x55e71251a000] illegal short term buffer state detected
+[h264 @ 0x55e7b5cc2000] illegal short term buffer state detected
+[h264 @ 0x55e72a31c000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e726382000 @ 
+[h264 @ 0x55e72421c000] illegal short term buffer state detected
+[h264 @ 0x55e7241e4000] illegal short term buffer state detected
+[h264 @ 0x55e72422a000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e726382000 @ 
+tcmalloc: large alloc 2097709056 bytes == 0x55e7299fa000 @ 
+tcmalloc: large alloc 2097709056 bytes == 0x55e71f086000 @ 
+[h264 @ 0x55e7b806a000] illegal short term buffer state detected
+[h264 @ 0x55e732774000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e730cf8000 @ 
+[h264 @ 0x55e732774000] illegal short term buffer state detected
+[h264 @ 0x55e7c6b9e000] illegal short term buffer state detected
+[h264 @ 0x55e7c6b9e000] illegal short term buffer state detected
+tcmalloc: large alloc 2191450112 bytes == 0x55e7259da000 @ 
+tcmalloc: large alloc 2681053184 bytes == 0x55e72bfb8000 @ 
+[h264 @ 0x55e72d7e4000] illegal short term buffer state detected
+tcmalloc: large alloc 2191450112 bytes == 0x55e7204ba000 @ 
+[h264 @ 0x55e81b88a000] illegal short term buffer state detected
+tcmalloc: large alloc 2681053184 bytes == 0x55e720432000 @ 
+[h264 @ 0x55e731618000] illegal short term buffer state detected
+Epoch: [18][80/475],	Time 15.883 (6.222)	Data 14.883 (5.280)	siamese Loss 0.0326 (0.0339)	classifier Loss 0.0009 (0.0084)	
+tcmalloc: large alloc 2214952960 bytes == 0x55e7094a4000 @ 
+[h264 @ 0x55e713e20000] illegal short term buffer state detected
+[h264 @ 0x55e714988000] illegal short term buffer state detected
+[h264 @ 0x55e7b2f98000] illegal short term buffer state detected
+[h264 @ 0x55e731cc8000] illegal short term buffer state detected
+[h264 @ 0x55e70bada000] illegal short term buffer state detected
+tcmalloc: large alloc 1819484160 bytes == 0x55e726d8c000 @ 
+Epoch: [18][100/475],	Time 41.189 (6.107)	Data 40.128 (5.174)	siamese Loss 0.0546 (0.0332)	classifier Loss 0.0058 (0.0079)	
+[h264 @ 0x55e7a9b48000] illegal short term buffer state detected
+[h264 @ 0x55e72b882000] illegal short term buffer state detected
+[h264 @ 0x55e7249fa000] illegal short term buffer state detected
+[h264 @ 0x55e72a1d4000] illegal short term buffer state detected
+[h264 @ 0x55e72c110000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e73a234000 @ 
+[h264 @ 0x55e72e064000] illegal short term buffer state detected
+Epoch: [18][120/475],	Time 1.349 (5.870)	Data 0.000 (4.939)	siamese Loss 0.0413 (0.0335)	classifier Loss 0.0086 (0.0081)	
+tcmalloc: large alloc 3011502080 bytes == 0x55e72c3ac000 @ 
+[h264 @ 0x55e73610a000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e7a99bc000 @ 
+tcmalloc: large alloc 3011502080 bytes == 0x55e7246a8000 @ 
+[h264 @ 0x55e7ed302000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e720826000 @ 
+[h264 @ 0x55e73268c000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e7a926c000 @ 
+[h264 @ 0x55e70fec2000] illegal short term buffer state detected
+[h264 @ 0x55e7df940000] illegal short term buffer state detected
+[h264 @ 0x55e731674000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e726382000 @ 
+[h264 @ 0x55e711bce000] illegal short term buffer state detected
+[h264 @ 0x55e731590000] illegal short term buffer state detected
+[h264 @ 0x55e721c6a000] illegal short term buffer state detected
+[h264 @ 0x55e716628000] illegal short term buffer state detected
+[h264 @ 0x55e732ef8000] illegal short term buffer state detected
+[h264 @ 0x55e72ea56000] illegal short term buffer state detected
+[h264 @ 0x55e72ea56000] illegal short term buffer state detected
+Epoch: [18][140/475],	Time 1.353 (5.966)	Data 0.000 (5.034)	siamese Loss 0.0340 (0.0332)	classifier Loss 0.0021 (0.0079)	
+[h264 @ 0x55e732bac000] illegal short term buffer state detected
+[h264 @ 0x55e72fc3a000] illegal short term buffer state detected
+[h264 @ 0x55e727c98000] illegal short term buffer state detected
+[h264 @ 0x55e726752000] illegal short term buffer state detected
+[h264 @ 0x55e728f9c000] illegal short term buffer state detected
+[h264 @ 0x55e728eb8000] illegal short term buffer state detected
+[h264 @ 0x55e96af98000] illegal short term buffer state detected
+[h264 @ 0x55e729db6000] illegal short term buffer state detected
+[h264 @ 0x55e71da2c000] illegal short term buffer state detected
+[h264 @ 0x55e7308dc000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e820e28000 @ 
+[h264 @ 0x55e72cf70000] illegal short term buffer state detected
+[h264 @ 0x55e72bdda000] illegal short term buffer state detected
+[h264 @ 0x55e96ee1a000] illegal short term buffer state detected
+[h264 @ 0x55e724ad0000] illegal short term buffer state detected
+Epoch: [18][160/475],	Time 1.360 (5.824)	Data 0.000 (4.890)	siamese Loss 0.0325 (0.0332)	classifier Loss 0.0024 (0.0078)	
+[h264 @ 0x55e71b15c000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e81f528000 @ 
+[h264 @ 0x55e7a6e82000] illegal short term buffer state detected
+[h264 @ 0x55e7bc2da000] illegal short term buffer state detected
+[h264 @ 0x55e72f8e6000] illegal short term buffer state detected
+[h264 @ 0x55e7bee2c000] illegal short term buffer state detected
+[h264 @ 0x55e7351e8000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e73387e000 @ 
+[h264 @ 0x55e7ab452000] illegal short term buffer state detected
+[h264 @ 0x55e7a6238000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72c47c000 @ 
+[h264 @ 0x55e7e7340000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72c47c000 @ 
+[h264 @ 0x55e7aa6e4000] illegal short term buffer state detected
+[h264 @ 0x55e7369ae000] illegal short term buffer state detected
+Epoch: [18][180/475],	Time 1.357 (5.824)	Data 0.000 (4.888)	siamese Loss 0.0510 (0.0339)	classifier Loss 0.0131 (0.0084)	
+[h264 @ 0x55e72589c000] illegal short term buffer state detected
+[h264 @ 0x55e725e54000] illegal short term buffer state detected
+[h264 @ 0x55e72574a000] illegal short term buffer state detected
+[h264 @ 0x55e71836c000] illegal short term buffer state detected
+[h264 @ 0x55e79a2e8000] illegal short term buffer state detected
+[h264 @ 0x55e7be8de000] illegal short term buffer state detected
+[h264 @ 0x55e71f8de000] illegal short term buffer state detected
+[h264 @ 0x55e7f1bb2000] illegal short term buffer state detected
+[h264 @ 0x55e72dddc000] illegal short term buffer state detected
+Epoch: [18][200/475],	Time 1.355 (5.831)	Data 0.000 (4.900)	siamese Loss 0.0352 (0.0334)	classifier Loss 0.0024 (0.0079)	
+[h264 @ 0x55e722e64000] illegal short term buffer state detected
+[h264 @ 0x55e7373e4000] illegal short term buffer state detected
+[h264 @ 0x55e724f72000] illegal short term buffer state detected
+[h264 @ 0x55e713daa000] illegal short term buffer state detected
+Epoch: [18][220/475],	Time 1.357 (5.802)	Data 0.000 (4.869)	siamese Loss 0.0199 (0.0332)	classifier Loss 0.0010 (0.0080)	
+[h264 @ 0x55e72f83c000] illegal short term buffer state detected
+[h264 @ 0x55e7283f4000] illegal short term buffer state detected
+[h264 @ 0x55e72bc3a000] illegal short term buffer state detected
+[h264 @ 0x55e711d38000] illegal short term buffer state detected
+[h264 @ 0x55e7319cc000] illegal short term buffer state detected
+[h264 @ 0x55e70c8d6000] illegal short term buffer state detected
+[h264 @ 0x55e70d326000] illegal short term buffer state detected
+Epoch: [18][240/475],	Time 1.355 (5.830)	Data 0.000 (4.895)	siamese Loss 0.0189 (0.0328)	classifier Loss 0.0008 (0.0075)	
+[h264 @ 0x55e7223c4000] illegal short term buffer state detected
+[h264 @ 0x55e72a50e000] illegal short term buffer state detected
+[h264 @ 0x55e7296de000] illegal short term buffer state detected
+[h264 @ 0x55e7a4d16000] illegal short term buffer state detected
+[h264 @ 0x55e72c47c000] illegal short term buffer state detected
+[h264 @ 0x55e72c47c000] illegal short term buffer state detected
+[h264 @ 0x55e726246000] illegal short term buffer state detected
+[h264 @ 0x55e728644000] illegal short term buffer state detected
+[h264 @ 0x55e73048c000] illegal short term buffer state detected
+[h264 @ 0x55e7c1d6a000] illegal short term buffer state detected
+[h264 @ 0x55e72b82e000] illegal short term buffer state detected
+[h264 @ 0x55e72d24c000] illegal short term buffer state detected
+Epoch: [18][260/475],	Time 1.347 (5.697)	Data 0.000 (4.760)	siamese Loss 0.0395 (0.0329)	classifier Loss 0.0027 (0.0076)	
+[h264 @ 0x55e721b10000] illegal short term buffer state detected
+[h264 @ 0x55e715020000] illegal short term buffer state detected
+[h264 @ 0x55e7a6bea000] illegal short term buffer state detected
+[h264 @ 0x55e72f60c000] illegal short term buffer state detected
+[h264 @ 0x55e72cee2000] illegal short term buffer state detected
+[h264 @ 0x55e72e6b4000] illegal short term buffer state detected
+[h264 @ 0x55e730380000] illegal short term buffer state detected
+[h264 @ 0x55e7293fc000] illegal short term buffer state detected
+[h264 @ 0x55e72a6e4000] illegal short term buffer state detected
+[h264 @ 0x55e72ecaa000] illegal short term buffer state detected
+[h264 @ 0x55e726fa6000] illegal short term buffer state detected
+Epoch: [18][280/475],	Time 1.325 (5.676)	Data 0.000 (4.740)	siamese Loss 0.0114 (0.0330)	classifier Loss 0.0001 (0.0075)	
+[h264 @ 0x55e72feca000] illegal short term buffer state detected
+[h264 @ 0x55e72efaa000] illegal short term buffer state detected
+[h264 @ 0x55e72d2e8000] illegal short term buffer state detected
+[h264 @ 0x55e728f1a000] illegal short term buffer state detected
+[h264 @ 0x55e7992f2000] illegal short term buffer state detected
+[h264 @ 0x55e712f94000] illegal short term buffer state detected
+[h264 @ 0x55e72f93c000] illegal short term buffer state detected
+[h264 @ 0x55e72bc80000] illegal short term buffer state detected
+[h264 @ 0x55e71427a000] illegal short term buffer state detected
+[h264 @ 0x55e96af98000] illegal short term buffer state detected
+[h264 @ 0x55e727872000] illegal short term buffer state detected
+Epoch: [18][300/475],	Time 1.358 (5.585)	Data 0.000 (4.649)	siamese Loss 0.0592 (0.0329)	classifier Loss 0.0059 (0.0073)	
+[h264 @ 0x55e7180fc000] illegal short term buffer state detected
+[h264 @ 0x55e73267e000] illegal short term buffer state detected
+[h264 @ 0x55e721c40000] illegal short term buffer state detected
+[h264 @ 0x55e724e3c000] illegal short term buffer state detected
+[h264 @ 0x55e73001e000] illegal short term buffer state detected
+[h264 @ 0x55e7253c0000] illegal short term buffer state detected
+[h264 @ 0x55e72d48e000] illegal short term buffer state detected
+[h264 @ 0x55e72aea8000] illegal short term buffer state detected
+[h264 @ 0x55e71b49c000] illegal short term buffer state detected
+[h264 @ 0x55e7c0870000] illegal short term buffer state detected
+[h264 @ 0x55e726290000] illegal short term buffer state detected
+Epoch: [18][320/475],	Time 1.358 (5.580)	Data 0.000 (4.645)	siamese Loss 0.0196 (0.0327)	classifier Loss 0.0003 (0.0071)	
+[h264 @ 0x55e72845a000] illegal short term buffer state detected
+[h264 @ 0x55e7145da000] illegal short term buffer state detected
+[h264 @ 0x55e730e0e000] illegal short term buffer state detected
+[h264 @ 0x55e72ecaa000] illegal short term buffer state detected
+tcmalloc: large alloc 2380242944 bytes == 0x55e72deb6000 @ 
+[h264 @ 0x55e72fb24000] illegal short term buffer state detected
+Epoch: [18][340/475],	Time 1.360 (5.494)	Data 0.074 (4.561)	siamese Loss 0.0763 (0.0328)	classifier Loss 0.0549 (0.0071)	
+[h264 @ 0x55e719dec000] illegal short term buffer state detected
+[h264 @ 0x55e722172000] illegal short term buffer state detected
+[h264 @ 0x55e72eea2000] illegal short term buffer state detected
+[h264 @ 0x55e7a4152000] illegal short term buffer state detected
+[h264 @ 0x55e731826000] illegal short term buffer state detected
+[h264 @ 0x55e72da4a000] illegal short term buffer state detected
+[h264 @ 0x55e7172da000] illegal short term buffer state detected
+[h264 @ 0x55e96af98000] illegal short term buffer state detected
+[h264 @ 0x55e7198b2000] illegal short term buffer state detected
+[h264 @ 0x55e71f708000] illegal short term buffer state detected
+[h264 @ 0x55e736912000] illegal short term buffer state detected
+[h264 @ 0x55e72d7ca000] illegal short term buffer state detected
+[h264 @ 0x55e736906000] illegal short term buffer state detected
+[h264 @ 0x55e728a38000] illegal short term buffer state detected
+Epoch: [18][360/475],	Time 1.359 (5.437)	Data 0.000 (4.504)	siamese Loss 0.0286 (0.0324)	classifier Loss 0.0020 (0.0068)	
+tcmalloc: large alloc 3607764992 bytes == 0x55e727172000 @ 
+[h264 @ 0x55e7ab05a000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e71b3b8000 @ 
+[h264 @ 0x55e809b1e000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e722ec6000 @ 
+[h264 @ 0x55e71d1a2000] illegal short term buffer state detected
+[h264 @ 0x55e7bc7d4000] illegal short term buffer state detected
+[h264 @ 0x55e728566000] illegal short term buffer state detected
+[h264 @ 0x55e8283ec000] illegal short term buffer state detected
+[h264 @ 0x55e726bf8000] illegal short term buffer state detected
+[h264 @ 0x55e7bdee8000] illegal short term buffer state detected
+[h264 @ 0x55e72978a000] illegal short term buffer state detected
+[h264 @ 0x55e72978a000] illegal short term buffer state detected
+[h264 @ 0x55e7c001a000] illegal short term buffer state detected
+[h264 @ 0x55e72cb14000] illegal short term buffer state detected
+Epoch: [18][380/475],	Time 1.355 (5.483)	Data 0.000 (4.552)	siamese Loss 0.0254 (0.0322)	classifier Loss 0.0050 (0.0068)	
+tcmalloc: large alloc 3411533824 bytes == 0x55e72808a000 @ 
+[h264 @ 0x55e72534e000] illegal short term buffer state detected
+[h264 @ 0x55e72978a000] illegal short term buffer state detected
+[h264 @ 0x55e73148e000] illegal short term buffer state detected
+[h264 @ 0x55e7ba066000] illegal short term buffer state detected
+[h264 @ 0x55e72eaa8000] illegal short term buffer state detected
+Epoch: [18][400/475],	Time 1.336 (5.437)	Data 0.000 (4.504)	siamese Loss 0.0234 (0.0318)	classifier Loss 0.0004 (0.0065)	
+[h264 @ 0x55e73209a000] illegal short term buffer state detected
+[h264 @ 0x55e72ecaa000] illegal short term buffer state detected
+[h264 @ 0x55e7369ae000] illegal short term buffer state detected
+[h264 @ 0x55e726c3e000] illegal short term buffer state detected
+[h264 @ 0x55e732b2c000] illegal short term buffer state detected
+[h264 @ 0x55e728da6000] illegal short term buffer state detected
+Epoch: [18][420/475],	Time 1.591 (5.443)	Data 0.598 (4.512)	siamese Loss 0.0415 (0.0319)	classifier Loss 0.0084 (0.0066)	
+[h264 @ 0x55e7c4ba8000] illegal short term buffer state detected
+[h264 @ 0x55e72898a000] illegal short term buffer state detected
+[h264 @ 0x55e724b08000] illegal short term buffer state detected
+[h264 @ 0x55e718eac000] illegal short term buffer state detected
+[h264 @ 0x55e72e1d4000] illegal short term buffer state detected
+[h264 @ 0x55e72e1c8000] illegal short term buffer state detected
+[h264 @ 0x55e72cf02000] illegal short term buffer state detected
+[h264 @ 0x55e72b056000] illegal short term buffer state detected
+Epoch: [18][440/475],	Time 1.351 (5.386)	Data 0.000 (4.455)	siamese Loss 0.0260 (0.0317)	classifier Loss 0.0015 (0.0065)	
+[h264 @ 0x55e718a9c000] illegal short term buffer state detected
+[h264 @ 0x55e7e7e12000] illegal short term buffer state detected
+[h264 @ 0x55e72a7a6000] illegal short term buffer state detected
+[h264 @ 0x55e726fa6000] illegal short term buffer state detected
+[h264 @ 0x55e715fd2000] illegal short term buffer state detected
+[h264 @ 0x55e7e4e3c000] illegal short term buffer state detected
+[h264 @ 0x55e728d9e000] illegal short term buffer state detected
+[h264 @ 0x55e799b7a000] illegal short term buffer state detected
+[h264 @ 0x55e7a9a84000] illegal short term buffer state detected
+[h264 @ 0x55e72b63a000] illegal short term buffer state detected
+[h264 @ 0x55e73178a000] illegal short term buffer state detected
+[h264 @ 0x55e7d9794000] illegal short term buffer state detected
+Epoch: [18][460/475],	Time 42.323 (5.528)	Data 41.299 (4.598)	siamese Loss 0.0222 (0.0316)	classifier Loss 0.0005 (0.0064)	
+tcmalloc: large alloc 1974067200 bytes == 0x55e71dad4000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e7ab2d6000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e7094c0000 @ 
+[h264 @ 0x55e723dca000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e72ad7e000 @ 
+tcmalloc: large alloc 1112375296 bytes == 0x55e72a32a000 @ 
+[h264 @ 0x55e72fa42000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e7094c0000 @ 
+[h264 @ 0x55e731022000] illegal short term buffer state detected
+[h264 @ 0x55e733c66000] illegal short term buffer state detected
+tcmalloc: large alloc 1455489024 bytes == 0x55e7309cc000 @ 
+[h264 @ 0x55e713a40000] illegal short term buffer state detected
+tcmalloc: large alloc 1455489024 bytes == 0x55e73181e000 @ 
+[h264 @ 0x55e7746c8000] illegal short term buffer state detected
+[h264 @ 0x55e718472000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e726de8000 @ 
+tcmalloc: large alloc 8688771072 bytes == 0x55e722706000 @ 
+[h264 @ 0x55e724efc000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e722706000 @ 
+[h264 @ 0x55e96ef1a000] illegal short term buffer state detected
+[h264 @ 0x55e96b098000] illegal short term buffer state detected
+Epoch: [19][0/475],	Time 134.948 (134.948)	Data 133.899 (133.899)	siamese Loss 0.0428 (0.0428)	classifier Loss 0.0358 (0.0358)	
+[h264 @ 0x55e71a536000] illegal short term buffer state detected
+tcmalloc: large alloc 1087832064 bytes == 0x55e75fe36000 @ 
+tcmalloc: large alloc 1227268096 bytes == 0x55e732d4c000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e7094c0000 @ 
+[h264 @ 0x55e7286a4000] illegal short term buffer state detected
+tcmalloc: large alloc 1227268096 bytes == 0x55e732d4c000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e7094c0000 @ 
+tcmalloc: large alloc 1338507264 bytes == 0x55e7ad61a000 @ 
+tcmalloc: large alloc 1095663616 bytes == 0x55e7303a8000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e73186e000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72d1a4000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e73d3f4000 @ 
+tcmalloc: large alloc 2167955456 bytes == 0x55e7306a6000 @ 
+[h264 @ 0x55e7c5082000] illegal short term buffer state detected
+tcmalloc: large alloc 1894039552 bytes == 0x55e7a4314000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72d1a4000 @ 
+tcmalloc: large alloc 1894039552 bytes == 0x55e7a4314000 @ 
+tcmalloc: large alloc 2167955456 bytes == 0x55e7306a6000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e726f5c000 @ 
+Epoch: [19][20/475],	Time 1.303 (10.001)	Data 0.000 (9.034)	siamese Loss 0.0350 (0.0331)	classifier Loss 0.0087 (0.0081)	
+[h264 @ 0x55e765630000] illegal short term buffer state detected
+tcmalloc: large alloc 2191450112 bytes == 0x55e7216dc000 @ 
+[h264 @ 0x55e773e02000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e71f196000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e71f138000 @ 
+[h264 @ 0x55e72e2a8000] illegal short term buffer state detected
+[h264 @ 0x55e7356a6000] illegal short term buffer state detected
+[h264 @ 0x55e7337f0000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e7b45b6000 @ 
+[h264 @ 0x55e72c6b2000] illegal short term buffer state detected
+[h264 @ 0x55e71a248000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e7b4468000 @ 
+[h264 @ 0x55e73077e000] illegal short term buffer state detected
+[h264 @ 0x55e72e7d0000] illegal short term buffer state detected
+tcmalloc: large alloc 2230624256 bytes == 0x55e7094c0000 @ 
+[h264 @ 0x55e721f4c000] illegal short term buffer state detected
+tcmalloc: large alloc 2230624256 bytes == 0x55e7094c0000 @ 
+tcmalloc: large alloc 1748205568 bytes == 0x55e72416c000 @ 
+[h264 @ 0x55e7ca7a6000] illegal short term buffer state detected
+Epoch: [19][40/475],	Time 29.745 (7.467)	Data 28.722 (6.508)	siamese Loss 0.0164 (0.0299)	classifier Loss 0.0003 (0.0048)	
+[h264 @ 0x55e7c3a36000] illegal short term buffer state detected
+tcmalloc: large alloc 1613463552 bytes == 0x55e72e6fc000 @ 
+tcmalloc: large alloc 2406612992 bytes == 0x55e7b3d1c000 @ 
+tcmalloc: large alloc 2406612992 bytes == 0x55e7b1aba000 @ 
+[h264 @ 0x55e72cf2e000] illegal short term buffer state detected
+[h264 @ 0x55e7367f6000] illegal short term buffer state detected
+[h264 @ 0x55e7af434000] illegal short term buffer state detected
+[h264 @ 0x55e7220b4000] illegal short term buffer state detected
+[h264 @ 0x55e717aac000] illegal short term buffer state detected
+[h264 @ 0x55e70f39c000] illegal short term buffer state detected
+tcmalloc: large alloc 2343944192 bytes == 0x55e72fe9c000 @ 
+tcmalloc: large alloc 2343944192 bytes == 0x55e72bfe4000 @ 
+[h264 @ 0x55e72c7fa000] illegal short term buffer state detected
+Epoch: [19][60/475],	Time 1.354 (6.470)	Data 0.000 (5.508)	siamese Loss 0.0242 (0.0292)	classifier Loss 0.0008 (0.0046)	
+[h264 @ 0x55e70de76000] illegal short term buffer state detected
+[h264 @ 0x55e7281ce000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e7094c0000 @ 
+[h264 @ 0x55e71a9ee000] illegal short term buffer state detected
+[h264 @ 0x55e72b450000] illegal short term buffer state detected
+[h264 @ 0x55e71e870000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e7094c0000 @ 
+tcmalloc: large alloc 2097709056 bytes == 0x55e76653c000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e72d9a4000 @ 
+[h264 @ 0x55e72fb9a000] illegal short term buffer state detected
+tcmalloc: large alloc 2097709056 bytes == 0x55e76653c000 @ 
+[h264 @ 0x55e7316ba000] illegal short term buffer state detected
+[h264 @ 0x55e7c54a4000] illegal short term buffer state detected
+[h264 @ 0x55e8122f8000] illegal short term buffer state detected
+[h264 @ 0x55e813918000] illegal short term buffer state detected
+tcmalloc: large alloc 2681053184 bytes == 0x55e7c31ac000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e7275ce000 @ 
+tcmalloc: large alloc 2681053184 bytes == 0x55e7c1cca000 @ 
+[h264 @ 0x55e72f190000] illegal short term buffer state detected
+tcmalloc: large alloc 2191450112 bytes == 0x55e7275ce000 @ 
+[h264 @ 0x55e7c131c000] illegal short term buffer state detected
+[h264 @ 0x55e733012000] illegal short term buffer state detected
+Epoch: [19][80/475],	Time 23.707 (6.279)	Data 22.654 (5.329)	siamese Loss 0.0279 (0.0289)	classifier Loss 0.0011 (0.0044)	
+tcmalloc: large alloc 2214952960 bytes == 0x55e7094c0000 @ 
+[h264 @ 0x55e974934000] illegal short term buffer state detected
+[h264 @ 0x55e88db60000] illegal short term buffer state detected
+[h264 @ 0x55e9787b6000] illegal short term buffer state detected
+[h264 @ 0x55e72d522000] illegal short term buffer state detected
+[h264 @ 0x55e7c3d9c000] illegal short term buffer state detected
+Epoch: [19][100/475],	Time 13.017 (5.847)	Data 12.016 (4.908)	siamese Loss 0.0503 (0.0284)	classifier Loss 0.0053 (0.0042)	
+tcmalloc: large alloc 1819484160 bytes == 0x55e72b148000 @ 
+[h264 @ 0x55e731346000] illegal short term buffer state detected
+[h264 @ 0x55e72b9b8000] illegal short term buffer state detected
+[h264 @ 0x55e724a04000] illegal short term buffer state detected
+[h264 @ 0x55e7243e0000] illegal short term buffer state detected
+[h264 @ 0x55e7280e8000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e76653c000 @ 
+Epoch: [19][120/475],	Time 4.217 (5.702)	Data 3.213 (4.775)	siamese Loss 0.0380 (0.0290)	classifier Loss 0.0214 (0.0053)	
+tcmalloc: large alloc 3011502080 bytes == 0x55e72eb08000 @ 
+[h264 @ 0x55e724b7c000] illegal short term buffer state detected
+[h264 @ 0x55e72c880000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e729c22000 @ 
+[h264 @ 0x55e8060ce000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e7b2e7a000 @ 
+tcmalloc: large alloc 3011502080 bytes == 0x55e729c22000 @ 
+[h264 @ 0x55e7396f0000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e7aeff8000 @ 
+[h264 @ 0x55e70a7aa000] illegal short term buffer state detected
+[h264 @ 0x55e718ee6000] illegal short term buffer state detected
+[h264 @ 0x55e72c880000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e7094c0000 @ 
+[h264 @ 0x55e9c55a2000] illegal short term buffer state detected
+[h264 @ 0x55e72ce58000] illegal short term buffer state detected
+[h264 @ 0x55e720a3c000] illegal short term buffer state detected
+[h264 @ 0x55e71a248000] illegal short term buffer state detected
+[h264 @ 0x55e732d42000] illegal short term buffer state detected
+[h264 @ 0x55e72506a000] illegal short term buffer state detected
+[h264 @ 0x55e732d06000] illegal short term buffer state detected
+Epoch: [19][140/475],	Time 1.354 (5.804)	Data 0.000 (4.877)	siamese Loss 0.0157 (0.0284)	classifier Loss 0.0002 (0.0048)	
+[h264 @ 0x55e72a1e0000] illegal short term buffer state detected
+[h264 @ 0x55e7277b6000] illegal short term buffer state detected
+[h264 @ 0x55e7275ce000] illegal short term buffer state detected
+[h264 @ 0x55e72664c000] illegal short term buffer state detected
+[h264 @ 0x55e72b450000] illegal short term buffer state detected
+[h264 @ 0x55e729d26000] illegal short term buffer state detected
+[h264 @ 0x55e729d26000] illegal short term buffer state detected
+[h264 @ 0x55e97e838000] illegal short term buffer state detected
+[h264 @ 0x55e97a5fa000] illegal short term buffer state detected
+[h264 @ 0x55e72f010000] illegal short term buffer state detected
+[h264 @ 0x55e731a2a000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7c7442000 @ 
+[h264 @ 0x55e728ff0000] illegal short term buffer state detected
+[h264 @ 0x55e977bd2000] illegal short term buffer state detected
+[h264 @ 0x55e72e866000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7bf470000 @ 
+Epoch: [19][160/475],	Time 1.351 (5.767)	Data 0.000 (4.839)	siamese Loss 0.0243 (0.0278)	classifier Loss 0.0009 (0.0046)	
+[h264 @ 0x55e72101e000] illegal short term buffer state detected
+[h264 @ 0x55e7294a0000] illegal short term buffer state detected
+[h264 @ 0x55e9fa4ee000] illegal short term buffer state detected
+[h264 @ 0x55e73288a000] illegal short term buffer state detected
+[h264 @ 0x55e718ec8000] illegal short term buffer state detected
+[h264 @ 0x55e70c47e000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72d936000 @ 
+[h264 @ 0x55e729ab2000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72b7d0000 @ 
+[h264 @ 0x55e71806c000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e729ab4000 @ 
+[h264 @ 0x55e71520c000] illegal short term buffer state detected
+[h264 @ 0x55e72534a000] illegal short term buffer state detected
+Epoch: [19][180/475],	Time 1.355 (5.675)	Data 0.000 (4.740)	siamese Loss 0.0255 (0.0278)	classifier Loss 0.0007 (0.0048)	
+[h264 @ 0x55e729086000] illegal short term buffer state detected
+[h264 @ 0x55e806d0e000] illegal short term buffer state detected
+[h264 @ 0x55e71fcfc000] illegal short term buffer state detected
+[h264 @ 0x55e736712000] illegal short term buffer state detected
+[h264 @ 0x55e72f050000] illegal short term buffer state detected
+[h264 @ 0x55e714f32000] illegal short term buffer state detected
+[h264 @ 0x55e7b0fec000] illegal short term buffer state detected
+[h264 @ 0x55e7259e4000] illegal short term buffer state detected
+[h264 @ 0x55e71d356000] illegal short term buffer state detected
+[h264 @ 0x55e9cfe86000] illegal short term buffer state detected
+[h264 @ 0x55e717b6e000] illegal short term buffer state detected
+Epoch: [19][200/475],	Time 1.355 (5.642)	Data 0.000 (4.708)	siamese Loss 0.0209 (0.0275)	classifier Loss 0.0003 (0.0045)	
+[h264 @ 0x55e73580a000] illegal short term buffer state detected
+[h264 @ 0x55e71a668000] illegal short term buffer state detected
+Epoch: [19][220/475],	Time 1.357 (5.600)	Data 0.000 (4.663)	siamese Loss 0.0086 (0.0272)	classifier Loss 0.0001 (0.0044)	
+[h264 @ 0x55e70d342000] illegal short term buffer state detected
+[h264 @ 0x55e72d296000] illegal short term buffer state detected
+[h264 @ 0x55e728672000] illegal short term buffer state detected
+[h264 @ 0x55e72bf60000] illegal short term buffer state detected
+[h264 @ 0x55e7094c0000] illegal short term buffer state detected
+[h264 @ 0x55e72aaae000] illegal short term buffer state detected
+[h264 @ 0x55e7304c6000] illegal short term buffer state detected
+[h264 @ 0x55e96ef1a000] illegal short term buffer state detected
+[h264 @ 0x55e720d0a000] illegal short term buffer state detected
+Epoch: [19][240/475],	Time 1.330 (5.672)	Data 0.000 (4.737)	siamese Loss 0.0300 (0.0270)	classifier Loss 0.0148 (0.0042)	
+[h264 @ 0x55e729cae000] illegal short term buffer state detected
+[h264 @ 0x55e730c6a000] illegal short term buffer state detected
+[h264 @ 0x55e72ba7e000] illegal short term buffer state detected
+[h264 @ 0x55e716b00000] illegal short term buffer state detected
+[h264 @ 0x55e7289a2000] illegal short term buffer state detected
+[h264 @ 0x55e7111c4000] illegal short term buffer state detected
+[h264 @ 0x55e725252000] illegal short term buffer state detected
+[h264 @ 0x55e72dffa000] illegal short term buffer state detected
+[h264 @ 0x55e71dcf6000] illegal short term buffer state detected
+[h264 @ 0x55e72be28000] illegal short term buffer state detected
+[h264 @ 0x55e70f8d4000] illegal short term buffer state detected
+Epoch: [19][260/475],	Time 1.338 (5.525)	Data 0.000 (4.590)	siamese Loss 0.0300 (0.0268)	classifier Loss 0.0020 (0.0040)	
+[h264 @ 0x55e712ba4000] illegal short term buffer state detected
+[h264 @ 0x55e72e9b0000] illegal short term buffer state detected
+[h264 @ 0x55e72d16a000] illegal short term buffer state detected
+[h264 @ 0x55e72d16a000] illegal short term buffer state detected
+[h264 @ 0x55e7124e0000] illegal short term buffer state detected
+[h264 @ 0x55e72e4e0000] illegal short term buffer state detected
+[h264 @ 0x55e730fec000] illegal short term buffer state detected
+[h264 @ 0x55e720958000] illegal short term buffer state detected
+[h264 @ 0x55e728c16000] illegal short term buffer state detected
+[h264 @ 0x55e73376a000] illegal short term buffer state detected
+[h264 @ 0x55e72d8fe000] illegal short term buffer state detected
+[h264 @ 0x55e7266d8000] illegal short term buffer state detected
+Epoch: [19][280/475],	Time 1.343 (5.611)	Data 0.000 (4.679)	siamese Loss 0.0168 (0.0267)	classifier Loss 0.0004 (0.0039)	
+[h264 @ 0x55e710f72000] illegal short term buffer state detected
+[h264 @ 0x55e712b6e000] illegal short term buffer state detected
+[h264 @ 0x55e72e624000] illegal short term buffer state detected
+[h264 @ 0x55e71aa64000] illegal short term buffer state detected
+[h264 @ 0x55e72fb32000] illegal short term buffer state detected
+[h264 @ 0x55e7a5042000] illegal short term buffer state detected
+[h264 @ 0x55e72c358000] illegal short term buffer state detected
+[h264 @ 0x55e72276e000] illegal short term buffer state detected
+[h264 @ 0x55e97ceec000] illegal short term buffer state detected
+Epoch: [19][300/475],	Time 1.348 (5.502)	Data 0.000 (4.570)	siamese Loss 0.0251 (0.0265)	classifier Loss 0.0008 (0.0039)	
+[h264 @ 0x55e729ae8000] illegal short term buffer state detected
+[h264 @ 0x55e726e1c000] illegal short term buffer state detected
+[h264 @ 0x55e7326bc000] illegal short term buffer state detected
+[h264 @ 0x55e71ee5a000] illegal short term buffer state detected
+[h264 @ 0x55e72bc06000] illegal short term buffer state detected
+[h264 @ 0x55e733b44000] illegal short term buffer state detected
+[h264 @ 0x55e72c824000] illegal short term buffer state detected
+[h264 @ 0x55e729360000] illegal short term buffer state detected
+[h264 @ 0x55e976c1e000] illegal short term buffer state detected
+[h264 @ 0x55e728aa6000] illegal short term buffer state detected
+[h264 @ 0x55e71c5c0000] illegal short term buffer state detected
+[h264 @ 0x55e72c824000] illegal short term buffer state detected
+[h264 @ 0x55e72b822000] illegal short term buffer state detected
+[h264 @ 0x55e72c3fa000] illegal short term buffer state detected
+[h264 @ 0x55e72d96a000] illegal short term buffer state detected
+Epoch: [19][320/475],	Time 1.352 (5.555)	Data 0.000 (4.625)	siamese Loss 0.0296 (0.0265)	classifier Loss 0.0020 (0.0042)	
+tcmalloc: large alloc 2380242944 bytes == 0x55e76653c000 @ 
+[h264 @ 0x55e71f68a000] illegal short term buffer state detected
+[h264 @ 0x55e72c74a000] illegal short term buffer state detected
+[h264 @ 0x55e7295ac000] illegal short term buffer state detected
+Epoch: [19][340/475],	Time 1.357 (5.444)	Data 0.000 (4.512)	siamese Loss 0.0210 (0.0263)	classifier Loss 0.0005 (0.0042)	
+[h264 @ 0x55e7279aa000] illegal short term buffer state detected
+[h264 @ 0x55e73048a000] illegal short term buffer state detected
+[h264 @ 0x55e713d6a000] illegal short term buffer state detected
+[h264 @ 0x55e73a07c000] illegal short term buffer state detected
+[h264 @ 0x55e72d20a000] illegal short term buffer state detected
+[h264 @ 0x55e713e3a000] illegal short term buffer state detected
+[h264 @ 0x55e725e9a000] illegal short term buffer state detected
+[h264 @ 0x55e72db9e000] illegal short term buffer state detected
+[h264 @ 0x55e732120000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e728b82000 @ 
+[h264 @ 0x55e97d72e000] illegal short term buffer state detected
+[h264 @ 0x55e729c52000] illegal short term buffer state detected
+[h264 @ 0x55e72a044000] illegal short term buffer state detected
+[h264 @ 0x55e729942000] illegal short term buffer state detected
+[h264 @ 0x55e97a76a000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e728942000 @ 
+[h264 @ 0x55e711dfa000] illegal short term buffer state detected
+[h264 @ 0x55e71aa6a000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e72876a000 @ 
+[h264 @ 0x55e81f61a000] illegal short term buffer state detected
+Epoch: [19][360/475],	Time 1.349 (5.531)	Data 0.000 (4.598)	siamese Loss 0.0259 (0.0265)	classifier Loss 0.0007 (0.0042)	
+[h264 @ 0x55e9710c2000] illegal short term buffer state detected
+[h264 @ 0x55e717692000] illegal short term buffer state detected
+[h264 @ 0x55e72b97c000] illegal short term buffer state detected
+[h264 @ 0x55e72b97c000] illegal short term buffer state detected
+[h264 @ 0x55e71b514000] illegal short term buffer state detected
+tcmalloc: large alloc 3411533824 bytes == 0x55e729ae8000 @ 
+[h264 @ 0x55e7164ee000] illegal short term buffer state detected
+[h264 @ 0x55e72ef38000] illegal short term buffer state detected
+[h264 @ 0x55e71aa6a000] illegal short term buffer state detected
+Epoch: [19][380/475],	Time 1.352 (5.517)	Data 0.000 (4.583)	siamese Loss 0.0133 (0.0264)	classifier Loss 0.0001 (0.0042)	
+[h264 @ 0x55e7303f8000] illegal short term buffer state detected
+[h264 @ 0x55e71fcea000] illegal short term buffer state detected
+[h264 @ 0x55e733a04000] illegal short term buffer state detected
+[h264 @ 0x55e730364000] illegal short term buffer state detected
+Epoch: [19][400/475],	Time 1.352 (5.467)	Data 0.000 (4.533)	siamese Loss 0.0189 (0.0262)	classifier Loss 0.0003 (0.0041)	
+[h264 @ 0x55e7133d8000] illegal short term buffer state detected
+[h264 @ 0x55e715046000] illegal short term buffer state detected
+[h264 @ 0x55e726ea2000] illegal short term buffer state detected
+[h264 @ 0x55e7302aa000] illegal short term buffer state detected
+[h264 @ 0x55e72c41c000] illegal short term buffer state detected
+[h264 @ 0x55e736818000] illegal short term buffer state detected
+[h264 @ 0x55e725604000] illegal short term buffer state detected
+[h264 @ 0x55e729486000] illegal short term buffer state detected
+Epoch: [19][420/475],	Time 1.355 (5.437)	Data 0.000 (4.501)	siamese Loss 0.0477 (0.0262)	classifier Loss 0.0144 (0.0040)	
+[h264 @ 0x55e7aef70000] illegal short term buffer state detected
+[h264 @ 0x55e7ab0e8000] illegal short term buffer state detected
+[h264 @ 0x55e733992000] illegal short term buffer state detected
+[h264 @ 0x55e71aa6a000] illegal short term buffer state detected
+[h264 @ 0x55e71e854000] illegal short term buffer state detected
+[h264 @ 0x55e72c74c000] illegal short term buffer state detected
+[h264 @ 0x55e726d50000] illegal short term buffer state detected
+[h264 @ 0x55e97c94c000] illegal short term buffer state detected
+[h264 @ 0x55e80b31c000] illegal short term buffer state detected
+Epoch: [19][440/475],	Time 1.358 (5.468)	Data 0.000 (4.532)	siamese Loss 0.0168 (0.0261)	classifier Loss 0.0004 (0.0039)	
+[h264 @ 0x55e7efb0c000] illegal short term buffer state detected
+[h264 @ 0x55e72f6c0000] illegal short term buffer state detected
+[h264 @ 0x55e97ea3c000] illegal short term buffer state detected
+[h264 @ 0x55e9798d0000] illegal short term buffer state detected
+[h264 @ 0x55e72b150000] illegal short term buffer state detected
+[h264 @ 0x55e7a687c000] illegal short term buffer state detected
+[h264 @ 0x55e71a39a000] illegal short term buffer state detected
+[h264 @ 0x55e72834a000] illegal short term buffer state detected
+[h264 @ 0x55e72ae2e000] illegal short term buffer state detected
+[h264 @ 0x55e72f5a4000] illegal short term buffer state detected
+Epoch: [19][460/475],	Time 41.438 (5.576)	Data 40.411 (4.640)	siamese Loss 0.0361 (0.0261)	classifier Loss 0.0019 (0.0039)	
+tcmalloc: large alloc 1974067200 bytes == 0x55e71e5a6000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e7ab51e000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e7ab460000 @ 
+[h264 @ 0x55e7231a0000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7276aa000 @ 
+[h264 @ 0x55e7300ce000] illegal short term buffer state detected
+tcmalloc: large alloc 1112375296 bytes == 0x55e72af2c000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e7aaefa000 @ 
+[h264 @ 0x55e7331dc000] illegal short term buffer state detected
+[h264 @ 0x55e733c56000] illegal short term buffer state detected
+[h264 @ 0x55e72bf3e000] illegal short term buffer state detected
+tcmalloc: large alloc 1455489024 bytes == 0x55e76f2e4000 @ 
+tcmalloc: large alloc 1455489024 bytes == 0x55e76bc7e000 @ 
+[h264 @ 0x55e72e44c000] illegal short term buffer state detected
+[h264 @ 0x55e7690b0000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7276a8000 @ 
+tcmalloc: large alloc 8688771072 bytes == 0x55e7276a8000 @ 
+[h264 @ 0x55e725e6e000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7276a8000 @ 
+[h264 @ 0x55e9cc260000] illegal short term buffer state detected
+[h264 @ 0x55e9cc260000] illegal short term buffer state detected
+Epoch: [20][0/475],	Time 145.687 (145.687)	Data 144.639 (144.639)	siamese Loss 0.0094 (0.0094)	classifier Loss 0.0001 (0.0001)	
+[h264 @ 0x55e71dad2000] illegal short term buffer state detected
+tcmalloc: large alloc 1087832064 bytes == 0x55e725de2000 @ 
+tcmalloc: large alloc 1227268096 bytes == 0x55e72888e000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e70d09c000 @ 
+[h264 @ 0x55e726b5e000] illegal short term buffer state detected
+tcmalloc: large alloc 1227268096 bytes == 0x55e727866000 @ 
+tcmalloc: large alloc 1338507264 bytes == 0x55e72c504000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e70d09c000 @ 
+tcmalloc: large alloc 1095663616 bytes == 0x55e72efbe000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e73252a000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e7a444e000 @ 
+tcmalloc: large alloc 2167955456 bytes == 0x55e729e26000 @ 
+[h264 @ 0x55e79c51a000] illegal short term buffer state detected
+tcmalloc: large alloc 1894039552 bytes == 0x55e7299bc000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e73252a000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e7a3c44000 @ 
+tcmalloc: large alloc 2167955456 bytes == 0x55e729baa000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72ad0c000 @ 
+Epoch: [20][20/475],	Time 1.310 (10.199)	Data 0.000 (9.232)	siamese Loss 0.0261 (0.0272)	classifier Loss 0.0059 (0.0056)	
+tcmalloc: large alloc 1894039552 bytes == 0x55e7284d4000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e727814000 @ 
+[h264 @ 0x55e7306e6000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e722fd2000 @ 
+[h264 @ 0x55e72dcf6000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e722fd2000 @ 
+[h264 @ 0x55e798084000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e731168000 @ 
+[h264 @ 0x55e799bc0000] illegal short term buffer state detected
+tcmalloc: large alloc 2230624256 bytes == 0x55e722c8e000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e72d2e6000 @ 
+[h264 @ 0x55e7294f8000] illegal short term buffer state detected
+tcmalloc: large alloc 2230624256 bytes == 0x55e722c8e000 @ 
+[h264 @ 0x55e79408e000] illegal short term buffer state detected
+[h264 @ 0x55e7322ec000] illegal short term buffer state detected
+[h264 @ 0x55e7254b8000] illegal short term buffer state detected
+[h264 @ 0x55e7277ee000] illegal short term buffer state detected
+Epoch: [20][40/475],	Time 7.312 (7.448)	Data 6.309 (6.498)	siamese Loss 0.0151 (0.0283)	classifier Loss 0.0002 (0.0063)	
+[h264 @ 0x55e72bbbc000] illegal short term buffer state detected
+tcmalloc: large alloc 1748205568 bytes == 0x55e729148000 @ 
+[h264 @ 0x55e7be1f0000] illegal short term buffer state detected
+tcmalloc: large alloc 1613463552 bytes == 0x55e72da74000 @ 
+[h264 @ 0x55e7b9a3a000] illegal short term buffer state detected
+[h264 @ 0x55e7a71ee000] illegal short term buffer state detected
+tcmalloc: large alloc 2406612992 bytes == 0x55e72cabe000 @ 
+[h264 @ 0x55e7b725a000] illegal short term buffer state detected
+[h264 @ 0x55e7aa07a000] illegal short term buffer state detected
+tcmalloc: large alloc 2406612992 bytes == 0x55e728c3c000 @ 
+[h264 @ 0x55e724856000] illegal short term buffer state detected
+[h264 @ 0x55e72f2b0000] illegal short term buffer state detected
+[h264 @ 0x55e712100000] illegal short term buffer state detected
+tcmalloc: large alloc 2343944192 bytes == 0x55e72ad68000 @ 
+Epoch: [20][60/475],	Time 1.357 (6.525)	Data 0.000 (5.563)	siamese Loss 0.0238 (0.0288)	classifier Loss 0.0007 (0.0071)	
+tcmalloc: large alloc 2343944192 bytes == 0x55e71f992000 @ 
+[h264 @ 0x55e72b560000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e722c8e000 @ 
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e7c0946000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e722c8e000 @ 
+[h264 @ 0x55e72afb8000] illegal short term buffer state detected
+tcmalloc: large alloc 2097709056 bytes == 0x55e725ca6000 @ 
+tcmalloc: large alloc 2097709056 bytes == 0x55e721e24000 @ 
+[h264 @ 0x55e7aafe2000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e71090e000 @ 
+[h264 @ 0x55e72445a000] illegal short term buffer state detected
+[h264 @ 0x55e7c1f6a000] illegal short term buffer state detected
+[h264 @ 0x55e7ab53a000] illegal short term buffer state detected
+[h264 @ 0x55e7261f2000] illegal short term buffer state detected
+[h264 @ 0x55e7bacaa000] illegal short term buffer state detected
+[h264 @ 0x55e7c012e000] illegal short term buffer state detected
+tcmalloc: large alloc 2191450112 bytes == 0x55e72b998000 @ 
+tcmalloc: large alloc 2681053184 bytes == 0x55e727050000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e727b16000 @ 
+Epoch: [20][80/475],	Time 1.354 (6.273)	Data 0.000 (5.301)	siamese Loss 0.0330 (0.0288)	classifier Loss 0.0011 (0.0063)	
+tcmalloc: large alloc 2681053184 bytes == 0x55e7137c6000 @ 
+[h264 @ 0x55e7d0d2e000] illegal short term buffer state detected
+[h264 @ 0x55e723f68000] illegal short term buffer state detected
+[h264 @ 0x55e73170c000] illegal short term buffer state detected
+[h264 @ 0x55e715142000] illegal short term buffer state detected
+[h264 @ 0x55e968860000] illegal short term buffer state detected
+tcmalloc: large alloc 2214952960 bytes == 0x55e70d09c000 @ 
+[h264 @ 0x55e7e46a8000] illegal short term buffer state detected
+[h264 @ 0x55e70a13c000] illegal short term buffer state detected
+[h264 @ 0x55e7c951e000] illegal short term buffer state detected
+tcmalloc: large alloc 1819484160 bytes == 0x55e7095bc000 @ 
+Epoch: [20][100/475],	Time 30.026 (6.213)	Data 28.972 (5.245)	siamese Loss 0.0440 (0.0287)	classifier Loss 0.0080 (0.0064)	
+[h264 @ 0x55e72d8fa000] illegal short term buffer state detected
+[h264 @ 0x55e71edf0000] illegal short term buffer state detected
+[h264 @ 0x55e72f21e000] illegal short term buffer state detected
+[h264 @ 0x55e7259da000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e730b7a000 @ 
+[h264 @ 0x55e72857a000] illegal short term buffer state detected
+[h264 @ 0x55e7f7736000] illegal short term buffer state detected
+[h264 @ 0x55e7fb5b8000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72ccd4000 @ 
+Epoch: [20][120/475],	Time 1.357 (5.955)	Data 0.000 (4.993)	siamese Loss 0.0447 (0.0293)	classifier Loss 0.0067 (0.0067)	
+tcmalloc: large alloc 3607764992 bytes == 0x55e8014bc000 @ 
+tcmalloc: large alloc 3011502080 bytes == 0x55e72114e000 @ 
+[h264 @ 0x55e7fe090000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72114e000 @ 
+tcmalloc: large alloc 3607764992 bytes == 0x55e7fcec6000 @ 
+[h264 @ 0x55e7b55a0000] illegal short term buffer state detected
+[h264 @ 0x55e7a336c000] illegal short term buffer state detected
+[h264 @ 0x55e7d83ea000] illegal short term buffer state detected
+[h264 @ 0x55e73681e000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e722c8e000 @ 
+[h264 @ 0x55e715e50000] illegal short term buffer state detected
+[h264 @ 0x55e725a04000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e723916000] illegal short term buffer state detected
+[h264 @ 0x55e727e7e000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e819298000] illegal short term buffer state detected
+[h264 @ 0x55e816d4e000] illegal short term buffer state detected
+Epoch: [20][140/475],	Time 1.351 (6.100)	Data 0.000 (5.140)	siamese Loss 0.0234 (0.0280)	classifier Loss 0.0005 (0.0059)	
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e7cf34a000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e728048000] illegal short term buffer state detected
+[h264 @ 0x55e70efe6000] illegal short term buffer state detected
+[h264 @ 0x55e96c6e2000] illegal short term buffer state detected
+[h264 @ 0x55e96c604000] illegal short term buffer state detected
+[h264 @ 0x55e70a300000] illegal short term buffer state detected
+[h264 @ 0x55e829794000] illegal short term buffer state detected
+[h264 @ 0x55e96ff84000] illegal short term buffer state detected
+[h264 @ 0x55e829672000] illegal short term buffer state detected
+[h264 @ 0x55e791afc000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7cd25c000 @ 
+[h264 @ 0x55e72cfcc000] illegal short term buffer state detected
+Epoch: [20][160/475],	Time 1.353 (6.011)	Data 0.000 (5.051)	siamese Loss 0.0209 (0.0273)	classifier Loss 0.0009 (0.0054)	
+[h264 @ 0x55e7b7fec000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7cd25c000 @ 
+[h264 @ 0x55e7bc6d6000] illegal short term buffer state detected
+[h264 @ 0x55e7c43da000] illegal short term buffer state detected
+[h264 @ 0x55e7d812a000] illegal short term buffer state detected
+[h264 @ 0x55e83e1da000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72efa4000 @ 
+[h264 @ 0x55e7a9204000] illegal short term buffer state detected
+[h264 @ 0x55e77fa74000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72b122000 @ 
+[h264 @ 0x55e7e7d6a000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72b122000 @ 
+[h264 @ 0x55e7b34a2000] illegal short term buffer state detected
+Epoch: [20][180/475],	Time 1.357 (6.075)	Data 0.000 (5.115)	siamese Loss 0.0514 (0.0274)	classifier Loss 0.0154 (0.0053)	
+[h264 @ 0x55e7146bc000] illegal short term buffer state detected
+[h264 @ 0x55e7d5bbc000] illegal short term buffer state detected
+[h264 @ 0x55e7fdefa000] illegal short term buffer state detected
+[h264 @ 0x55e71f556000] illegal short term buffer state detected
+[h264 @ 0x55e7dcd7a000] illegal short term buffer state detected
+[h264 @ 0x55e7816be000] illegal short term buffer state detected
+[h264 @ 0x55e796d98000] illegal short term buffer state detected
+[h264 @ 0x55e968860000] illegal short term buffer state detected
+[h264 @ 0x55e7e0330000] illegal short term buffer state detected
+[h264 @ 0x55e84da30000] illegal short term buffer state detected
+Epoch: [20][200/475],	Time 1.358 (6.076)	Data 0.000 (5.123)	siamese Loss 0.0303 (0.0273)	classifier Loss 0.0007 (0.0052)	
+[h264 @ 0x55e83b756000] illegal short term buffer state detected
+[h264 @ 0x55e732dc6000] illegal short term buffer state detected
+[h264 @ 0x55e78ca64000] illegal short term buffer state detected
+[h264 @ 0x55e7f2dfc000] illegal short term buffer state detected
+Epoch: [20][220/475],	Time 1.357 (6.020)	Data 0.000 (5.070)	siamese Loss 0.0110 (0.0269)	classifier Loss 0.0004 (0.0049)	
+[h264 @ 0x55e792018000] illegal short term buffer state detected
+[h264 @ 0x55e71b84e000] illegal short term buffer state detected
+[h264 @ 0x55e716964000] illegal short term buffer state detected
+[h264 @ 0x55e71adde000] illegal short term buffer state detected
+[h264 @ 0x55e70d71e000] illegal short term buffer state detected
+[h264 @ 0x55e70ec60000] illegal short term buffer state detected
+[h264 @ 0x55e710436000] illegal short term buffer state detected
+Epoch: [20][240/475],	Time 1.357 (6.023)	Data 0.000 (5.072)	siamese Loss 0.0335 (0.0272)	classifier Loss 0.0062 (0.0052)	
+[h264 @ 0x55e71b574000] illegal short term buffer state detected
+[h264 @ 0x55e71e6f0000] illegal short term buffer state detected
+[h264 @ 0x55e72929c000] illegal short term buffer state detected
+[h264 @ 0x55e72ea30000] illegal short term buffer state detected
+[h264 @ 0x55e71e6f0000] illegal short term buffer state detected
+[h264 @ 0x55e72b1a8000] illegal short term buffer state detected
+[h264 @ 0x55e72b1a8000] illegal short term buffer state detected
+[h264 @ 0x55e7286a6000] illegal short term buffer state detected
+[h264 @ 0x55e72cd6e000] illegal short term buffer state detected
+[h264 @ 0x55e7302a2000] illegal short term buffer state detected
+[h264 @ 0x55e72b9d4000] illegal short term buffer state detected
+[h264 @ 0x55e70d43e000] illegal short term buffer state detected
+Epoch: [20][260/475],	Time 1.349 (5.880)	Data 0.000 (4.929)	siamese Loss 0.0242 (0.0272)	classifier Loss 0.0006 (0.0050)	
+[h264 @ 0x55e712ac0000] illegal short term buffer state detected
+[h264 @ 0x55e72d71a000] illegal short term buffer state detected
+[h264 @ 0x55e854fee000] illegal short term buffer state detected
+[h264 @ 0x55e72360e000] illegal short term buffer state detected
+[h264 @ 0x55e84d2de000] illegal short term buffer state detected
+[h264 @ 0x55e7e154a000] illegal short term buffer state detected
+[h264 @ 0x55e850c7e000] illegal short term buffer state detected
+[h264 @ 0x55e72ad4c000] illegal short term buffer state detected
+[h264 @ 0x55e79be52000] illegal short term buffer state detected
+[h264 @ 0x55e72a35a000] illegal short term buffer state detected
+[h264 @ 0x55e70d43e000] illegal short term buffer state detected
+[h264 @ 0x55e72d948000] illegal short term buffer state detected
+Epoch: [20][280/475],	Time 1.355 (5.853)	Data 0.000 (4.905)	siamese Loss 0.0165 (0.0272)	classifier Loss 0.0002 (0.0049)	
+[h264 @ 0x55e70d43e000] illegal short term buffer state detected
+[h264 @ 0x55e7e8baa000] illegal short term buffer state detected
+[h264 @ 0x55e7e9de6000] illegal short term buffer state detected
+[h264 @ 0x55e71471c000] illegal short term buffer state detected
+[h264 @ 0x55e855dc2000] illegal short term buffer state detected
+[h264 @ 0x55e721b00000] illegal short term buffer state detected
+[h264 @ 0x55e70d43e000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e73319a000] illegal short term buffer state detected
+[h264 @ 0x55e968860000] illegal short term buffer state detected
+Epoch: [20][300/475],	Time 1.360 (5.772)	Data 0.000 (4.825)	siamese Loss 0.0620 (0.0270)	classifier Loss 0.0223 (0.0047)	
+[h264 @ 0x55e714ad2000] illegal short term buffer state detected
+[h264 @ 0x55e84c0a0000] illegal short term buffer state detected
+[h264 @ 0x55e732a9a000] illegal short term buffer state detected
+[h264 @ 0x55e85d772000] illegal short term buffer state detected
+[h264 @ 0x55e724e62000] illegal short term buffer state detected
+[h264 @ 0x55e71287e000] illegal short term buffer state detected
+[h264 @ 0x55e72f516000] illegal short term buffer state detected
+[h264 @ 0x55e70d43e000] illegal short term buffer state detected
+[h264 @ 0x55e715142000] illegal short term buffer state detected
+[h264 @ 0x55e730d72000] illegal short term buffer state detected
+[h264 @ 0x55e7ecfca000] illegal short term buffer state detected
+[h264 @ 0x55e7f0cba000] illegal short term buffer state detected
+Epoch: [20][320/475],	Time 1.348 (5.755)	Data 0.000 (4.809)	siamese Loss 0.0122 (0.0268)	classifier Loss 0.0002 (0.0046)	
+[h264 @ 0x55e85a692000] illegal short term buffer state detected
+[h264 @ 0x55e72b1a8000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+tcmalloc: large alloc 2380242944 bytes == 0x55e7224a2000 @ 
+[h264 @ 0x55e72b1a8000] illegal short term buffer state detected
+[h264 @ 0x55e857140000] illegal short term buffer state detected
+Epoch: [20][340/475],	Time 26.037 (5.704)	Data 24.982 (4.760)	siamese Loss 0.0660 (0.0268)	classifier Loss 0.0545 (0.0047)	
+[h264 @ 0x55e720738000] illegal short term buffer state detected
+[h264 @ 0x55e7ed30e000] illegal short term buffer state detected
+[h264 @ 0x55e7209ca000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e7f0dc2000] illegal short term buffer state detected
+[h264 @ 0x55e84265c000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e85c34a000] illegal short term buffer state detected
+[h264 @ 0x55e968860000] illegal short term buffer state detected
+[h264 @ 0x55e71342c000] illegal short term buffer state detected
+[h264 @ 0x55e71c152000] illegal short term buffer state detected
+Epoch: [20][360/475],	Time 1.362 (5.584)	Data 0.000 (4.644)	siamese Loss 0.0271 (0.0270)	classifier Loss 0.0014 (0.0049)	
+[h264 @ 0x55e724666000] illegal short term buffer state detected
+[h264 @ 0x55e72a234000] illegal short term buffer state detected
+[h264 @ 0x55e85343c000] illegal short term buffer state detected
+[h264 @ 0x55e72d842000] illegal short term buffer state detected
+[h264 @ 0x55e968860000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e728260000 @ 
+[h264 @ 0x55e72caec000] illegal short term buffer state detected
+[h264 @ 0x55e71ddfa000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e721546000 @ 
+[h264 @ 0x55e824290000] illegal short term buffer state detected
+[h264 @ 0x55e72d08a000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e71c49a000 @ 
+[h264 @ 0x55e8259d6000] illegal short term buffer state detected
+[h264 @ 0x55e7eca26000] illegal short term buffer state detected
+[h264 @ 0x55e7eca26000] illegal short term buffer state detected
+tcmalloc: large alloc 3411533824 bytes == 0x55e70e0ca000 @ 
+Epoch: [20][380/475],	Time 9.295 (5.645)	Data 8.284 (4.710)	siamese Loss 0.0176 (0.0272)	classifier Loss 0.0002 (0.0051)	
+[h264 @ 0x55e7a8f14000] illegal short term buffer state detected
+[h264 @ 0x55e72cea0000] illegal short term buffer state detected
+[h264 @ 0x55e718612000] illegal short term buffer state detected
+[h264 @ 0x55e7f03da000] illegal short term buffer state detected
+[h264 @ 0x55e7f1592000] illegal short term buffer state detected
+[h264 @ 0x55e718432000] illegal short term buffer state detected
+[h264 @ 0x55e71c82e000] illegal short term buffer state detected
+Epoch: [20][400/475],	Time 1.356 (5.617)	Data 0.000 (4.683)	siamese Loss 0.0251 (0.0270)	classifier Loss 0.0012 (0.0049)	
+[h264 @ 0x55e8511d4000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e7133a2000] illegal short term buffer state detected
+[h264 @ 0x55e7b3c58000] illegal short term buffer state detected
+[h264 @ 0x55e7112c0000] illegal short term buffer state detected
+[h264 @ 0x55e71ddfa000] illegal short term buffer state detected
+[h264 @ 0x55e71b508000] illegal short term buffer state detected
+[h264 @ 0x55e857a6e000] illegal short term buffer state detected
+[h264 @ 0x55e857a62000] illegal short term buffer state detected
+[h264 @ 0x55e733332000] illegal short term buffer state detected
+Epoch: [20][420/475],	Time 50.389 (5.680)	Data 49.344 (4.747)	siamese Loss 0.0336 (0.0269)	classifier Loss 0.0026 (0.0048)	
+[h264 @ 0x55e721c7c000] illegal short term buffer state detected
+[h264 @ 0x55e968860000] illegal short term buffer state detected
+[h264 @ 0x55e7227b2000] illegal short term buffer state detected
+[h264 @ 0x55e7f03a8000] illegal short term buffer state detected
+Epoch: [20][440/475],	Time 1.356 (5.585)	Data 0.000 (4.651)	siamese Loss 0.0234 (0.0270)	classifier Loss 0.0005 (0.0047)	
+[h264 @ 0x55e78940e000] illegal short term buffer state detected
+[h264 @ 0x55e96c6e2000] illegal short term buffer state detected
+[h264 @ 0x55e721ed8000] illegal short term buffer state detected
+[h264 @ 0x55e7f07fa000] illegal short term buffer state detected
+[h264 @ 0x55e724bc6000] illegal short term buffer state detected
+[h264 @ 0x55e968860000] illegal short term buffer state detected
+[h264 @ 0x55e7fb3b6000] illegal short term buffer state detected
+[h264 @ 0x55e72901e000] illegal short term buffer state detected
+[h264 @ 0x55e7095bc000] illegal short term buffer state detected
+[h264 @ 0x55e70aa68000] illegal short term buffer state detected
+[h264 @ 0x55e7d3c06000] illegal short term buffer state detected
+Epoch: [20][460/475],	Time 45.420 (5.776)	Data 44.398 (4.841)	siamese Loss 0.0185 (0.0269)	classifier Loss 0.0009 (0.0047)	
+[h264 @ 0x55e7097b4000] illegal short term buffer state detected
+tcmalloc: large alloc 2097709056 bytes == 0x55e726e34000 @ 
+tcmalloc: large alloc 2097709056 bytes == 0x55e726a86000 @ 
+tcmalloc: large alloc 1142792192 bytes == 0x55e725130000 @ 
+[h264 @ 0x55e728f96000] illegal short term buffer state detected
+Validate: [0/46]	Time 32.793 (32.793)	siamese loss 0.0799 (0.0799)	clf loss 0.0022 (0.0022)	
+tcmalloc: large alloc 1115250688 bytes == 0x55e78c808000 @ 
+tcmalloc: large alloc 2117165056 bytes == 0x55e779b3a000 @ 
+[h264 @ 0x55e7290c0000] illegal short term buffer state detected
+tcmalloc: large alloc 2117165056 bytes == 0x55e7791b0000 @ 
+tcmalloc: large alloc 1281318912 bytes == 0x55e72b1ba000 @ 
+tcmalloc: large alloc 1233403904 bytes == 0x55e72b9f8000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e72fff8000 @ 
+tcmalloc: large alloc 1281318912 bytes == 0x55e7322a0000 @ 
+tcmalloc: large alloc 1233403904 bytes == 0x55e727b76000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e720ed8000 @ 
+tcmalloc: large alloc 1613463552 bytes == 0x55e72c4b8000 @ 
+[h264 @ 0x55e7647ee000] illegal short term buffer state detected
+tcmalloc: large alloc 1613463552 bytes == 0x55e72c212000 @ 
+tcmalloc: large alloc 2191581184 bytes == 0x55e79f448000 @ 
+tcmalloc: large alloc 1460969472 bytes == 0x55e7307c8000 @ 
+[h264 @ 0x55e727a6e000] illegal short term buffer state detected
+tcmalloc: large alloc 2191581184 bytes == 0x55e7934e8000 @ 
+[h264 @ 0x55e727b36000] illegal short term buffer state detected
+tcmalloc: large alloc 1393213440 bytes == 0x55e72ecf8000 @ 
+[h264 @ 0x55e72fc0e000] illegal short term buffer state detected
+Validate: [20/46]	Time 0.343 (6.765)	siamese loss 0.1653 (0.1133)	clf loss 0.0279 (0.0865)	
+[h264 @ 0x55e72e4ec000] illegal short term buffer state detected
+tcmalloc: large alloc 1894039552 bytes == 0x55e728408000 @ 
+tcmalloc: large alloc 1894039552 bytes == 0x55e7230d4000 @ 
+[h264 @ 0x55e72a4fa000] illegal short term buffer state detected
+tcmalloc: large alloc 1393336320 bytes == 0x55e72c50e000 @ 
+tcmalloc: large alloc 1853169664 bytes == 0x55e72a4fa000 @ 
+[h264 @ 0x55e72dba0000] illegal short term buffer state detected
+[h264 @ 0x55e72eedc000] illegal short term buffer state detected
+tcmalloc: large alloc 1853169664 bytes == 0x55e72a4fa000 @ 
+[h264 @ 0x55e72c50e000] illegal short term buffer state detected
+[h264 @ 0x55e7b99c8000] illegal short term buffer state detected
+[h264 @ 0x55e71cf0c000] illegal short term buffer state detected
+Validate: [40/46]	Time 0.343 (5.938)	siamese loss 0.1172 (0.1220)	clf loss 0.0109 (0.0909)	
+Validating Results: siamese Loss 0.11937, classification loss 0.08330, Accuracy: 98.000%
+tcmalloc: large alloc 1974067200 bytes == 0x55e71dcf6000 @ 
+[h264 @ 0x55e7320c0000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e7ab71e000 @ 
+tcmalloc: large alloc 8688771072 bytes == 0x55e72d99e000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e709802000 @ 
+tcmalloc: large alloc 1112375296 bytes == 0x55e72b6c2000 @ 
+[h264 @ 0x55e727ea0000] illegal short term buffer state detected
+[h264 @ 0x55e714674000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e7097c2000 @ 
+[h264 @ 0x55e7184f6000] illegal short term buffer state detected
+tcmalloc: large alloc 1455489024 bytes == 0x55e72fab4000 @ 
+[h264 @ 0x55e71c658000] illegal short term buffer state detected
+tcmalloc: large alloc 1455489024 bytes == 0x55e72e9b6000 @ 
+[h264 @ 0x55e71f242000] illegal short term buffer state detected
+[h264 @ 0x55e7333c6000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e721698000 @ 
+tcmalloc: large alloc 8688771072 bytes == 0x55e721644000 @ 
+[h264 @ 0x55e73095c000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e721644000 @ 
+[h264 @ 0x55e96858c000] illegal short term buffer state detected
+[h264 @ 0x55e96c40e000] illegal short term buffer state detected
+Epoch: [21][0/475],	Time 126.741 (126.741)	Data 124.853 (124.853)	siamese Loss 0.0318 (0.0318)	classifier Loss 0.0239 (0.0239)	
+[h264 @ 0x55e7253e0000] illegal short term buffer state detected
+tcmalloc: large alloc 1087832064 bytes == 0x55e787354000 @ 
+tcmalloc: large alloc 1227268096 bytes == 0x55e72efaa000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e7097c2000 @ 
+[h264 @ 0x55e72fb2a000] illegal short term buffer state detected
+tcmalloc: large alloc 1227268096 bytes == 0x55e77f77a000 @ 
+tcmalloc: large alloc 1338507264 bytes == 0x55e77f650000 @ 
+tcmalloc: large alloc 1999790080 bytes == 0x55e7097c2000 @ 
+tcmalloc: large alloc 1095663616 bytes == 0x55e72fb1c000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72ab3e000 @ 
+tcmalloc: large alloc 1655242752 bytes == 0x55e72dcbc000 @ 
+tcmalloc: large alloc 1894039552 bytes == 0x55e740420000 @ 
+tcmalloc: large alloc 2167955456 bytes == 0x55e72856a000 @ 
+tcmalloc: large alloc 1894039552 bytes == 0x55e740420000 @ 
+[h264 @ 0x55e7c40d4000] illegal short term buffer state detected
+tcmalloc: large alloc 1655242752 bytes == 0x55e72dcbc000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72a95e000 @ 
+tcmalloc: large alloc 2167955456 bytes == 0x55e72856a000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72e2c2000 @ 
+Epoch: [21][20/475],	Time 1.312 (9.596)	Data 0.000 (8.597)	siamese Loss 0.0189 (0.0255)	classifier Loss 0.0013 (0.0070)	
+[h264 @ 0x55e71e018000] illegal short term buffer state detected
+tcmalloc: large alloc 2191450112 bytes == 0x55e72b268000 @ 
+[h264 @ 0x55e730da0000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e729c3a000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e729baa000 @ 
+[h264 @ 0x55e71fee0000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e73142a000 @ 
+[h264 @ 0x55e72934a000] illegal short term buffer state detected
+[h264 @ 0x55e721f52000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e73912e000 @ 
+tcmalloc: large alloc 2230624256 bytes == 0x55e70de52000 @ 
+[h264 @ 0x55e724d7a000] illegal short term buffer state detected
+[h264 @ 0x55e7300dc000] illegal short term buffer state detected
+[h264 @ 0x55e70e228000] illegal short term buffer state detected
+[h264 @ 0x55e71aa94000] illegal short term buffer state detected
+tcmalloc: large alloc 2230624256 bytes == 0x55e70de52000 @ 
+[h264 @ 0x55e7336b2000] illegal short term buffer state detected
+Epoch: [21][40/475],	Time 8.215 (7.255)	Data 7.213 (6.287)	siamese Loss 0.0113 (0.0252)	classifier Loss 0.0001 (0.0046)	
+tcmalloc: large alloc 1748205568 bytes == 0x55e72978a000 @ 
+tcmalloc: large alloc 2406612992 bytes == 0x55e740420000 @ 
+tcmalloc: large alloc 2406612992 bytes == 0x55e740420000 @ 
+tcmalloc: large alloc 1613463552 bytes == 0x55e72d780000 @ 
+[h264 @ 0x55e7dc1d8000] illegal short term buffer state detected
+[h264 @ 0x55e7d9112000] illegal short term buffer state detected
+[h264 @ 0x55e796ef8000] illegal short term buffer state detected
+[h264 @ 0x55e731cd4000] illegal short term buffer state detected
+[h264 @ 0x55e73144e000] illegal short term buffer state detected
+[h264 @ 0x55e733d50000] illegal short term buffer state detected
+[h264 @ 0x55e727e86000] illegal short term buffer state detected
+Epoch: [21][60/475],	Time 1.324 (6.349)	Data 0.000 (5.408)	siamese Loss 0.0144 (0.0251)	classifier Loss 0.0002 (0.0059)	
+[h264 @ 0x55e72b37e000] illegal short term buffer state detected
+tcmalloc: large alloc 2343944192 bytes == 0x55e72b37e000 @ 
+[h264 @ 0x55e72ec24000] illegal short term buffer state detected
+[h264 @ 0x55e71feae000] illegal short term buffer state detected
+tcmalloc: large alloc 2563153920 bytes == 0x55e70de52000 @ 
+[h264 @ 0x55e728194000] illegal short term buffer state detected
+tcmalloc: large alloc 2343944192 bytes == 0x55e729d6a000 @ 
+tcmalloc: large alloc 2563153920 bytes == 0x55e70de52000 @ 
+[h264 @ 0x55e723af8000] illegal short term buffer state detected
+tcmalloc: large alloc 2097709056 bytes == 0x55e730ce4000 @ 
+tcmalloc: large alloc 1974067200 bytes == 0x55e733236000 @ 
+tcmalloc: large alloc 2097709056 bytes == 0x55e730ce4000 @ 
+[h264 @ 0x55e71d556000] illegal short term buffer state detected
+[h264 @ 0x55e726168000] illegal short term buffer state detected
+[h264 @ 0x55e72181a000] illegal short term buffer state detected
+[h264 @ 0x55e70f418000] illegal short term buffer state detected
+[h264 @ 0x55e72531c000] illegal short term buffer state detected
+[h264 @ 0x55e733034000] illegal short term buffer state detected
+[h264 @ 0x55e7b9cc8000] illegal short term buffer state detected
+[h264 @ 0x55e731d98000] illegal short term buffer state detected
+[h264 @ 0x55e72919e000] illegal short term buffer state detected
+tcmalloc: large alloc 2681053184 bytes == 0x55e72a6cc000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e72519e000 @ 
+tcmalloc: large alloc 2681053184 bytes == 0x55e7228a8000 @ 
+tcmalloc: large alloc 2191450112 bytes == 0x55e7206f2000 @ 
+Epoch: [21][80/475],	Time 1.361 (6.554)	Data 0.000 (5.620)	siamese Loss 0.0352 (0.0260)	classifier Loss 0.0011 (0.0060)	
+[h264 @ 0x55e7c72e4000] illegal short term buffer state detected
+tcmalloc: large alloc 2214952960 bytes == 0x55e7097c2000 @ 
+[h264 @ 0x55e976fd6000] illegal short term buffer state detected
+[h264 @ 0x55e726f00000] illegal short term buffer state detected
+[h264 @ 0x55e97ae58000] illegal short term buffer state detected
+[h264 @ 0x55e72aa8e000] illegal short term buffer state detected
+[h264 @ 0x55e7bfbf8000] illegal short term buffer state detected
+[h264 @ 0x55e7a3604000] illegal short term buffer state detected
+Epoch: [21][100/475],	Time 43.406 (6.574)	Data 42.343 (5.644)	siamese Loss 0.0243 (0.0260)	classifier Loss 0.0005 (0.0053)	
+tcmalloc: large alloc 1819484160 bytes == 0x55e72934a000 @ 
+[h264 @ 0x55e7255d2000] illegal short term buffer state detected
+[h264 @ 0x55e724e24000] illegal short term buffer state detected
+[h264 @ 0x55e71dae8000] illegal short term buffer state detected
+tcmalloc: large alloc 1974067200 bytes == 0x55e737e2e000 @ 
+[h264 @ 0x55e725b30000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e7cf552000 @ 
+tcmalloc: large alloc 3011502080 bytes == 0x55e7cf520000 @ 
+[h264 @ 0x55e7317c6000] illegal short term buffer state detected
+[h264 @ 0x55e72ad06000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e7cf520000 @ 
+[h264 @ 0x55e72f158000] illegal short term buffer state detected
+Epoch: [21][120/475],	Time 1.319 (6.416)	Data 0.000 (5.481)	siamese Loss 0.0290 (0.0270)	classifier Loss 0.0015 (0.0060)	
+[h264 @ 0x55e72ff38000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e7c987a000 @ 
+tcmalloc: large alloc 3607764992 bytes == 0x55e7c987a000 @ 
+[h264 @ 0x55e717ec2000] illegal short term buffer state detected
+[h264 @ 0x55e72a094000] illegal short term buffer state detected
+[h264 @ 0x55e72f064000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e70de52000 @ 
+[h264 @ 0x55e728c6a000] illegal short term buffer state detected
+[h264 @ 0x55e98548a000] illegal short term buffer state detected
+[h264 @ 0x55e726624000] illegal short term buffer state detected
+[h264 @ 0x55e7e589e000] illegal short term buffer state detected
+[h264 @ 0x55e727d0c000] illegal short term buffer state detected
+[h264 @ 0x55e7e608a000] illegal short term buffer state detected
+Epoch: [21][140/475],	Time 1.347 (6.243)	Data 0.000 (5.312)	siamese Loss 0.0225 (0.0266)	classifier Loss 0.0004 (0.0055)	
+[h264 @ 0x55e72ef3c000] illegal short term buffer state detected
+[h264 @ 0x55e72d1cc000] illegal short term buffer state detected
+[h264 @ 0x55e7e6dfe000] illegal short term buffer state detected
+[h264 @ 0x55e7211d2000] illegal short term buffer state detected
+[h264 @ 0x55e7ef736000] illegal short term buffer state detected
+[h264 @ 0x55e72d1cc000] illegal short term buffer state detected
+[h264 @ 0x55e72a612000] illegal short term buffer state detected
+[h264 @ 0x55e97e7a8000] illegal short term buffer state detected
+[h264 @ 0x55e72d206000] illegal short term buffer state detected
+[h264 @ 0x55e97999c000] illegal short term buffer state detected
+[h264 @ 0x55e72d206000] illegal short term buffer state detected
+[h264 @ 0x55e731398000] illegal short term buffer state detected
+[h264 @ 0x55e7243d4000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7cc8f0000 @ 
+[h264 @ 0x55e979ed2000] illegal short term buffer state detected
+[h264 @ 0x55e72b3ba000] illegal short term buffer state detected
+Epoch: [21][160/475],	Time 1.352 (6.327)	Data 0.000 (5.397)	siamese Loss 0.0235 (0.0261)	classifier Loss 0.0009 (0.0051)	
+[h264 @ 0x55e711896000] illegal short term buffer state detected
+tcmalloc: large alloc 8688771072 bytes == 0x55e7c811a000 @ 
+[h264 @ 0x55e7a13c4000] illegal short term buffer state detected
+[h264 @ 0x55e7f10c2000] illegal short term buffer state detected
+[h264 @ 0x55ea0d8c0000] illegal short term buffer state detected
+[h264 @ 0x55e715348000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72b4a0000 @ 
+[h264 @ 0x55e72d1cc000] illegal short term buffer state detected
+[h264 @ 0x55e7e28e0000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72761e000 @ 
+[h264 @ 0x55e805e44000] illegal short term buffer state detected
+tcmalloc: large alloc 3011502080 bytes == 0x55e72761e000 @ 
+[h264 @ 0x55e7e7876000] illegal short term buffer state detected
+[h264 @ 0x55e8069c0000] illegal short term buffer state detected
+[h264 @ 0x55e721b24000] illegal short term buffer state detected
+[h264 @ 0x55e781d06000] illegal short term buffer state detected
+Epoch: [21][180/475],	Time 1.356 (6.291)	Data 0.000 (5.354)	siamese Loss 0.0373 (0.0261)	classifier Loss 0.0054 (0.0051)	
+[h264 @ 0x55e71f796000] illegal short term buffer state detected
+[h264 @ 0x55e72d1cc000] illegal short term buffer state detected
+[h264 @ 0x55e7283bc000] illegal short term buffer state detected
+[h264 @ 0x55e7f10a4000] illegal short term buffer state detected
+[h264 @ 0x55e97db72000] illegal short term buffer state detected
+[h264 @ 0x55e7097c2000] illegal short term buffer state detected
+[h264 @ 0x55e798a30000] illegal short term buffer state detected
+[h264 @ 0x55e7946f4000] illegal short term buffer state detected
+Epoch: [21][200/475],	Time 1.360 (6.126)	Data 0.000 (5.183)	siamese Loss 0.0261 (0.0258)	classifier Loss 0.0005 (0.0050)	
+[h264 @ 0x55e7d8bb0000] illegal short term buffer state detected
+[h264 @ 0x55e731366000] illegal short term buffer state detected
+[h264 @ 0x55e72934a000] illegal short term buffer state detected
+[h264 @ 0x55e763dfc000] illegal short term buffer state detected
+Epoch: [21][220/475],	Time 1.356 (6.152)	Data 0.000 (5.205)	siamese Loss 0.0097 (0.0253)	classifier Loss 0.0001 (0.0047)	
+[h264 @ 0x55e72e2c4000] illegal short term buffer state detected
+[h264 @ 0x55e72fc92000] illegal short term buffer state detected
+[h264 @ 0x55e725f36000] illegal short term buffer state detected
+[h264 @ 0x55e71d9ca000] illegal short term buffer state detected
+[h264 @ 0x55e717092000] illegal short term buffer state detected
+[h264 @ 0x55e717092000] illegal short term buffer state detected
+[h264 @ 0x55e96ec22000] illegal short term buffer state detected
+[h264 @ 0x55e723d16000] illegal short term buffer state detected
+Epoch: [21][240/475],	Time 1.360 (6.125)	Data 0.000 (5.180)	siamese Loss 0.0248 (0.0249)	classifier Loss 0.0019 (0.0044)	
+[h264 @ 0x55e72ce64000] illegal short term buffer state detected
+[h264 @ 0x55e727c10000] illegal short term buffer state detected
+[h264 @ 0x55e7246d2000] illegal short term buffer state detected
+[h264 @ 0x55e716a2e000] illegal short term buffer state detected
+[h264 @ 0x55e719e06000] illegal short term buffer state detected
+[h264 @ 0x55e71559a000] illegal short term buffer state detected
+[h264 @ 0x55e718446000] illegal short term buffer state detected
+[h264 @ 0x55e72c670000] illegal short term buffer state detected
+[h264 @ 0x55e72934a000] illegal short term buffer state detected
+[h264 @ 0x55e716ebc000] illegal short term buffer state detected
+[h264 @ 0x55e7242a8000] illegal short term buffer state detected
+[h264 @ 0x55e71cbdc000] illegal short term buffer state detected
+[h264 @ 0x55e73216e000] illegal short term buffer state detected
+[h264 @ 0x55e7217d2000] illegal short term buffer state detected
+Epoch: [21][260/475],	Time 1.350 (6.278)	Data 0.000 (5.329)	siamese Loss 0.0316 (0.0250)	classifier Loss 0.0007 (0.0044)	
+[h264 @ 0x55e732512000] illegal short term buffer state detected
+[h264 @ 0x55e71d944000] illegal short term buffer state detected
+[h264 @ 0x55e81a34a000] illegal short term buffer state detected
+[h264 @ 0x55e825756000] illegal short term buffer state detected
+[h264 @ 0x55e724fe2000] illegal short term buffer state detected
+[h264 @ 0x55e72ca08000] illegal short term buffer state detected
+[h264 @ 0x55e82138e000] illegal short term buffer state detected
+[h264 @ 0x55e72f004000] illegal short term buffer state detected
+[h264 @ 0x55e72941a000] illegal short term buffer state detected
+Epoch: [21][280/475],	Time 1.352 (6.322)	Data 0.000 (5.369)	siamese Loss 0.0255 (0.0249)	classifier Loss 0.0017 (0.0043)	
+[h264 @ 0x55e72f824000] illegal short term buffer state detected
+[h264 @ 0x55e70c2b8000] illegal short term buffer state detected
+[h264 @ 0x55e713fbc000] illegal short term buffer state detected
+[h264 @ 0x55e801036000] illegal short term buffer state detected
+[h264 @ 0x55e72b2a2000] illegal short term buffer state detected
+[h264 @ 0x55e72934a000] illegal short term buffer state detected
+[h264 @ 0x55e72169a000] illegal short term buffer state detected
+[h264 @ 0x55e97c3e2000] illegal short term buffer state detected
+[h264 @ 0x55e714e10000] illegal short term buffer state detected
+[h264 @ 0x55e72b42a000] illegal short term buffer state detected
+[h264 @ 0x55e732602000] illegal short term buffer state detected
+Epoch: [21][300/475],	Time 1.341 (6.478)	Data 0.000 (5.522)	siamese Loss 0.0304 (0.0249)	classifier Loss 0.0020 (0.0043)	
+[h264 @ 0x55e7242a6000] illegal short term buffer state detected
+[h264 @ 0x55e7233d8000] illegal short term buffer state detected
+[h264 @ 0x55e826b58000] illegal short term buffer state detected
+[h264 @ 0x55e719860000] illegal short term buffer state detected
+[h264 @ 0x55e8388c6000] illegal short term buffer state detected
+[h264 @ 0x55e72c43a000] illegal short term buffer state detected
+[h264 @ 0x55e9cd7da000] illegal short term buffer state detected
+[h264 @ 0x55e729066000] illegal short term buffer state detected
+[h264 @ 0x55e7282d2000] illegal short term buffer state detected
+Epoch: [21][320/475],	Time 1.346 (6.430)	Data 0.000 (5.472)	siamese Loss 0.0154 (0.0250)	classifier Loss 0.0002 (0.0043)	
+[h264 @ 0x55e713fbc000] illegal short term buffer state detected
+[h264 @ 0x55e71d5fe000] illegal short term buffer state detected
+[h264 @ 0x55e731784000] illegal short term buffer state detected
+[h264 @ 0x55e82fac0000] illegal short term buffer state detected
+[h264 @ 0x55e7219fe000] illegal short term buffer state detected
+[h264 @ 0x55e724a14000] illegal short term buffer state detected
+tcmalloc: large alloc 2380242944 bytes == 0x55e72d256000 @ 
+[h264 @ 0x55e83d19e000] illegal short term buffer state detected
+[h264 @ 0x55e721606000] illegal short term buffer state detected
+[h264 @ 0x55e72a5c6000] illegal short term buffer state detected
+Epoch: [21][340/475],	Time 1.348 (6.606)	Data 0.000 (5.645)	siamese Loss 0.0334 (0.0251)	classifier Loss 0.0018 (0.0042)	
+[h264 @ 0x55e72d1c6000] illegal short term buffer state detected
+[h264 @ 0x55e72934a000] illegal short term buffer state detected
+[h264 @ 0x55e711980000] illegal short term buffer state detected
+[h264 @ 0x55e840146000] illegal short term buffer state detected
+[h264 @ 0x55e84013a000] illegal short term buffer state detected
+[h264 @ 0x55e72c5ea000] illegal short term buffer state detected
+[h264 @ 0x55e9757fe000] illegal short term buffer state detected
+[h264 @ 0x55e73046c000] illegal short term buffer state detected
+[h264 @ 0x55e976b90000] illegal short term buffer state detected
+[h264 @ 0x55e7298cc000] illegal short term buffer state detected
+Epoch: [21][360/475],	Time 1.347 (6.520)	Data 0.000 (5.557)	siamese Loss 0.0248 (0.0250)	classifier Loss 0.0019 (0.0041)	
+[h264 @ 0x55e72b6d6000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e7261ce000 @ 
+[h264 @ 0x55e84c100000] illegal short term buffer state detected
+[h264 @ 0x55e98140c000] illegal short term buffer state detected
+[h264 @ 0x55e72b704000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e71e25a000 @ 
+[h264 @ 0x55e715b9a000] illegal short term buffer state detected
+tcmalloc: large alloc 3607764992 bytes == 0x55e71d976000 @ 
+[h264 @ 0x55e7fe1fe000] illegal short term buffer state detected
+[h264 @ 0x55e721848000] illegal short term buffer state detected
+[h264 @ 0x55e71d9c6000] illegal short term buffer state detected
+[h264 @ 0x55e726b4e000] illegal short term buffer state detected
+tcmalloc: large alloc 3411533824 bytes == 0x55e7097c2000 @ 
+[h264 @ 0x55e718d06000] illegal short term buffer state detected
+[h264 @ 0x55e72ce8a000] illegal short term buffer state detected
+[h264 @ 0x55e72d2ae000] illegal short term buffer state detected
+Epoch: [21][380/475],	Time 1.354 (6.589)	Data 0.000 (5.624)	siamese Loss 0.0116 (0.0247)	classifier Loss 0.0002 (0.0040)	
+[h264 @ 0x55e72fde4000] illegal short term buffer state detected
+[h264 @ 0x55e726b38000] illegal short term buffer state detected
+[h264 @ 0x55e7278e8000] illegal short term buffer state detected
+[h264 @ 0x55e733cb4000] illegal short term buffer state detected
+[h264 @ 0x55e72bd42000] illegal short term buffer state detected
+Epoch: [21][400/475],	Time 1.303 (6.537)	Data 0.000 (5.570)	siamese Loss 0.0134 (0.0246)	classifier Loss 0.0002 (0.0038)	
+[h264 @ 0x55e7179a6000] illegal short term buffer state detected
+[h264 @ 0x55e73104e000] illegal short term buffer state detected
+[h264 @ 0x55e738d52000] illegal short term buffer state detected
+[h264 @ 0x55e835a2c000] illegal short term buffer state detected
+[h264 @ 0x55e727f14000] illegal short term buffer state detected
+[h264 @ 0x55e72805a000] illegal short term buffer state detected
+[h264 @ 0x55e730a78000] illegal short term buffer state detected
+[h264 @ 0x55e72a2d6000] illegal short term buffer state detected
+[h264 @ 0x55e7292e6000] illegal short term buffer state detected
+Epoch: [21][420/475],	Time 1.299 (6.544)	Data 0.000 (5.576)	siamese Loss 0.0316 (0.0244)	classifier Loss 0.0006 (0.0037)	
+[h264 @ 0x55e8732c8000] illegal short term buffer state detected
+[h264 @ 0x55e86f43a000] illegal short term buffer state detected
+[h264 @ 0x55e977b54000] illegal short term buffer state detected
+[h264 @ 0x55e71575a000] illegal short term buffer state detected
+[h264 @ 0x55e725b02000] illegal short term buffer state detected
+[h264 @ 0x55e732252000] illegal short term buffer state detected
+[h264 @ 0x55e73241c000] illegal short term buffer state detected
+[h264 @ 0x55e7d46a4000] illegal short term buffer state detected
+[h264 @ 0x55e7c7a22000] illegal short term buffer state detected
+Epoch: [21][440/475],	Time 1.355 (6.559)	Data 0.000 (5.589)	siamese Loss 0.0156 (0.0243)	classifier Loss 0.0003 (0.0036)	
+[h264 @ 0x55e7218f6000] illegal short term buffer state detected
+[h264 @ 0x55e978f00000] illegal short term buffer state detected
+[h264 @ 0x55e97a4b2000] illegal short term buffer state detected
+[h264 @ 0x55e72fc9a000] illegal short term buffer state detected
