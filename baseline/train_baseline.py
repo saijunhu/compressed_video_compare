@@ -1,9 +1,16 @@
 """Run training."""
+import sys
+import os
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath) # 把项目的根目录添加到程序执行时的环境变量
+os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6,7"
+
 
 import shutil
 import time
 import numpy as np
-
+import gc
 import torch
 import torch.backends.cudnn as cudnn
 import torch.nn.parallel
@@ -15,22 +22,21 @@ import torch.backends as F
 from baseline.dataset_baseline import BaselineDataset
 from baseline.model_baseline import BaselineModel
 from train_options import parser
-from transforms import GroupCenterCrop
-from transforms import GroupScale
-from utils import *
+from utils.utils import *
 from torch.utils.tensorboard import SummaryWriter
 
 SAVE_FREQ = 5
 PRINT_FREQ = 20
 ACCUMU_STEPS = 4  # use gradient accumlation to use least memory and more runtime
 loss_min = 1
-CONTINUE_FROM_LAST = True
-LAST_SAVE_PATH = r'r2plus1d_18_bt_28_seg_15_baseline_using_frame_checkpoint.pth.tar'
-FINETUNE = False
+CONTINUE_FROM_LAST = False
 
 WEI_S = 1
 WEI_C = 2
 
+LOG_ROOT_PATH = r'/home/sjhu/projects/compressed_video_compare/baseline/'
+
+LAST_SAVE_PATH = LOG_ROOT_PATH + r'r2plus1d_18_bt_24_seg_10_baseline_using_frame__best.pth.tar'
 # for visualization
 WRITER = []
 DEVICES = []
@@ -42,8 +48,9 @@ def main():
     global devices
     global WRITER
     args = parser.parse_args()
+
     global description
-    description = '%s_bt_%d_seg_%d_%s' % (args.arch, args.batch_size, args.num_segments, "baseline_using_frame")
+    description = 'bt_%d_seg_%d_%s' % ( args.batch_size, args.num_segments, "baseline_using_frame")
     log_name = '/home/sjhu/projects/compressed_video_compare/log/%s' % description
     WRITER = SummaryWriter(log_name)
     print('Training arguments:')
@@ -80,8 +87,8 @@ def main():
             num_segments=args.num_segments,
             is_train=True,
         ),
-        batch_size=args.batch_size, shuffle=True,
-        num_workers=args.workers, pin_memory=False)
+        batch_size=args.batch_size, shuffle=False,
+        num_workers=0, pin_memory=False)
 
     val_loader = torch.utils.data.DataLoader(
         BaselineDataset(
@@ -91,7 +98,7 @@ def main():
             is_train=False,
         ),
         batch_size=args.batch_size, shuffle=False,
-        num_workers=args.workers, pin_memory=False)
+        num_workers=0, pin_memory=False)
 
     model = torch.nn.DataParallel(model, device_ids=args.gpus)
     model = model.to(devices[0])
@@ -112,14 +119,7 @@ def main():
 
         params += [{'params': value, 'lr': args.lr, 'lr_mult': lr_mult, 'decay_mult': decay_mult}]
 
-    if FINETUNE:
-        optimizer = torch.optim.SGD(params, lr=1e-5, momentum=0.9)
-    else:
-        optimizer = torch.optim.Adam(
-            params,
-            weight_decay=args.weight_decay,
-            eps=0.001)
-    # optimizer = torch.optim.SGD(params, lr=args.lr, momentum=0.9)
+    optimizer = torch.optim.SGD(params, lr=args.lr, momentum=0.9)
     criterions = []
     siamese_loss = ContrastiveLoss(margin=2.0).to(devices[0])
     classifiy_loss = nn.CrossEntropyLoss().to(devices[0])
@@ -128,19 +128,19 @@ def main():
     criterions.append(classifiy_loss)
 
     # try to use ReduceOnPlatue to adjust lr
-    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.2, patience=20 // args.eval_freq, verbose=True)
-    # scheduler = WarmStartCosineAnnealingLR(optimizer,args.epochs,T_warm=10)
+    # scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.2, patience=20 // args.eval_freq, verbose=True)
+    scheduler = WarmStartCosineAnnealingLR(optimizer,args.epochs,T_warm=10)
     for epoch in range(start_epochs, args.epochs):
         # about optimizer
         WRITER.add_scalar('Lr/epoch', get_lr(optimizer), epoch)
         loss_train_s, loss_train_c = train(train_loader, model, criterions, optimizer, epoch)
         loss_train = WEI_S * loss_train_s + WEI_C * loss_train_c
+        scheduler.step(epoch)
         if epoch % args.eval_freq == 0 or epoch == args.epochs - 1:
             loss_val_s, loss_val_c, acc = validate(val_loader, model, criterions, epoch)
             loss_val = WEI_S * loss_val_s + WEI_C * loss_val_c
             is_best = (loss_val_c < loss_min)
             loss_min = min(loss_val_c, loss_min)
-            scheduler.step(loss_val)
             # visualization
             WRITER.add_scalar('Accuracy/epoch', acc, epoch)
             WRITER.add_scalars('Siamese Loss/epoch', {'Train': loss_train_s, 'Val': loss_val_s}, epoch)
@@ -189,7 +189,7 @@ def train(train_loader, model, criterions, optimizer, epoch):
         # loss1.backward(retain_graph=True)
         # loss2.backward()
         loss = WEI_S * loss1 + WEI_C * loss2
-        loss.backward(retain_graph=True)
+        loss.backward()
         # use gradient accumulation
         if i % ACCUMU_STEPS == 0:
             # attention the following line can't be transplaced
@@ -209,7 +209,7 @@ def train(train_loader, model, criterions, optimizer, epoch):
                 data_time=data_time,
                 loss1=siamese_losses,
                 loss2=clf_losses)))
-
+    gc.collect()
     return siamese_losses.avg, clf_losses.avg  # attention indent ,there was a serious bug here
 
 
@@ -265,20 +265,14 @@ def validate(val_loader, model, criterions, epoch):
 
 def save_checkpoint(state, is_best, filename):
     filename = '_'.join((description, filename))
+    filename = LOG_ROOT_PATH + filename
     torch.save(state, filename)
     if is_best:
         best_name = '_'.join((description, '_best.pth.tar'))
+        best_name = LOG_ROOT_PATH + best_name
         shutil.copyfile(filename, best_name)
 
 
-def adjust_learning_rate(optimizer, epoch, lr_steps, lr_decay):
-    decay = lr_decay ** (sum(epoch >= np.array(lr_steps)))
-    lr = args.lr * decay
-    wd = args.weight_decay
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = lr * param_group['lr_mult']
-        param_group['weight_decay'] = wd * param_group['decay_mult']
-    return lr
 
 
 if __name__ == '__main__':

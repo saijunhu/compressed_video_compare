@@ -3,13 +3,15 @@ import time
 import subprocess
 import random
 from tqdm import tqdm
-from utils import partition
+from utils.sample import partition
 
 base_url = r'/home/sjhu/datasets/annotation'
 video_url = r'/home/sjhu/datasets/core_dataset_no_dir/'
 output_url = r'/home/sjhu/datasets/all_dataset/'
 root_url = r'/home/sjhu/datasets/'
 txt_url = r'/home/sjhu/datasets/'
+
+small_dataset_url = r'/home/sjhu/datasets/formal_small_dataset/'
 
 def put_all_files_in_one_directory(input, output):
     for dir in os.listdir(input):

@@ -23,9 +23,9 @@ from imqfusion.model_im_fm_stack import Model
 from train_options import parser
 import gc
 from torch.utils.tensorboard import SummaryWriter
-
+from torch.utils.data.sampler import WeightedRandomSampler
 from utils.utils import AverageMeter, ContrastiveLoss, get_lr, WarmStartCosineAnnealingLR
-
+from sklearn.metrics import classification_report
 
 
 SAVE_FREQ = 1
@@ -34,7 +34,7 @@ PRINT_FREQ = 20
 ACCUMU_STEPS = 4  # use gradient accumlation to use least memory and more runtime
 loss_min = 1
 CONTINUE_FROM_LAST = True
-LAST_SAVE_PATH = r'/home/sjhu/projects/compressed_video_compare/imqfusion/checkpoint.pth.tar'
+LAST_SAVE_PATH = r'/home/sjhu/projects/compressed_video_compare/imqfusion/bt_48_seg_5_im_fm_conv1_stack_sgd__best.pth.tar'
 FINETUNE = False
 
 WEI_S = 1
@@ -54,7 +54,7 @@ def main():
     global WRITER
     args = parser.parse_args()
     global description
-    description = 'bt_%d_seg_%d_%s' % (args.batch_size * ACCUMU_STEPS, args.num_segments, "im_fm_conv1_stack_sgd")
+    description = 'bt_%d_seg_%d_%s' % (args.batch_size * ACCUMU_STEPS, args.num_segments, "finetune_from_vcdb")
     log_name = r'/home/sjhu/projects/compressed_video_compare/imqfusion/log/%s' % description
     WRITER = SummaryWriter(log_name)
     print('Training arguments:')
@@ -81,6 +81,19 @@ def main():
     global DEVICES
     DEVICES = devices
 
+    # deal the unbalance between pos and neg samples
+    train_dataset = CoviarDataSet(
+            args.data_root,
+            video_list=args.train_list,
+            num_segments=args.num_segments,
+            is_train=True,
+        )
+    target = train_dataset._labels_list
+    class_sample_count = torch.tensor(
+        [(target == t).sum() for t in np.unique(target)])
+    weight = 1. / class_sample_count.float()
+    samples_weights = weight[target]
+    train_sampler = WeightedRandomSampler(samples_weights, len(train_dataset), True)
     train_loader = torch.utils.data.DataLoader(
         CoviarDataSet(
             args.data_root,
@@ -89,7 +102,7 @@ def main():
             is_train=True,
         ),
         batch_size=args.batch_size, shuffle=False,
-        num_workers=args.workers, pin_memory=True)
+        num_workers=args.workers, pin_memory=True,sampler=train_sampler)
 
     val_loader = torch.utils.data.DataLoader(
         CoviarDataSet(
@@ -118,6 +131,7 @@ def main():
         else:
             params += [{'params': [value], 'lr': args.lr * 1, 'decay_mult': decay_mult}]
 
+    # loss_weights = torch.FloatTensor([1.01,1])
     optimizer = torch.optim.SGD(params, lr=args.lr, momentum=0.9)
     criterions = []
     siamese_loss = ContrastiveLoss(margin=2.0).to(devices[0])
@@ -136,11 +150,12 @@ def main():
         loss_train = WEI_S * loss_train_s + WEI_C * loss_train_c
         scheduler.step(epoch)
         if epoch % EVAL_FREQ == 0 or epoch == args.epochs - 1:
-            loss_val_s, loss_val_c, acc = validate(val_loader, model, criterions, epoch)
+            loss_val_s, loss_val_c, acc ,report= validate(val_loader, model, criterions, epoch)
             loss_val = WEI_S * loss_val_s + WEI_C * loss_val_c
             is_best = (loss_val_c < loss_min)
             loss_min = min(loss_val_c, loss_min)
             # visualization
+            WRITER.add_text(tag='Classification Report',text_string=report,global_step=epoch)
             WRITER.add_scalar('Accuracy/epoch', acc, epoch)
             WRITER.add_scalars('Siamese Loss/epoch', {'Train': loss_train_s, 'Val': loss_val_s}, epoch)
             WRITER.add_scalars('Classification Loss/epoch', {'Train': loss_train_c, 'Val': loss_val_c}, epoch)
@@ -227,6 +242,10 @@ def validate(val_loader, model, criterions, epoch):
     model.eval()
     end = time.time()
     correct_nums = 0
+
+    scores = []
+    labels = []
+
     for i, (input_pairs, label) in enumerate(val_loader):
         with torch.no_grad():
             input_pairs[0][0] = input_pairs[0][0].float().to(devices[0])
@@ -243,6 +262,8 @@ def validate(val_loader, model, criterions, epoch):
 
             _, predicts = torch.max(y, 1)
             correct_nums += (predicts == label.clone().long()).sum()
+            scores.append(y.detach().cpu().numpy())
+            labels.append(label.detach().cpu().numpy())
             batch_time.update(time.time() - end)
             end = time.time()
 
@@ -258,11 +279,18 @@ def validate(val_loader, model, criterions, epoch):
                     loss2=clf_losses)))
 
     acc = 100 * correct_nums / len(val_loader.dataset)
+    scores = np.concatenate(scores,axis=0)
+    labels = np.concatenate(labels,axis=0)
+    predits = np.argmax(scores, 1).ravel()
+    labels = np.around(labels).astype(np.long).ravel()
+    target_names = ['Copy', 'Not Copy']
+    report = classification_report(labels, predits, target_names=target_names)
     print((
         'Validating Results: siamese Loss {loss.avg:.5f}, classification loss {loss3.avg:.5f}, Accuracy: {accuracy:.3f}%'.format(
             loss=siamese_losses, loss3=clf_losses,
             accuracy=acc)))
-    return siamese_losses.avg, clf_losses.avg, acc
+    print(report)
+    return siamese_losses.avg, clf_losses.avg, acc, report
 
 
 def save_checkpoint(state, is_best, filename):

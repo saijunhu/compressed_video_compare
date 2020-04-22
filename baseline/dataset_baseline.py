@@ -1,3 +1,9 @@
+import sys
+import os
+curPath = os.path.abspath(os.path.dirname(__file__))
+rootPath = os.path.split(curPath)[0]
+sys.path.append(rootPath) # 把项目的根目录添加到程序执行时的环境变量
+
 import torch.utils.data as data
 from torchvision.io import read_video
 import torchvision
@@ -142,3 +148,23 @@ class BaselineDataset(data.Dataset):
 
         self.idxs = idx
         return np.array(mat, dtype=np.float32).transpose((0,2,1,3))
+
+if __name__ == '__main__':
+    import time
+    start = time.time()
+    train_loader = torch.utils.data.DataLoader(
+        BaselineDataset(
+            r'/home/sjhu/datasets/all_datasets',
+            video_list=r'/home/sjhu/projects/compressed_video_compare/data/datalists/debug_all_dataset.txt',
+            num_segments=10,
+            is_train=True
+        ),
+        batch_size=4, shuffle=True,
+        num_workers=4, pin_memory=False)
+
+    for i, (input_pairs, label) in enumerate(train_loader):
+        iframe, mv= input_pairs
+        print(iframe.shape)
+        print(mv.shape)
+    end = time.time()
+    print("cost %f s" % ((end - start)))

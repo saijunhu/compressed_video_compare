@@ -64,6 +64,7 @@ class CoviarDataSet(data.Dataset):
 
         self._load_list(video_list)
 
+
     def _load_list(self, video_list):
         """
         :param video_list: input the txt file contains the speific split
@@ -75,8 +76,6 @@ class CoviarDataSet(data.Dataset):
             for line in f:
                 # A,B,1
                 video_a, video_b, label = line.strip().split(',')
-                video_a = video_a.split('/')[-1]
-                video_b = video_b.split('/')[-1]
                 self._videos_list.append((video_a, video_b))
                 self._labels_list.append(int(label))
         # must be numpy array rather than python list , nontheless ,this may be lead to a memory leak.
@@ -90,13 +89,12 @@ class CoviarDataSet(data.Dataset):
     def __getitem__(self, index):
         # siamese label, '0' means same, '1' means diff
         video_pairs = self._videos_list[index]
-        # divide into segments, then fetch a frame in every seg
         pairs_data = []  # ( (img1,mv1), (img2,mv2) )
 
         for video in video_pairs:
             # shapes  (nums,height,width,channels)
             video_features = []
-            extracter = VideoExtracter(video)
+            extracter = VideoExtracter(video,self._data_root)
 
             # process mv
             mvs = extracter.load_mvs(self._num_segments, self._is_train)
@@ -123,9 +121,10 @@ class CoviarDataSet(data.Dataset):
 
 
 class VideoExtracter:
-    def __init__(self, video_name):
+    def __init__(self, video_name,data_root):
         # ex: filename = 916710595466737253411014029368.mp4
-        os.chdir(VIDEOS_URL)
+        os.chdir(data_root)
+        self.data_root = data_root
         self.video_name = video_name
         # get basic decode information
         frames_type = coviexinfo.get_num_frames(video_name)
@@ -138,7 +137,7 @@ class VideoExtracter:
         :param is_train:
         :return: (counts, width, height, channels)
         """
-        os.chdir(VIDEOS_URL)
+        os.chdir(self.data_root)
         frames = coviexinfo.extract(self.video_name, 'get_I', self.num_frames, self.num_I, 0)
         if len(frames) == 0:
             mat = np.random.randint(255, size=(num_segments, WIDTH, HEIGHT, 3))
@@ -165,7 +164,7 @@ class VideoExtracter:
         # mv_ref_arr is a array with 3 dimensions. The first dimension denotes Height of a frame. The second dimension denotes Width of a frame.
         # For every frame, it contains mv_0_x, mv_0_y, ref_0, mv_1_x, mv_1_y, ref_1. So, the third dimension denote frames*6.
 
-        os.chdir(VIDEOS_URL)
+        os.chdir(self.data_root)
         mv_origin = coviexinfo.extract(self.video_name, 'get_mv', self.num_frames, self.num_I, 0)
         if len(mv_origin) == 0:
             mat = np.random.randint(1, size=(num_segments, WIDTH, HEIGHT, 2))

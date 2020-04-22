@@ -4,16 +4,14 @@ from torch import nn
 import torch.nn.functional as F
 import torchvision
 import torch
-from train_options import parser
 from torchvision.models.utils import load_state_dict_from_url
 from torch.nn.modules import Conv3d
 import numpy as np
 from backbone.resnet3d import R2Plus1d
 # from train_siamese import DEVICES
-args = parser.parse_args()
 
 KEY_FEATURES = 128
-DROPOUT = args.dropout
+DROPOUT = 0.25
 
 
 class IframeNet(R2Plus1d):
@@ -53,7 +51,7 @@ class Flatten(nn.Module):
 
 
 class Model(nn.Module):
-    def __init__(self, num_class, num_segments, representation,
+    def __init__(self, num_class, num_segments, representation='none',
                  base_model='r2plus1d_18'):
         super(Model, self).__init__()
         self._representation = representation  # net input, mv,residual,
