@@ -1,0 +1,27 @@
+视频比对任务
+compressed_video_compare
+infusion
+nohup python -u train_imqfusion.py --lr 0.01 --batch-size 12  --num-segments 5 --data-root /home/sjhu/datasets/formal_small_dataset/dataset --train-list /home/sjhu/datasets/formal_small_dataset/train.txt --test-list /home/sjhu/datasets/formal_small_dataset/test.txt --workers 10 --epochs 50 --gpus 2 1 0 >train_formal.log 2>&1 &
+
+per gpu 3 sample
+
+nohup python -u test.py --data-root /home/sjhu/datasets/formal_small_dataset/dataset --test-list /home/sjhu/datasets/formal_small_dataset/dataset.txt --weights /home/sjhu/projects/compressed_video_compare/ --batch-size 10 --num-segments 10 --workers 4 --gpus 0 --des >pytorch_full_decode_10s.txt 2>&1 &
+
+
+baseline:
+vcdb
+nohup python -u train_baseline.py --lr 0.01 --batch-size 8  --num-segments 5 --data-root /home/sjhu/datasets/all_dataset --train-list /home/sjhu/datasets/all_train_sample.txt --test-list /home/sjhu/datasets/all_test_sample.txt --workers 2 --epochs 100 --description using_full_decode_frame --gpus 3 2 >train_vcdb.log 2>&1 &
+
+ucf
+nohup python -u train_baseline.py --lr 0.01 --batch-size 24  --num-segments 5 --data-root /home/sjhu/datasets/formal_small_dataset/dataset --train-list /home/sjhu/datasets/formal_small_dataset/train.txt --test-list /home/sjhu/datasets/formal_small_dataset/test.txt --workers 10 --epochs 20 --description adjust_sampler_ratio --gpus 2 4 5 7 >adjust_sampler_ratio.log 2>&1 &
+
+
+￼
+
+动作识别任务
+compressed_video_classification
+nohup python -u train.py --lr 0.01 --batch-size 10 --num-segments 64 --data-root /home/sjhu/datasets/UCF-101 --train-list /home/sjhu/projects/pytorch-coviar/data/datalists/ucf101_split1_train.txt --test-list /home/sjhu/projects/pytorch-coviar/data/datalists/ucf101_split1_test.txt --workers 10 --des slowfast --epochs 100 --gpus 3 >train_slowfast_part2.log 2>&1 &
+
+tensorboard --logdir log --port=6007
+
+209236970965175386093500626191

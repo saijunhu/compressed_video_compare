@@ -5,7 +5,7 @@ curPath = os.path.abspath(os.path.dirname(__file__))
 rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath) # 把项目的根目录添加到程序执行时的环境变量
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6,7"
 import argparse
 import time
 import numpy as np
@@ -21,7 +21,6 @@ from torch.utils.tensorboard import SummaryWriter
 parser = argparse.ArgumentParser(
     description="Standard video-level testing")
 parser.add_argument('--data-root', type=str)
-parser.add_argument('--des', type=str)
 parser.add_argument('--test-list', type=str)
 parser.add_argument('--weights', type=str)
 parser.add_argument('--save-scores', type=bool, default=True)
@@ -32,38 +31,44 @@ parser.add_argument('--input_size', type=int, default=224)
 parser.add_argument('-j', '--workers', default=2, type=int, metavar='N',
                     help='number of workers for data loader.')
 parser.add_argument('--gpus', nargs='+', type=int, default=None)
-args = parser.parse_args()
+
 
 LOG_ROOT_URL = r'/home/sjhu/projects/compressed_video_compare/imqfusion/'
-def main():
-    print(torch.cuda.device_count())
-    print('Infering arguments:')
-    for k, v in vars(args).items():
-        print('\t{}: {}'.format(k, v))
-    devices = [torch.device("cuda:%d" % device) for device in args.gpus]
-    description = 'bt_%d_seg_%d_%s' % (args.batch_size,args.num_segments, args.des)
+def test(data_root,test_list,weights,num_segments,batch_size,workers,gpus):
+    '''
+    :param data_root:  the target video source
+    :param test_list:  video pairs
+    :param weights:  saved model weights path(absolute)
+    :param num_segments: the TSN idea, sample frames number from video
+    :param batch_size: batch size when infer
+    :param workers: when using single thread,workers=0; else use mulitprocress to speed up dataloader
+    :param gpus: a list of gpu device id,ex:[0,1,2,3]
+    :return:
+    '''
+    devices = [torch.device("cuda:%d" % device) for device in gpus]
+    description = 'seg_%d_%s' % (num_segments, "im_fm_stack_test")
     log_name = r'/home/sjhu/projects/compressed_video_compare/imqfusion/log/%s' % description
     writer = SummaryWriter(log_name)
 
-    model = Model(2, args.num_segments)
-    checkpoint = torch.load(args.weights,map_location={'cuda:4':'cuda:0'})
+    model = Model(2, num_segments)
+    checkpoint = torch.load(weights)
     # print("model epoch {} best prec@1: {}".format(checkpoint['epoch'], checkpoint['best_prec1']))
-    # print("model epoch {} lowest loss {}".format(checkpoint['epoch'], checkpoint['loss_min']))
+    print("model epoch {} lowest loss {}".format(checkpoint['epoch'], checkpoint['loss_min']))
     base_dict = {'.'.join(k.split('.')[1:]): v for k, v in list(checkpoint['state_dict'].items())}
     model.load_state_dict(base_dict)
 
 
     val_loader = torch.utils.data.DataLoader(
         CoviarDataSet(
-            args.data_root,
-            video_list=args.test_list,
-            num_segments=args.num_segments,
+            data_root,
+            video_list=test_list,
+            num_segments=num_segments,
             is_train=False,
         ),
-        batch_size=args.batch_size, shuffle=False,
-        num_workers=args.workers, pin_memory=True)
+        batch_size=batch_size, shuffle=False,
+        num_workers=workers, pin_memory=True)
 
-    model = torch.nn.DataParallel(model, device_ids=args.gpus)
+    model = torch.nn.DataParallel(model, device_ids=gpus)
     model = model.to(devices[0])
     cudnn.benchmark = True
 
@@ -86,14 +91,15 @@ def main():
             labels.append(label.detach().cpu().numpy())
             correct_nums += (predicts == label.clone().long()).sum()
             cnt_time = time.time() - proc_start_time
-            if (i + 1) % 10 == 0:
+            if (i + 1) % 100 == 0:
                 print('Batch {} done, total {}/{}, average {} sec/video pair'.format(i, i + 1,
-                                                                                total_num/args.batch_size,
-                                                                    float(cnt_time) / ((i + 1)*args.batch_size)))
-    with open(LOG_ROOT_URL + args.des + '_scores.pkl', 'wb') as fp:
+                                                                                total_num/batch_size,
+                                                                    float(cnt_time) / ((i + 1)*batch_size)))
+
+    with open(LOG_ROOT_URL + 'scores.pkl', 'wb') as fp:
         pickle.dump(scores, fp)
     fp.close()
-    with open(LOG_ROOT_URL + args.des + '_labels.pkl', 'wb') as fp:
+    with open(LOG_ROOT_URL + 'labels.pkl', 'wb') as fp:
         pickle.dump(labels, fp)
     fp.close()
     acc = 100 * correct_nums / len(val_loader.dataset)
@@ -105,66 +111,21 @@ def main():
     target_names = ['Copy', 'Not Copy']
     print(classification_report(labels, predits, target_names=target_names))
 
-    from matplotlib import pyplot as plt
-    import matplotlib
-    from matplotlib.pyplot import MultipleLocator
-    matplotlib.use('Agg')
-    from sklearn.metrics import precision_recall_fscore_support, roc_curve, auc
-    import torch.nn.functional as F
-    prob = F.softmax(torch.from_numpy(scores),dim=1).numpy()[:,0]
-    false_positive_rate,true_positive_rate,thresholds=roc_curve(labels, prob,pos_label=0)
-    roc_auc=auc(false_positive_rate, true_positive_rate)
-    plt.title('ROC')
-    plt.plot(false_positive_rate, true_positive_rate,'b',label='AUC = %0.4f'% roc_auc)
-    plt.legend(loc='lower right')
-    plt.plot([0,1],[0,1],'r--')
-    plt.plot([0.1,0.1],[0,1],'g--')
-    plt.plot([0,1],[0.9,0.9],'g--')
-    plt.gca().xaxis.set_major_locator(MultipleLocator(0.1))
-    plt.gca().yaxis.set_major_locator(MultipleLocator(0.1))
-    plt.ylabel('TPR')
-    plt.xlabel('FPR')
-    plt.savefig(args.des + '_roc.png')
-
 def read_pkl():
-    from matplotlib import pyplot as plt
-    import matplotlib
-    matplotlib.use('Agg')
-    from matplotlib.pyplot import MultipleLocator
-    from sklearn.metrics import precision_recall_fscore_support, roc_curve, auc,accuracy_score
-    import torch.nn.functional as F
-    with open(LOG_ROOT_URL + 'small_dataset_scores.pkl', 'rb') as fp:
+    with open(LOG_ROOT_URL + 'scores.pkl', 'rb') as fp:
         scores = pickle.load(fp)
     fp.close()
-    with open(LOG_ROOT_URL + 'small_dataset_labels.pkl', 'rb') as fp:
+    with open(LOG_ROOT_URL + 'labels.pkl', 'rb') as fp:
         labels = pickle.load(fp)
     fp.close()
     scores = np.concatenate(scores,axis=0)
     labels = np.concatenate(labels,axis=0)
     predits = np.argmax(scores, 1).ravel()
     labels = np.around(labels).astype(np.long).ravel()
-    accuracy = accuracy_score(labels,predits)
-    print("accuracy is %.6f" % accuracy)
+    target_names = ['Copy', 'Not Copy']
+    print(classification_report(labels, predits, target_names=target_names))
 
-    # target_names = ['Copy', 'Not Copy']
-    # print(classification_report(labels, predits, target_names=target_names))
-    #
-    # prob = F.softmax(torch.from_numpy(scores),dim=1).numpy()[:,0]
-    # false_positive_rate,true_positive_rate,thresholds=roc_curve(labels, prob,pos_label=0)
-    # roc_auc=auc(false_positive_rate, true_positive_rate)
-    # plt.title('ROC')
-    # plt.plot(false_positive_rate, true_positive_rate,'b',label='AUC = %0.4f'% roc_auc)
-    # plt.legend(loc='lower right')
-    # plt.plot([0,1],[0,1],'r--')
-    # from matplotlib.pyplot import MultipleLocator
-    # plt.plot([0.1,0.1],[0,1],'g--')
-    # plt.plot([0,1],[0.9,0.9],'g--')
-    # plt.gca().xaxis.set_major_locator(MultipleLocator(0.1))
-    # plt.gca().yaxis.set_major_locator(MultipleLocator(0.1))
-    # plt.ylabel('TPR')
-    # plt.xlabel('FPR')
-    # plt.savefig('small_dataset_roc_fine.png')
 
 if __name__ == '__main__':
-    main()
+    pass
     # read_pkl()

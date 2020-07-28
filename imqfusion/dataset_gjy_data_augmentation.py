@@ -127,6 +127,9 @@ class VideoExtracter:
         self.data_root = data_root
         self.video_name = video_name
         # get basic decode information
+        frames_type = coviexinfo.get_num_frames(video_name)
+        self.num_frames = frames_type.shape[1]
+        self.num_I = np.sum(frames_type[0] == 1).item()
 
     def load_keyframes(self, num_segments, is_train):
         """
@@ -135,13 +138,13 @@ class VideoExtracter:
         :return: (counts, width, height, channels)
         """
         os.chdir(self.data_root)
-        frames = coviexinfo.extract(self.video_name, 'get_I', 'test', 20, 0)
+        frames = coviexinfo.extract(self.video_name, 'get_I', self.num_frames, self.num_I, 0)
         if len(frames) == 0:
             mat = np.random.randint(255, size=(num_segments, WIDTH, HEIGHT, 3))
             return np.array(mat, dtype=np.float32)
 
         mat = []
-        for i in range(frames.shape[2]//3):
+        for i in range(self.num_I):
             rgb = np.dstack((frames[:, :, i * 3], frames[:, :, i * 3 + 1], frames[:, :, i * 3 + 2]))
             mat.append(rgb)
             # plt.imshow(rgb)
@@ -160,9 +163,9 @@ class VideoExtracter:
         # mv_ref_arr=(H/4,W/4,frames*6)
         # mv_ref_arr is a array with 3 dimensions. The first dimension denotes Height of a frame. The second dimension denotes Width of a frame.
         # For every frame, it contains mv_0_x, mv_0_y, ref_0, mv_1_x, mv_1_y, ref_1. So, the third dimension denote frames*6.
-        phase = 'train' if is_train else 'test'
+
         os.chdir(self.data_root)
-        mv_origin = coviexinfo.extract(self.video_name, 'get_mv', phase, num_segments, 0)
+        mv_origin = coviexinfo.extract(self.video_name, 'get_mv', self.num_frames, self.num_I, 0)
         mv_origin = mv_origin.reshape((mv_origin.shape[1],mv_origin.shape[2],mv_origin.shape[0]))
         if len(mv_origin) == 0:
             mat = np.random.randint(1, size=(num_segments, WIDTH, HEIGHT, 2))
@@ -176,31 +179,32 @@ class VideoExtracter:
             mat.append(mv_0 + 128)
             # plt.imshow(mv_0)
             # plt.show()
+        mat = random_sample(mat, num_segments) if is_train else fix_sample(mat, num_segments)
         mat = np.asarray(mat, dtype=np.float32)
         mv_origin = []
         return mat
 
 
-
+def group_transform(img_group,transform):
+    return [transform(img) for img in img_group]
 def main():
     import time
 
     start = time.time()
     train_loader = torch.utils.data.DataLoader(
         CoviarDataSet(
-             r'/home/sjhu/datasets/formal_small_dataset/dataset',
-            video_list=r'/home/sjhu/datasets/formal_small_dataset/speed.txt',
+            r'/home/sjhu/datasets/formal_small_dataset/dataset',
+            video_list=r'/home/sjhu/datasets/formal_small_dataset/base_videos.txt',
             num_segments=5,
             is_train=True
         ),
-        batch_size=4, shuffle=True,
-        num_workers=0, pin_memory=False)
+        batch_size=1, shuffle=True,
+        num_workers=8, pin_memory=False)
 
     for i, (input_pairs, label) in enumerate(train_loader):
-        # (iframe, mv), _ = input_pairs
-        # print(iframe.shape)
-        # print(mv.shape)
-        print("%d" % i)
+        (iframe, mv), _ = input_pairs
+        print(iframe.shape)
+        print(mv.shape)
     end = time.time()
     print("cost %f s" % ((end - start)))
 

@@ -14,7 +14,7 @@ from transforms_hsj import transform_mv, transform_rgb_residual,transform_infer
 WIDTH = 256
 HEIGHT = 340
 
-torchvision.set_video_backend('video_reader')
+torchvision.set_video_backend('pyav')
 class BaselineDataset(data.Dataset):
     def __init__(self, data_root,
                  video_list,
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     start = time.time()
     train_loader = torch.utils.data.DataLoader(
         BaselineDataset(
-            r'/home/sjhu/datasets/all_datasets',
+            r'/home/sjhu/datasets/all_dataset',
             video_list=r'/home/sjhu/projects/compressed_video_compare/data/datalists/debug_all_dataset.txt',
             num_segments=10,
             is_train=True

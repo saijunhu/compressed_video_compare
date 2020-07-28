@@ -6,7 +6,7 @@ rootPath = os.path.split(curPath)[0]
 sys.path.append(rootPath) # 把项目的根目录添加到程序执行时的环境变量
 
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6,7"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5,6,7"
 import shutil
 import time
 import numpy as np
@@ -20,7 +20,6 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 import torch.backends as F
 from imqfusion.dataset_gjy import CoviarDataSet
 from imqfusion.model_im_fm_stack import Model
-from train_options import parser
 import gc
 from torch.utils.tensorboard import SummaryWriter
 from torch.utils.data.sampler import WeightedRandomSampler
@@ -36,7 +35,7 @@ loss_min = 1
 CONTINUE_FROM_LAST = True
 LAST_SAVE_PATH = r'/home/sjhu/projects/compressed_video_compare/imqfusion/bt_48_seg_5_im_fm_conv1_stack_sgd__best.pth.tar'
 FINETUNE = False
-
+description =''
 WEI_S = 1
 WEI_C = 2
 
@@ -44,25 +43,59 @@ WEI_C = 2
 WRITER = []
 DEVICES = []
 
-description = ""
+import argparse
+parser = argparse.ArgumentParser(description="Baseline")
 
+# Data.
+parser.add_argument('--data-root', type=str,
+                    help='root of data directory.')
+parser.add_argument('--train-list', type=str,
+                    help='training example list.')
+parser.add_argument('--test-list', type=str,
+                    help='testing example list.')
+
+# Model.
+parser.add_argument('--num-segments', type=int, default=3,
+                    help='number of TSN segments.')
+parser.add_argument('--no-accumulation', action='store_true',
+                    help='disable accumulation of motion vectors and residuals.')
+
+# Training.
+parser.add_argument('--epochs', default=500, type=int,
+                    help='number of training epochs.')
+parser.add_argument('--batch-size', default=40, type=int,
+                    help='batch size.')
+parser.add_argument('--accumulation-step', default=4, type=int,
+                    help='gradient accumulation')
+parser.add_argument('--lr', default=0.01, type=float,
+                    help='base learning rate.')
+parser.add_argument('--weight-decay', '--wd', default=1e-4, type=float,
+                    help='weight decay.')
+parser.add_argument('--description', '--des',type=str,
+                    help='tag this model info')
+# Log.
+parser.add_argument('--eval-freq', default=5, type=int,
+                    help='evaluation frequency (epochs).')
+parser.add_argument('--workers', default=8, type=int,
+                    help='number of data loader workers.')
+parser.add_argument('--gpus', nargs='+', type=int, default=None,
+                    help='gpu ids.')
 
 def main():
     print(torch.cuda.device_count())
     global args
     global devices
     global WRITER
-    args = parser.parse_args()
     global description
-    description = 'bt_%d_seg_%d_%s' % (args.batch_size * ACCUMU_STEPS, args.num_segments, "finetune_from_vcdb")
+    args = parser.parse_args()
+    description = 'bt_%d_seg_%d_%s' % (args.batch_size * ACCUMU_STEPS, args.num_segments, args.description)
     log_name = r'/home/sjhu/projects/compressed_video_compare/imqfusion/log/%s' % description
     WRITER = SummaryWriter(log_name)
     print('Training arguments:')
     for k, v in vars(args).items():
         print('\t{}: {}'.format(k, v))
 
-    model = Model(2, args.num_segments, args.representation,
-                  base_model=args.arch)
+    model = Model(2, args.num_segments)
 
     # add continue train from before
     if CONTINUE_FROM_LAST:
@@ -164,7 +197,6 @@ def main():
                 save_checkpoint(
                     {
                         'epoch': epoch + 1,
-                        'arch': args.arch,
                         'state_dict': model.state_dict(),
                         'loss_min': loss_min,
                     },
@@ -302,15 +334,6 @@ def save_checkpoint(state, is_best, filename):
         best_name = r'/home/sjhu/projects/compressed_video_compare/imqfusion/' + best_name
         shutil.copyfile(filename, best_name)
 
-
-def adjust_learning_rate(optimizer, epoch, lr_steps, lr_decay):
-    decay = lr_decay ** (sum(epoch >= np.array(lr_steps)))
-    lr = args.lr * decay
-    wd = args.weight_decay
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = lr * param_group['lr_mult']
-        param_group['weight_decay'] = wd * param_group['decay_mult']
-    return lr
 
 
 if __name__ == '__main__':

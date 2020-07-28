@@ -4,8 +4,15 @@
 *.npy
 *.mp4
 *.avi
-
+*.pkl
+*.png
+*.txt
+*.log
+*.out
 save/
+log/
+baseline/log/
+imqfusion/log/
 # Byte-compiled / optimized / DLL files
 
 __pycache__/

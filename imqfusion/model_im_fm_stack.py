@@ -7,14 +7,14 @@ import torch
 from torchvision.models.utils import load_state_dict_from_url
 from torch.nn.modules import Conv3d
 import numpy as np
-from backbone.resnet3d import R2Plus1d
+from backbone.resnet3d import R2Plus1d18
 # from train_siamese import DEVICES
-
+from ptflops import get_model_complexity_info
 KEY_FEATURES = 128
 DROPOUT = 0.25
 
 
-class IframeNet(R2Plus1d):
+class IframeNet(R2Plus1d18):
     def __init__(self):
         super(IframeNet,self).__init__(num_classes=128)
 
@@ -26,7 +26,7 @@ class IframeNet(R2Plus1d):
         x = self.layer4(x)
         return x
 
-class MvNet(R2Plus1d):
+class MvNet(R2Plus1d18):
     def __init__(self):
         super(MvNet,self).__init__(input_channels=2,num_classes=128)
 
@@ -54,7 +54,6 @@ class Model(nn.Module):
     def __init__(self, num_class, num_segments, representation='none',
                  base_model='r2plus1d_18'):
         super(Model, self).__init__()
-        self._representation = representation  # net input, mv,residual,
         self.num_segments = num_segments
 
         print(("""
@@ -134,3 +133,22 @@ class Simple3dConv(nn.Module):
         # out = self.layer2(x)
         return x
 
+
+
+def get_parameter_number(net):
+    total_num = sum(p.numel() for p in net.parameters())
+    trainable_num = sum(p.numel() for p in net.parameters() if p.requires_grad)
+    return {'Total': total_num, 'Trainable': trainable_num}
+
+def input_constructer(input_res):
+    im1=torch.randn(size=(1,3,5,224,224))
+    mv1 = torch.randn(size=(1,2,5,224,224))
+    return {'inputs':[[im1,mv1],[im1,mv1]]}
+
+if __name__ == '__main__':
+    net = Model(2,5)
+
+    macs, params = get_model_complexity_info(net,input_res=(224,224),input_constructor=input_constructer, as_strings=True,
+                                             print_per_layer_stat=False, verbose=False)
+    print('{:<30}  {:<8}'.format('Computational complexity: ', macs))
+    print('{:<30}  {:<8}'.format('Number of parameters: ', params))

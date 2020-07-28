@@ -1,6 +1,6 @@
 import os
 import sys
-
+from tqdm import tqdm
 SOURCE_URL = r'/home/sjhu/datasets/UCF-101-video-compare'
 ROOT_URL = r'/home/sjhu/datasets/formal_small_dataset'
 DATA_ROOT = r'/home/sjhu/datasets/formal_small_dataset/dataset'
@@ -109,12 +109,12 @@ def train_test_split():
     random.shuffle(pos_lines)
     random.shuffle(neg_lines)
     with open(ROOT_URL + '/train.txt', 'w') as fw_train:
-        a = pos_lines[:80] + neg_lines[:720]
+        a = pos_lines[:100] + neg_lines[:39900]
         random.shuffle(a)
         fw_train.writelines(a)
     fw_train.close()
     with open(ROOT_URL + '/test.txt', 'w') as fw_test:
-        a = pos_lines[-20:] + neg_lines[-180:]
+        a = pos_lines[-100:] + neg_lines[-39900:]
         random.shuffle(a)
         fw_test.writelines(a)
     fw_test.close()
@@ -140,6 +140,22 @@ def pos_neg_split():
 
     fr.close()
 
+def convert_avi_to_h264(root_path):
+    os.chdir(root_path)
+    cnt=0
+    for video in tqdm(os.listdir(root_path)):
+        if video.strip().split('.')[-1] == 'avi':
+            video_b = video.strip().split('.')[0]+'_temp'+'.avi'
+            return_code_a = os.system(
+                "/home/sjhu/env/ffmpeg-4.2-amd64-static/ffmpeg -loglevel warning -i %s -c:v libx264 %s" % (
+                video,video_b))
+            os.system('rm %s' % video)
+            os.system('mv %s %s'%(video_b,video))
+            cnt=cnt+1
+    print('cnt %d' % cnt)
+
+
+
 if __name__ == '__main__':
     # create_200_1000()
     # create_miss_1000()
@@ -147,5 +163,6 @@ if __name__ == '__main__':
     # put_all_files_in_one_directory(os.path.join(ROOT_URL, 'web_video', 'miss_video'), DATA_ROOT)
     # put_all_files_in_one_directory(os.path.join(ROOT_URL, 'web_video', 'hit_video'), DATA_ROOT)
     # put_all_files_in_one_directory(os.path.join(ROOT_URL, 'base_video'), DATA_ROOT)
-    train_test_split()
+    # train_test_split()
     # pos_neg_split()
+    convert_avi_to_h264(r'/home/sjhu/datasets/formal_large_dataset/dataset')

@@ -53,18 +53,22 @@ def create(base_num):
 
 def create_compare_pairs():
     pos_num=0
+    neg_num=0
     with open(ROOT_URL + '/base_videos.txt', 'r') as fr_base:
         with open(ROOT_URL + '/web_videos.txt', 'r') as fr_web:
             lines_base = fr_base.readlines()
             lines_web = fr_web.readlines()
-            with open(ROOT_URL + '/dataset.txt', 'w') as fw_dataset:
+            with open(ROOT_URL + '/dataset_sample.txt', 'w') as fw_dataset:
                 for a in lines_base:
                     for b in lines_web:
                         if is_copy(a, b):
                             fw_dataset.write(a.strip() + ',' + b.strip() + ',' + '0\n')
                             pos_num+=1
                         else:
+                            if neg_num>=3980000:
+                                continue
                             fw_dataset.write(a.strip() + ',' + b.strip() + ',' + '1\n')
+                            neg_num+=1
             fw_dataset.close()
         fr_web.close()
     fr_base.close()
@@ -131,9 +135,9 @@ def pos_neg_split():
 
 if __name__ == '__main__':
     # create(2000)
-    create_compare_pairs()
-    # put_all_files_in_one_directory(os.path.join(ROOT_URL, 'web_video', 'miss_video'), DATA_ROOT)
-    # put_all_files_in_one_directory(os.path.join(ROOT_URL, 'web_video', 'hit_video'), DATA_ROOT)
+    # create_compare_pairs()
+    put_all_files_in_one_directory(os.path.join(ROOT_URL, 'web_video'), DATA_ROOT)
+    put_all_files_in_one_directory(os.path.join(ROOT_URL, 'base_video'), DATA_ROOT)
     # put_all_files_in_one_directory(os.path.join(ROOT_URL, 'base_video'), DATA_ROOT)
     # train_test_split()
     # pos_neg_split()
