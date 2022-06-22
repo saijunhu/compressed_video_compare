@@ -3,7 +3,7 @@ opencv_python==4.1.0.25
 tqdm==4.44.1
 torch==1.6.0.dev20200411
 torchvision==0.5.0
-numpy==1.18.1
+numpy==1.22.0
 adrest==3.3.2
 Pillow==7.1.1
 scikit_learn==0.22.2.post1
