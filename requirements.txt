@@ -1,9 +1,10 @@
 matplotlib==3.2.1
 opencv_python==4.1.0.25
 tqdm==4.44.1
-torch==1.6.0.dev20200411
+torch==1.13.1
 torchvision==0.5.0
 numpy==1.18.1
 adrest==3.3.2
 Pillow==7.1.1
 scikit_learn==0.22.2.post1
+django>=3.2.25 # not directly required, pinned by Snyk to avoid a vulnerability
